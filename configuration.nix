@@ -104,6 +104,7 @@
     home = "/Users/flebel";
   };
   system.primaryUser = "flebel";
+  security.pam.services.sudo_local.touchIdAuth = true;
   
   system.defaults = {
     dock = {
