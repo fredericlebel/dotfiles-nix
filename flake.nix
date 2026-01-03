@@ -33,6 +33,9 @@
         ''
     );
 
+    packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
+    packages."x86_64-linux".default = self.nixosConfigurations."vps-01".system;
+
     darwinConfigurations = {
       "caladan" = mylib.mkDarwinSystem "caladan";
     };
