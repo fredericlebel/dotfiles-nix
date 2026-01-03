@@ -21,6 +21,11 @@ in
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
+      sessionVariables = {
+        EDITOR = "vim";
+        VISUAL = "vim";
+      };
+
       history = {
         size = 10000;
         save = 10000;
