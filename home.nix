@@ -3,13 +3,17 @@
   imports = [
     ./modules/programs/aerospace
     ./modules/programs/gpg
+    ./modules/programs/starship
     ./modules/programs/wezterm
+    ./modules/programs/zsh
   ];
 
   my.programs = {
     aerospace.enable = true;
     gpg.enable = true;
+    starship.enable = true;
     wezterm.enable = true;
+    zsh.enable = true;
   };
 
   home = {
