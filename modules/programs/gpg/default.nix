@@ -15,6 +15,7 @@ in
     services.gpg-agent = {
       enable = true;
       enableZshIntegration = true;
+      enableSshSupport = true;
       
       pinentry.package = pkgs.pinentry_mac;
       
@@ -24,6 +25,7 @@ in
 
     home.sessionVariables = {
       GPG_TTY = "$(tty)";
+      SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
     };
     
     # Optionnel : Si tu veux un fichier gpg.conf spécifique, tu peux le gérer ici aussi
