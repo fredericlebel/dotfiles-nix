@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  
+
   environment.systemPackages = with pkgs; [
     # Outils Système de base
     bat
@@ -10,7 +10,12 @@
     wget
     gnupg
     ffmpeg
-    
+
+    # rust et outils associés
+    rustc
+    cargo
+    rustfmt
+
     # DevOps / Infrastructure
     ansible
     ansible-lint
@@ -20,14 +25,14 @@
     podman-compose
     colima
     qemu
-    
+
     # Kubernetes
     kubectl
     k9s
     kubernetes-helm
     kustomize
     fluxcd
-    
+
     # Réseau & Sécurité
     nmap
     wireshark-cli
@@ -36,7 +41,7 @@
     age
     sshpass
     tailscale
-    
+
     # Développement
     git
     gh
@@ -51,18 +56,18 @@
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";
-  
+
     taps = [
       "nikitabobko/tap"
     ];
-  
+
     casks = [
       # Navigateurs & Com
       "google-chrome"
       "discord"
       "zoom"
-      "spotify"     
- 
+      "spotify"
+
       # Outils Tech
       "visual-studio-code"
       "wezterm"
@@ -71,27 +76,27 @@
       "podman-desktop"
       "caido"
       "maccy"
-      
+
       # Productivité & Système
       "logseq"
       "bitwarden"
       "google-drive"
       "aerospace"
       "alt-tab"
-      
+
       # Fonts (Installées via Brew c'est souvent plus simple pour les Casks)
       "font-fira-code"
       "font-fira-code-nerd-font"
       "font-jetbrains-mono-nerd-font"
     ];
 
-    # Outils CLI qu'on laisse à Homebrew 
+    # Outils CLI qu'on laisse à Homebrew
     brews = [
       "bettercap"
       "mas"
       "wifi-password"
     ];
-    
+
     # Apps du Mac App Store (Tu devras trouver les IDs avec `mas search`)
     masApps = {
       "Bitwarden" = 1352778147;
@@ -105,12 +110,12 @@
   };
   system.primaryUser = "flebel";
   security.pam.services.sudo_local.touchIdAuth = true;
-  
+
   system.defaults = {
     dock = {
       autohide = true;
       mru-spaces = false;
-      
+
       persistent-apps = [
         "/Applications/Google Chrome.app"
         "/Applications/WezTerm.app"
