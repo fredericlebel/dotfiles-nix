@@ -1,12 +1,10 @@
 { pkgs, user, ... }: {
 
-  # --- 1. CONFIGURATION UTILISATEUR SYSTÈME ---
   users.users."${user}" = {
     name = user;
     home = "/Users/${user}";
   };
 
-  # --- 2. CONFIGURATION MACOS (NIX-DARWIN) ---
   system = {
     stateVersion = 4;
     primaryUser = user;
@@ -39,11 +37,9 @@
     };
   };
 
-  # --- 3. SÉCURITÉ & NIX ---
   security.pam.services.sudo_local.touchIdAuth = true;
   nix.enable = false;
 
-  # --- 4. CONFIGURATION HOMEBREW ---
   nix-homebrew = {
     enable = true;
     enableRosetta = true;

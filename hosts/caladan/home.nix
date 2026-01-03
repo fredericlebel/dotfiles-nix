@@ -16,7 +16,6 @@
     homeDirectory = "/Users/${user}";
 
     packages = with pkgs; [
-      # Outils spécifiques macOS uniquement
       colima
     ];
   };
