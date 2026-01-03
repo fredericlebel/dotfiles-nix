@@ -1,13 +1,14 @@
 { pkgs, ... }: {
 
   imports = [
-    ./modules/programs/aerospace  # Nix cherche automatiquement le "default.nix" dedans
+    ./modules/programs/aerospace
     ./modules/programs/gpg
-    # ./modules/programs/wezterm  # (Pour quand tu feras pareil avec Wezterm)
+    ./modules/programs/wezterm
   ];
 
   my.programs.aerospace.enable = true;
   my.programs.gpg.enable = true;
+  my.programs.wezterm.enable = true;
   
   home.username = "flebel";
   home.homeDirectory = "/Users/flebel";
