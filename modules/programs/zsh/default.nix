@@ -1,15 +1,16 @@
-{ lib, config, pkgs, ... }:
-
-let
-  cfg = config.my.programs.zsh;
-in
 {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  cfg = config.my.programs.zsh;
+in {
   options.my.programs.zsh = {
     enable = lib.mkEnableOption "Zsh configuration";
   };
 
   config = lib.mkIf cfg.enable {
-
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -36,7 +37,7 @@ in
 
       oh-my-zsh = {
         enable = true;
-        plugins = [ "docker" "docker-compose" "git" "git-flow" "git-flow-avh" "sudo" ];
+        plugins = ["docker" "docker-compose" "git" "git-flow" "git-flow-avh" "sudo"];
       };
       initContent = ''
         bindkey -e

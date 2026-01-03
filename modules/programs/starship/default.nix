@@ -1,9 +1,11 @@
-{ lib, config, pkgs, ... }:
-
-let
-  cfg = config.my.programs.starship;
-in
 {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  cfg = config.my.programs.starship;
+in {
   options.my.programs.starship = {
     enable = lib.mkEnableOption "Starship prompt";
   };
@@ -29,7 +31,6 @@ in
         package = {
           disabled = true;
         };
-
       };
     };
   };
