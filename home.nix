@@ -6,21 +6,23 @@
     ./modules/programs/wezterm
   ];
 
-  my.programs.aerospace.enable = true;
-  my.programs.gpg.enable = true;
-  my.programs.wezterm.enable = true;
-  
-  home.username = "flebel";
-  home.homeDirectory = "/Users/flebel";
-  
-  home.stateVersion = "24.05"; 
+  my.programs = {
+    aerospace.enable = true;
+    gpg.enable = true;
+    wezterm.enable = true;
+  };
 
-  home.packages = with pkgs; [
-    bat
-    fzf
-    ripgrep
-    jq
-  ];
+  home = {
+    username = "flebel";
+    homeDirectory = "/Users/flebel";
+    stateVersion = "24.05";
+    packages = with pkgs; [
+      bat
+      fzf
+      ripgrep
+      jq
+    ];
+  };
 
   # Exemple de config programme
   # programs.zsh.enable = true;
