@@ -5,6 +5,7 @@
     ./modules/programs/gpg
     ./modules/programs/starship
     ./modules/programs/wezterm
+    ./modules/programs/yazi
     ./modules/programs/zsh
   ];
 
@@ -13,6 +14,7 @@
     gpg.enable = true;
     starship.enable = true;
     wezterm.enable = true;
+    yazi.enable = true;
     zsh.enable = true;
   };
 
