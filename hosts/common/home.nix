@@ -1,5 +1,4 @@
-{ pkgs, ... }: {
-
+{pkgs, ...}: {
   imports = [
     ../../modules/programs/gpg
     ../../modules/programs/starship
@@ -14,7 +13,7 @@
     zsh.enable = true;
   };
 
-home = {
+  home = {
     stateVersion = "24.05";
 
     packages = with pkgs; [

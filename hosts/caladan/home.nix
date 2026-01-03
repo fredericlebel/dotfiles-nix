@@ -1,5 +1,8 @@
-{ pkgs, user, ... }: {
-
+{
+  pkgs,
+  user,
+  ...
+}: {
   imports = [
     ../common/home.nix
     ../../modules/programs/aerospace

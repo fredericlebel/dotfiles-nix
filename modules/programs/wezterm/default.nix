@@ -1,9 +1,11 @@
-{ lib, config, pkgs, ... }:
-
-let
-  cfg = config.my.programs.wezterm;
-in
 {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  cfg = config.my.programs.wezterm;
+in {
   options.my.programs.wezterm = {
     enable = lib.mkEnableOption "WezTerm configuration";
   };
