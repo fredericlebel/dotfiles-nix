@@ -7,6 +7,9 @@
   home-manager = inputs.home-manager;
   darwin = inputs.darwin;
   nix-homebrew = inputs.nix-homebrew;
+
+  # 1. AJOUT : On récupère l'input Disko
+  disko = inputs.disko;
 in {
   mkDarwinSystem = hostName:
     darwin.lib.darwinSystem {
@@ -30,6 +33,8 @@ in {
       system = "x86_64-linux";
       specialArgs = {inherit inputs user;};
       modules = [
+        disko.nixosModules.disko
+
         ../hosts/${hostName}/default.nix
         home-manager.nixosModules.home-manager
         {
