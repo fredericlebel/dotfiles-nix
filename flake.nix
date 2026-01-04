@@ -11,6 +11,9 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
@@ -34,14 +37,14 @@
     );
 
     packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
-    packages."x86_64-linux".default = self.nixosConfigurations."vps-01".system;
+    packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
 
     darwinConfigurations = {
       "caladan" = mylib.mkDarwinSystem "caladan";
     };
 
     nixosConfigurations = {
-      "vps-01" = mylib.mkNixosSystem "vps-01";
+      "ix" = mylib.mkNixosSystem "ix";
     };
   };
 }

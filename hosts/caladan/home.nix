@@ -11,6 +11,8 @@
 
   my.programs = {
     aerospace.enable = true;
+    gpg.enable = true;
+    zsh.enable = true;
     wezterm.enable = true;
   };
 
