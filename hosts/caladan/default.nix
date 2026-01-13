@@ -8,6 +8,24 @@
     home = "/Users/${user}";
   };
 
+  imports = [
+    ../../modules/features/aerospace
+    ../../modules/features/git
+    ../../modules/features/logseq
+    ../../modules/features/nix-maintenance
+    ../../modules/features/tailscale
+    ../../modules/features/wezterm
+  ];
+
+  my.features = {
+    aerospace.enable = true;
+    git.enable = true;
+    logseq.enable = true;
+    nix-maintenance.enable = true;
+    tailscale.enable = true;
+    wezterm.enable = true;
+  };
+
   system = {
     stateVersion = 4;
     primaryUser = user;
@@ -25,10 +43,12 @@
 
       dock = {
         autohide = true;
+        autohide-time-modifier = 0.0;
+        autohide-delay = 0.0;
         mru-spaces = false;
         persistent-apps = [
           "/Applications/Google Chrome.app"
-          "/Applications/WezTerm.app"
+          "/Applications/Nix Apps/WezTerm.app"
           "/Applications/Visual Studio Code.app"
           "/Applications/Logseq.app"
           "/Applications/Spotify.app"
@@ -60,11 +80,13 @@
     };
 
     taps = [
+      "jorgelbg/tap"
       "nikitabobko/tap"
     ];
 
     brews = [
       "mas"
+      "pinentry-touchid"
       "wifi-password"
     ];
 
@@ -81,11 +103,9 @@
       "pgadmin4"
       "podman-desktop"
       "visual-studio-code"
-      "wezterm"
       "wireshark-app"
 
       # Productivité & Système
-      "aerospace"
       "alt-tab"
       "bitwarden"
       "google-drive"

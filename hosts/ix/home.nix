@@ -3,7 +3,7 @@
   user,
   ...
 }: {
-  imports = [../common/home.nix];
+  imports = [../common/core.nix];
 
   home = {
     username = user;
