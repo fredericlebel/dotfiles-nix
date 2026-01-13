@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.my.programs.zsh;
+  cfg = config.my.features.zsh;
 in {
-  options.my.programs.zsh = {
+  options.my.features.zsh = {
     enable = lib.mkEnableOption "Zsh configuration";
   };
 
