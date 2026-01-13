@@ -4,9 +4,9 @@
   pkgs,
   ...
 }: let
-  cfg = config.my.programs.yazi;
+  cfg = config.my.features.yazi;
 in {
-  options.my.programs.yazi = {
+  options.my.features.yazi = {
     enable = lib.mkEnableOption "Yazi Terminal File Manager";
   };
 
@@ -18,10 +18,10 @@ in {
 
       settings = {
         manager = {
-          show_hidden = true; # Afficher les fichiers cachés par défaut
-          sort_by = "natural"; # Tri naturel (file1, file2, file10)
-          sort_dir_first = true; # Dossiers en haut
-          linemode = "size"; # Affiche la taille à côté du nom
+          show_hidden = true;
+          sort_by = "natural";
+          sort_dir_first = true;
+          linemode = "size";
         };
 
         preview = {
@@ -31,7 +31,6 @@ in {
         };
       };
 
-      # Optionnel : Si tu veux fixer un thème spécifique
       # theme = { ... };
     };
   };
