@@ -5,23 +5,18 @@
 }: {
   imports = [
     ../common/home.nix
-    ../../modules/programs/aerospace
-    ../../modules/programs/wezterm
+    ../../modules/features/containers
+    ../../modules/features/gpg
   ];
 
-  my.programs = {
-    aerospace.enable = true;
+  my.features = {
+    containers.enable = true;
     gpg.enable = true;
     zsh.enable = true;
-    wezterm.enable = true;
   };
 
   home = {
     username = user;
     homeDirectory = "/Users/${user}";
-
-    packages = with pkgs; [
-      colima
-    ];
   };
 }

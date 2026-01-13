@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   imports = [
-    #../../modules/programs/gpg
+    ../../modules/features/gpg
     ../../modules/features/starship
     ../../modules/features/yazi
     ../../modules/features/zsh
@@ -18,7 +18,6 @@
     packages = with pkgs; [
       # --- Base System ---
       bat
-      ffmpeg
       fzf
       gnupg
       jq
@@ -26,33 +25,16 @@
       tree
       wget
 
-      # --- Rust ---
-      cargo
-      rustc
-      rustfmt
-
       # --- DevOps / Infrastructure ---
-      ansible
-      ansible-lint
-      docker
-      docker-compose
       podman
       podman-compose
 
-      # --- Kubernetes ---
-      fluxcd
-      k9s
-      kubectl
-      kubernetes-helm
-      kustomize
-
       # --- Réseau & Sécurité ---
       age
-      aircrack-ng
       nmap
       sops
-      sshpass
-      wireshark-cli
+      tailscale
+      tcpdump
 
       # --- Développement ---
       direnv
