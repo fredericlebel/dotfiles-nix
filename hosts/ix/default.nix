@@ -8,8 +8,13 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
+    ../../modules/features/tailscale
     ../../modules/services/aide
   ];
+
+  my.features= {
+    tailscale.enable = true;
+  };
 
   my.services = {
     aide.enable = true;
