@@ -8,7 +8,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
-    #../../modules/darwin/tailscale
     ../../modules/nixos/aide
     ../../modules/nixos/suricata
     ../../modules/nixos/openssh
@@ -78,23 +77,9 @@
     nftables.enable = true;
   };
 
-  #services.openssh = {
-  #  enable = true;
-  #  settings = {
-  #    PermitRootLogin = "yes";
-  #    PasswordAuthentication = false;
-  #    KbdInteractiveAuthentication = false;
-  #    X11Forwarding = false;
-  #    AllowAgentForwarding = false;
-  #    KexAlgorithms = ["curve25519-sha256" "curve25519-sha256@libssh.org"];
-  #    Ciphers = ["chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com"];
-  #    Macs = ["hmac-sha2-512-etm@openssh.com"];
-  #  };
-  #};
+  programs.zsh.enable = true;
 
   time.timeZone = "America/Montreal";
-
-  programs.zsh.enable = true;
 
   users = {
     #defaultUserShell = pkgs.zsh;
@@ -124,5 +109,11 @@
     ];
   };
   security.sudo.wheelNeedsPassword = false;
+
+  sops = {
+    defaultSopsFile = ../../secrets/ix.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  };
+
   system.stateVersion = "26.05";
 }

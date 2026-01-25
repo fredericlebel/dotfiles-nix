@@ -16,10 +16,10 @@ in {
     services.vaultwarden = {
       enable = true;
       #backupDir = "/var/backup/vaultwarden/";
-      environmentFile = "/var/lib/vaultwarden/.env";
+      environmentFile = config.sops.secrets."vaultwarden-env".path;
       config = {
         DOMAIN = "https://vaultwarden.ix.opval.com/";
-        SIGNUPS_ALLOWED = true;
+        SIGNUPS_ALLOWED = false;
         SHOW_PASSWORD_HINT = false;
         ROCKET_ADDRESS = "127.0.0.1";
         ROCKET_PORT = 8222;
@@ -49,6 +49,14 @@ in {
     security.acme = {
       acceptTerms = true;
       defaults.email = "flebel@opval.com";
+    };
+    sops.secrets."vaultwarden-env" = {
+      owner = "vaultwarden";
+      mode = "0400";
+    };
+    systemd.services.vaultwarden = {
+      after = [ "sops-install-secrets.service" ];
+      wants = [ "sops-install-secrets.service" ];
     };
   };
 }
