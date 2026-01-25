@@ -9,6 +9,7 @@
   darwin = inputs.darwin;
   nix-homebrew = inputs.nix-homebrew;
   disko = inputs.disko;
+  sops-nix = inputs.sops-nix;
 in {
   mkDarwinSystem = hostName:
     darwin.lib.darwinSystem {
@@ -18,6 +19,7 @@ in {
       modules = [
         ../hosts/${hostName}/default.nix
         mac-app-util.darwinModules.default
+        sops-nix.darwinModules.sops
 
         home-manager.darwinModules.home-manager
         {
@@ -42,6 +44,7 @@ in {
       modules = [
         disko.nixosModules.disko
         ../hosts/${hostName}/default.nix
+        sops-nix.nixosModules.sops
 
         home-manager.nixosModules.home-manager
         {

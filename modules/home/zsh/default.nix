@@ -41,6 +41,18 @@ in {
         ];
       };
 
+      #system.sessionVariables = {
+      #  SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
+      #};
+
+      #shellInit = ''
+      #  export SOPS_AGE_KEY_FILE=$HOME/.config/sops/age/keys.txt
+      #'';
+
+      sessionVariables = {
+        SOPS_AGE_KEY_FILE = "$HOME/.config/sops/age/keys.txt";
+      };
+
       initContent = lib.mkBefore ''
         ssh-production() {
           # Change terminal background to dark red

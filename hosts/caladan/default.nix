@@ -16,6 +16,8 @@
     logseq.enable = true;
   };
 
+  services.openssh.enable = false;
+
   # The "Where"
   system.defaults.dock.persistent-apps = [
     "/Applications/Google Chrome.app"
