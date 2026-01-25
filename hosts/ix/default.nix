@@ -8,23 +8,53 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
-    ../../modules/features/tailscale
-    ../../modules/services/aide
+    #../../modules/darwin/tailscale
+    ../../modules/nixos/aide
+    ../../modules/nixos/suricata
+    ../../modules/nixos/openssh
+    ../../modules/nixos/vaultwarden
+    ../../modules/nixos/zsh
   ];
 
-  my.features= {
-    tailscale.enable = true;
+  boot = {
+    loader.grub = {
+      enable = true;
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+    };
+    kernelPackages = pkgs.linuxPackages_hardened;
+    kernel.sysctl = {
+      "kernel.dmesg_restrict" = 1;
+      "net.ipv4.conf.all.log_martians" = 1;
+      "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
+      "kernel.kptr_restrict" = 2;
+      "kernel.unprivileged_bpf_disabled" = 1;
+    };
+    tmp = {
+      cleanOnBoot = true;
+      useTmpfs = true;
+    };
   };
+
+  fileSystems."/boot".options = ["umask=0077"];
 
   my.services = {
     aide.enable = true;
+    openssh.enable = true;
+    suricata = {
+      enable = true;
+      interface = "ens3";
+    };
+    vaultwarden.enable = true;
   };
 
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-  };
+  environment.systemPackages = with pkgs; [
+    btop
+    ethtool
+    htop
+    jq
+    tcpdump
+  ];
 
   swapDevices = [
     {
@@ -36,30 +66,38 @@
   networking = {
     firewall = {
       enable = true;
-
-      allowedTCPPorts = [22];
+      allowedTCPPorts = [22 80 443];
       allowedUDPPorts = [];
+      extraInputRules = ''
+        tcp dport 22 ct state new,untracked limit rate 3/minute accept
+        tcp dport 22 drop
+      '';
       trustedInterfaces = ["tailscale0"];
     };
     hostName = "ix";
+    nftables.enable = true;
   };
 
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "yes";
-      PasswordAuthentication = false;
-    };
-  };
+  #services.openssh = {
+  #  enable = true;
+  #  settings = {
+  #    PermitRootLogin = "yes";
+  #    PasswordAuthentication = false;
+  #    KbdInteractiveAuthentication = false;
+  #    X11Forwarding = false;
+  #    AllowAgentForwarding = false;
+  #    KexAlgorithms = ["curve25519-sha256" "curve25519-sha256@libssh.org"];
+  #    Ciphers = ["chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com"];
+  #    Macs = ["hmac-sha2-512-etm@openssh.com"];
+  #  };
+  #};
 
   time.timeZone = "America/Montreal";
 
-  programs.zsh = {
-    enable = true;
-  };
+  programs.zsh.enable = true;
 
   users = {
-    defaultUserShell = pkgs.zsh;
+    #defaultUserShell = pkgs.zsh;
     users = {
       root.openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
@@ -67,7 +105,7 @@
 
       "${user}" = {
         isNormalUser = true;
-        extraGroups = ["wheel" "docker"];
+        extraGroups = ["wheel"];
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
         ];
@@ -75,6 +113,16 @@
     };
   };
 
+  security.doas = {
+    enable = true;
+    extraRules = [
+      {
+        users = ["flebel"];
+        keepEnv = true;
+        persist = true;
+      }
+    ];
+  };
   security.sudo.wheelNeedsPassword = false;
   system.stateVersion = "26.05";
 }

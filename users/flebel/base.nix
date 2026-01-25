@@ -1,9 +1,9 @@
 {pkgs, ...}: {
   imports = [
-    #../../modules/programs/gpg
-    ../../modules/features/starship
-    ../../modules/features/yazi
-    ../../modules/features/zsh
+    ../../modules/home/bundles/dev.nix
+    ../../modules/home/starship
+    ../../modules/home/yazi
+    ../../modules/home/zsh
   ];
 
   my.features = {
@@ -13,7 +13,7 @@
   };
 
   home = {
-    stateVersion = "24.05";
+    stateVersion = "26.05";
 
     packages = with pkgs; [
       # --- Base System ---

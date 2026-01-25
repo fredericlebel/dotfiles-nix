@@ -16,14 +16,15 @@ in {
       specialArgs = {inherit inputs user;};
 
       modules = [
-        mac-app-util.darwinModules.default
         ../hosts/${hostName}/default.nix
+        mac-app-util.darwinModules.default
 
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs user;};
+          home-manager.backupFileExtension = "hm-backup";
           home-manager.users.${user} = {
             imports = [
               ../hosts/${hostName}/home.nix
@@ -31,7 +32,6 @@ in {
             ];
           };
         }
-
         nix-homebrew.darwinModules.nix-homebrew
       ];
     };
@@ -48,6 +48,7 @@ in {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs user;};
+          home-manager.backupFileExtension = "hm-backup";
           home-manager.users.${user} = import ../hosts/${hostName}/home.nix;
         }
       ];
