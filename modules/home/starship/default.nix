@@ -17,7 +17,20 @@ in {
       enableZshIntegration = true;
 
       settings = {
-        add_newline = true;
+        #add_newline = true;
+        username = {
+          style_user = "blue bold";
+          style_root = "red bold";
+          format = "[$user]($style) ";
+          disabled = false;
+          show_always = false;
+        };
+        hostname = {
+          ssh_only = true;
+          format = "sur [$hostname](bold red) ";
+          disabled = false;
+        };
+        format = "$username$hostname$directory$git_branch$character";
 
         scan_timeout = 10;
 
@@ -58,7 +71,7 @@ in {
         };
 
         cmd_duration = {
-          min_time = 500; # Affiche la durée si la commande prend > 500ms
+          min_time = 500;
           show_notifications = true;
         };
       };
