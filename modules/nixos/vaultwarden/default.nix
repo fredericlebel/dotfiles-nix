@@ -22,6 +22,7 @@ in {
 
     services.vaultwarden = {
       enable = true;
+      dbBackend = "postgresql";
       #backupDir = "/var/backup/vaultwarden/";
       environmentFile = config.sops.secrets."vaultwarden-env".path;
       config = {
@@ -48,6 +49,20 @@ in {
         };
       };
     };
+    services.postgresql = {
+      enable = true;
+      package = pkgs.postgresql_17;
+      ensureDatabases = [ "vaultwarden" ];
+      ensureUsers = [{
+        name = "vaultwarden";
+        ensureDBOwnership = true;
+      }];
+    };
+    services.postgresqlBackup = {
+      enable = true;
+      databases = [ "vaultwarden" ];
+      location = "/var/lib/postgresql/backups";
+    };
     security.acme = {
       acceptTerms = true;
       defaults.email = myMeta.adminEmail;
@@ -57,8 +72,8 @@ in {
       mode = "0400";
     };
     systemd.services.vaultwarden = {
-      after = ["sops-install-secrets.service"];
-      wants = ["sops-install-secrets.service"];
+      after = ["sops-install-secrets.service" "postgresql.service"];
+      wants = ["sops-install-secrets.service" "postgresql.service"];
     };
   };
 }
