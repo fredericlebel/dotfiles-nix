@@ -1,0 +1,24 @@
+# Nix / NixOS
+result
+result-*
+
+# Secrets
+.sops.yaml.tmp
+*.age
+keys.txt
+secrets.decrypted.yaml
+
+# Home Manager
+*.hm-backup
+
+# direnv
+.direnv/
+
+# darwin
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editeurs
+.vscode/
+*.swp
