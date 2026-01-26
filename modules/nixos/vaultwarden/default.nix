@@ -10,11 +10,11 @@ in {
   options.my.services.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
 
-  domain = lib.mkOption {
-    type = lib.types.str;
-    default = myMeta.vaultwardenSubdomain;
-    description = " Le domaine dynamique de vaultwarden";
-  };
+    domain = lib.mkOption {
+      type = lib.types.str;
+      default = myMeta.vaultwardenSubdomain;
+      description = " Le domaine dynamique de vaultwarden";
+    };
   };
 
   config = lib.mkIf cfg.enable {
