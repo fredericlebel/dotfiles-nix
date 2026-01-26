@@ -3,57 +3,68 @@
   user,
   ...
 }: let
-  mac-app-util = inputs.mac-app-util;
-  pkgs-unstable = inputs.nixpkgs;
-  home-manager = inputs.home-manager;
-  darwin = inputs.darwin;
-  nix-homebrew = inputs.nix-homebrew;
-  disko = inputs.disko;
-  sops-nix = inputs.sops-nix;
+  myMeta = {
+    adminEmail = "flebel@opval.com";
+    baseDomain = "opval.com";
+    vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+  };
 in {
-  mkDarwinSystem = hostName:
-    darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = {inherit inputs user;};
+  mkSystem = {
+    hostName,
+    system,
+    isDarwin ? false,
+  }: let
+    builder =
+      if isDarwin
+      then inputs.darwin.lib.darwinSystem
+      else inputs.nixpkgs.lib.nixosSystem;
 
-      modules = [
-        ../hosts/${hostName}/default.nix
-        mac-app-util.darwinModules.default
-        sops-nix.darwinModules.sops
-
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit inputs user;};
-          home-manager.backupFileExtension = "hm-backup";
-          home-manager.users.${user} = {
-            imports = [
-              ../hosts/${hostName}/home.nix
-              mac-app-util.homeManagerModules.default
-            ];
-          };
-        }
-        nix-homebrew.darwinModules.nix-homebrew
+    osModules =
+      if isDarwin
+      then [
+        inputs.mac-app-util.darwinModules.default
+        inputs.nix-homebrew.darwinModules.nix-homebrew
+        inputs.sops-nix.darwinModules.sops
+      ]
+      else [
+        inputs.disko.nixosModules.disko
+        inputs.sops-nix.nixosModules.sops
       ];
-    };
-  mkNixosSystem = hostName:
-    pkgs-unstable.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {inherit inputs user;};
-      modules = [
-        disko.nixosModules.disko
-        ../hosts/${hostName}/default.nix
-        sops-nix.nixosModules.sops
 
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit inputs user;};
-          home-manager.backupFileExtension = "hm-backup";
-          home-manager.users.${user} = import ../hosts/${hostName}/home.nix;
-        }
-      ];
+    homeManagerModule =
+      if isDarwin
+      then inputs.home-manager.darwinModules.home-manager
+      else inputs.home-manager.nixosModules.home-manager;
+  in
+    builder {
+      inherit system;
+      specialArgs = {inherit inputs user myMeta;};
+
+      modules =
+        osModules
+        ++ [
+          ../hosts/${hostName}/configuration.nix
+
+          homeManagerModule
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = {inherit inputs user myMeta;};
+              users.${user} = {
+                imports =
+                  [
+                    ../hosts/${hostName}/home.nix
+                  ]
+                  ++ (
+                    if isDarwin
+                    then [inputs.mac-app-util.homeManagerModules.default]
+                    else []
+                  );
+              };
+            };
+          }
+        ];
     };
 }

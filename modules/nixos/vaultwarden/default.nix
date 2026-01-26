@@ -1,13 +1,20 @@
 {
-  lib,
-  pkgs,
   config,
+  lib,
+  myMeta,
+  pkgs,
   ...
 }: let
   cfg = config.my.services.vaultwarden;
 in {
   options.my.services.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
+
+  domain = lib.mkOption {
+    type = lib.types.str;
+    default = myMeta.vaultwardenSubdomain;
+    description = " Le domaine dynamique de vaultwarden";
+  };
   };
 
   config = lib.mkIf cfg.enable {
@@ -18,17 +25,12 @@ in {
       #backupDir = "/var/backup/vaultwarden/";
       environmentFile = config.sops.secrets."vaultwarden-env".path;
       config = {
-        DOMAIN = "https://vaultwarden.ix.opval.com/";
+        DOMAIN = "https://${cfg.domain}/";
         SIGNUPS_ALLOWED = false;
         SHOW_PASSWORD_HINT = false;
         ROCKET_ADDRESS = "127.0.0.1";
         ROCKET_PORT = 8222;
         ROCKET_LOG = "critical";
-        SMTP_HOST = "localhost";
-        SMTP_PORT = 25;
-        SMTP_SSL = false;
-        SMTP_FROM = "vaultwarden@caliban.nixos.org";
-        SMTP_FROM_NAME = "NixOS Vaultwarden";
         ORG_EVENTS_ENABLED = true;
       };
     };
@@ -38,7 +40,7 @@ in {
       recommendedOptimisation = true;
       recommendedProxySettings = true;
       recommendedTlsSettings = true;
-      virtualHosts."vaultwarden.ix.opval.com" = {
+      virtualHosts."${cfg.domain}" = {
         forceSSL = true;
         enableACME = true;
         locations."/" = {
@@ -48,15 +50,15 @@ in {
     };
     security.acme = {
       acceptTerms = true;
-      defaults.email = "flebel@opval.com";
+      defaults.email = myMeta.adminEmail;
     };
     sops.secrets."vaultwarden-env" = {
       owner = "vaultwarden";
       mode = "0400";
     };
     systemd.services.vaultwarden = {
-      after = [ "sops-install-secrets.service" ];
-      wants = [ "sops-install-secrets.service" ];
+      after = ["sops-install-secrets.service"];
+      wants = ["sops-install-secrets.service"];
     };
   };
 }
