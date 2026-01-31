@@ -1,4 +1,5 @@
-{user, ...}: {
+{ user, ... }:
+{
   imports = [
     ../../users/${user}/base.nix
   ];

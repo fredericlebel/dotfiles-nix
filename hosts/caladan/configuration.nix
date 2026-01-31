@@ -2,7 +2,8 @@
   pkgs,
   user,
   ...
-}: {
+}:
+{
   imports = [
     ../../modules/darwin/system-defaults
     ../../modules/darwin/homebrew
