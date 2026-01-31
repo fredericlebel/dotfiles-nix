@@ -32,39 +32,47 @@
     sops-nix.url = "github:Mic92/sops-nix";
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    ...
-  }: let
-    user = "flebel";
-    # On importe notre helper
-    mylib = import ./lib/helpers.nix {inherit inputs user;};
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      ...
+    }:
+    let
+      user = "flebel";
 
-    systems = ["aarch64-darwin" "x86_64-linux"];
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+      mylib = import ./lib/helpers.nix { inherit inputs user; };
 
-    # Configurations macOS (Architecture ARM/M1/M2/M3)
-    darwinConfigurations = {
-      "caladan" = mylib.mkSystem {
-        hostName = "caladan";
-        system = "aarch64-darwin";
-        isDarwin = true;
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+      darwinConfigurations = {
+        "caladan" = mylib.mkSystem {
+          hostName = "caladan";
+          system = "aarch64-darwin";
+          isDarwin = true;
+        };
       };
-    };
 
-    # Configurations NixOS (Architecture PC/Cloud)
-    nixosConfigurations = {
-      "ix" = mylib.mkSystem {
-        hostName = "ix";
-        system = "x86_64-linux";
+      nixosConfigurations = {
+        "ix" = mylib.mkSystem {
+          hostName = "ix";
+          system = "x86_64-linux";
+          hostMeta = {
+            s3Endpoint = "s3.us-west-000.backblazeb2.com";
+            s3Bucket = "ix-opval-com";
+            vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+          };
+        };
       };
-    };
 
-    # Raccourcis pour nix build
-    packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
-    packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
-  };
+      packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
+      packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
+    };
 }

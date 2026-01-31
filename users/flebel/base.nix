@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     ../../modules/home/bundles/dev.nix
     ../../modules/home/starship

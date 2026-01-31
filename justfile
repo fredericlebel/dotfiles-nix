@@ -13,7 +13,8 @@ clean age='7d':
 
 # Déploiement macOS (Darwin) - ex: just darwin caladan
 darwin host:
-    nix run nix-darwin#darwin-rebuild -- switch --flake .#{{host}}
+    sudo -E nix run nix-darwin#darwin-rebuild -- switch \
+        --flake .#{{host}}
 
 # Déploiement NixOS à distance - ex: just nixos ix
 nixos host:
