@@ -11,10 +11,10 @@
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
     ../../modules/features/observability
+    ../../modules/features/vaultwarden
     ../../modules/nixos/aide
     ../../modules/nixos/openssh
     ../../modules/nixos/suricata
-    ../../modules/nixos/vaultwarden
     ../../modules/nixos/zsh
   ];
 
@@ -40,9 +40,12 @@
 
   fileSystems."/boot".options = [ "umask=0077" ];
 
-  my.features.observability = {
-    enable = true;
-    role = "server";
+  my.features = {
+    observability = {
+      enable = true;
+      role = "server";
+    };
+    vaultwarden.enable = true;
   };
 
   my.services = {
@@ -52,7 +55,6 @@
       enable = true;
       interface = "ens3";
     };
-    vaultwarden.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

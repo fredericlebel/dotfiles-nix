@@ -6,11 +6,11 @@
   ...
 }:
 let
-  cfg = config.my.services.vaultwarden;
+  cfg = config.my.features.vaultwarden;
   pgBackupPath = "${config.services.postgresqlBackup.location}/vaultwarden.sql.gz";
 in
 {
-  options.my.services.vaultwarden = {
+  options.my.features.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
 
     domain = lib.mkOption {
