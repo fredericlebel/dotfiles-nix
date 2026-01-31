@@ -4,14 +4,19 @@
   myMeta,
   user,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
     ../../modules/nixos/aide
-    ../../modules/nixos/suricata
+    ../../modules/nixos/alertmanager
+    ../../modules/nixos/grafana
     ../../modules/nixos/openssh
+    ../../modules/nixos/suricata
+    ../../modules/nixos/prometheus
+    ../../modules/nixos/node-exporter
     ../../modules/nixos/vaultwarden
     ../../modules/nixos/zsh
   ];
@@ -36,11 +41,15 @@
     };
   };
 
-  fileSystems."/boot".options = ["umask=0077"];
+  fileSystems."/boot".options = [ "umask=0077" ];
 
   my.services = {
     aide.enable = true;
+    grafana.enable = true;
     openssh.enable = true;
+    prometheus.enable = true;
+    prometheus.alertmanager.enable = true;
+    prometheus.exporters.node.enable = true;
     suricata = {
       enable = true;
       interface = "ens3";
@@ -66,16 +75,35 @@
   networking = {
     firewall = {
       enable = true;
-      allowedTCPPorts = [22 80 443];
-      allowedUDPPorts = [];
+      allowedTCPPorts = [
+        22
+        80
+        443
+      ];
+      allowedUDPPorts = [ ];
       extraInputRules = ''
         tcp dport 22 ct state new,untracked limit rate 3/minute accept
         tcp dport 22 drop
       '';
-      trustedInterfaces = ["tailscale0"];
+      trustedInterfaces = [ "tailscale0" ];
     };
     hostName = "ix";
     nftables.enable = true;
+  };
+
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 
   programs.zsh.enable = true;
@@ -91,7 +119,7 @@
 
       "${user}" = {
         isNormalUser = true;
-        extraGroups = ["wheel"];
+        extraGroups = [ "wheel" ];
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
         ];
@@ -103,7 +131,7 @@
     enable = true;
     extraRules = [
       {
-        users = ["flebel"];
+        users = [ "flebel" ];
         keepEnv = true;
         persist = true;
       }
@@ -113,8 +141,10 @@
 
   sops = {
     defaultSopsFile = ../../secrets/ix.yaml;
-    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   };
+
+  #nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "26.05";
 }

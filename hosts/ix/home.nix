@@ -2,7 +2,8 @@
   pkgs,
   user,
   ...
-}: {
+}:
+{
   imports = [
     ../common/core.nix
     ../../modules/home/git
