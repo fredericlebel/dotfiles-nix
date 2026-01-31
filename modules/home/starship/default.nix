@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.starship;
-in {
+in
+{
   options.my.features.starship = {
     enable = lib.mkEnableOption "Starship prompt";
   };
@@ -58,7 +60,7 @@ in {
 
         python = {
           symbol = "🐍 ";
-          detect_extensions = ["py"];
+          detect_extensions = [ "py" ];
         };
 
         rust = {
