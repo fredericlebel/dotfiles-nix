@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.screen;
-in {
+in
+{
   options.my.features.screen = {
     enable = lib.mkEnableOption "screen avec intégration Zsh";
   };
