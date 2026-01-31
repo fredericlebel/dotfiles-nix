@@ -4,12 +4,12 @@
   myMeta,
   user,
   ...
-}:
-{
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
+    ../../modules/nixos/bundles/base-server.nix
     ../../modules/features/observability
     ../../modules/features/vaultwarden
     ../../modules/nixos/aide
@@ -38,7 +38,7 @@
     };
   };
 
-  fileSystems."/boot".options = [ "umask=0077" ];
+  fileSystems."/boot".options = ["umask=0077"];
 
   my.features = {
     observability = {
@@ -80,12 +80,12 @@
         80
         443
       ];
-      allowedUDPPorts = [ ];
+      allowedUDPPorts = [];
       extraInputRules = ''
         tcp dport 22 ct state new,untracked limit rate 3/minute accept
         tcp dport 22 drop
       '';
-      trustedInterfaces = [ "tailscale0" ];
+      trustedInterfaces = ["tailscale0"];
     };
     hostName = "ix";
     domain = "opval.com";
@@ -120,7 +120,7 @@
 
       "${user}" = {
         isNormalUser = true;
-        extraGroups = [ "wheel" ];
+        extraGroups = ["wheel"];
         openssh.authorizedKeys.keys = [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
         ];
@@ -132,7 +132,7 @@
     enable = true;
     extraRules = [
       {
-        users = [ "flebel" ];
+        users = ["flebel"];
         keepEnv = true;
         persist = true;
       }
@@ -142,7 +142,7 @@
 
   sops = {
     defaultSopsFile = ../../secrets/ix.yaml;
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   };
 
   #nixpkgs.config.allowUnfree = true;
