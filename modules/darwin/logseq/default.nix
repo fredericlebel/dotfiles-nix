@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.logseq;
-in {
+in
+{
   options.my.features.logseq = {
     enable = lib.mkEnableOption "Logseq Knowledge Base (via Homebrew)";
   };
