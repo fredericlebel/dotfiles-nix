@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.fzf;
-in {
+in
+{
   options.my.features.fzf = {
     enable = lib.mkEnableOption "fzf avec intégration Zsh";
   };
