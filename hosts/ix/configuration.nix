@@ -10,13 +10,10 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
+    ../../modules/features/observability
     ../../modules/nixos/aide
-    ../../modules/nixos/alertmanager
-    ../../modules/nixos/grafana
     ../../modules/nixos/openssh
     ../../modules/nixos/suricata
-    ../../modules/nixos/prometheus
-    ../../modules/nixos/node-exporter
     ../../modules/nixos/vaultwarden
     ../../modules/nixos/zsh
   ];
@@ -43,13 +40,14 @@
 
   fileSystems."/boot".options = [ "umask=0077" ];
 
+  my.features.observability = {
+    enable = true;
+    role = "server";
+  };
+
   my.services = {
     aide.enable = true;
-    grafana.enable = true;
     openssh.enable = true;
-    prometheus.enable = true;
-    prometheus.alertmanager.enable = true;
-    prometheus.exporters.node.enable = true;
     suricata = {
       enable = true;
       interface = "ens3";
@@ -88,6 +86,7 @@
       trustedInterfaces = [ "tailscale0" ];
     };
     hostName = "ix";
+    domain = "opval.com";
     nftables.enable = true;
   };
 

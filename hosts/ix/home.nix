@@ -5,7 +5,6 @@
 }:
 {
   imports = [
-    ../common/core.nix
     ../../modules/home/git
     ../../modules/home/zsh
   ];
@@ -16,7 +15,8 @@
   };
 
   home = {
-    username = user;
     homeDirectory = "/home/${user}";
+    stateVersion = "26.05";
+    username = user;
   };
 }
