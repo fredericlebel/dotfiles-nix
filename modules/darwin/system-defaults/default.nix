@@ -1,4 +1,5 @@
-{user, ...}: {
+{ user, ... }:
+{
   system.stateVersion = 4;
 
   system.primaryUser = user;
