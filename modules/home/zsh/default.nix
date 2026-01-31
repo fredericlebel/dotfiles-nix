@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.zsh;
-in {
+in
+{
   options.my.features.zsh = {
     enable = lib.mkEnableOption "Zsh configuration";
   };
