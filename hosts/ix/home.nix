@@ -2,17 +2,13 @@
   pkgs,
   user,
   ...
-}:
-{
+}: {
   imports = [
-    ../../modules/home/git
-    ../../modules/home/zsh
+    ../../users/${user}/base.nix
+    ../../modules/home/bundles/server.nix
   ];
 
-  my.features = {
-    git.enable = true;
-    zsh.enable = true;
-  };
+  my.bundles.server.enable = true;
 
   home = {
     homeDirectory = "/home/${user}";

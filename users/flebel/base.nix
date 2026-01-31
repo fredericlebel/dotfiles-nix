@@ -1,18 +1,4 @@
-{ pkgs, ... }:
-{
-  imports = [
-    ../../modules/home/bundles/dev.nix
-    ../../modules/home/starship
-    ../../modules/home/yazi
-    ../../modules/home/zsh
-  ];
-
-  my.features = {
-    starship.enable = true;
-    yazi.enable = true;
-    zsh.enable = true;
-  };
-
+{pkgs, ...}: {
   home = {
     stateVersion = "26.05";
 
@@ -28,9 +14,9 @@
       wget
 
       # --- Rust ---
-      cargo
-      rustc
-      rustfmt
+      #cargo
+      #rustc
+      #rustfmt
 
       # --- DevOps / Infrastructure ---
       ansible
@@ -49,14 +35,14 @@
 
       # --- Réseau & Sécurité ---
       age
-      aircrack-ng
+      #aircrack-ng
       nmap
       sops
       sshpass
       wireshark-cli
 
       # --- Développement ---
-      direnv
+      #direnv
       gh
       git
       just
