@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.k9s;
-in {
+in
+{
   options.my.features.k9s = {
     enable = lib.mkEnableOption "k9s avec intégration Zsh";
   };
