@@ -49,6 +49,7 @@ in {
 
         push = {
           default = "simple";
+          autoSetupRemote = true;
         };
 
         tag = {
