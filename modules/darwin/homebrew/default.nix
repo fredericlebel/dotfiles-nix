@@ -1,4 +1,5 @@
-{user, ...}: {
+{ user, ... }:
+{
   nix-homebrew = {
     enable = true;
     enableRosetta = true;
@@ -15,20 +16,16 @@
       upgrade = true;
     };
 
-    # --- Sources externes ---
     taps = [
       "jorgelbg/tap"
-      #"nikitabobko/tap" # Pour AeroSpace si installé via Brew
     ];
 
-    # --- Utilitaires CLI (Brews) ---
     brews = [
-      "mas" # Mac App Store CLI
-      "pinentry-touchid" # GPG + TouchID integration
-      "wifi-password" # Récupération rapide des clés WiFi
+      "mas"
+      "pinentry-touchid"
+      "wifi-password"
     ];
 
-    # --- Applications Graphiques (Casks) ---
     casks = [
       # Communication & Navigation
       "discord"
@@ -48,7 +45,6 @@
       "alt-tab" # Gestionnaire de fenêtres Windows-style
       "bitwarden" # Gestionnaire de mots de passe
       "google-drive"
-      "logseq" # Base de connaissance
 
       # Fonts (Typographies)
       "font-fira-code"

@@ -4,16 +4,25 @@
   myMeta,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.services.vaultwarden;
-in {
+  pgBackupPath = "${config.services.postgresqlBackup.location}/vaultwarden.sql.gz";
+in
+{
   options.my.services.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
 
     domain = lib.mkOption {
       type = lib.types.str;
       default = myMeta.vaultwardenSubdomain;
-      description = " Le domaine dynamique de vaultwarden";
+      description = "Le domaine dynamique de vaultwarden";
+    };
+
+    resticEnable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Activer les backups Restic pour Vaultwarden";
     };
   };
 
@@ -23,7 +32,6 @@ in {
     services.vaultwarden = {
       enable = true;
       dbBackend = "postgresql";
-      #backupDir = "/var/backup/vaultwarden/";
       environmentFile = config.sops.secrets."vaultwarden-env".path;
       config = {
         DOMAIN = "https://${cfg.domain}/";
@@ -35,6 +43,7 @@ in {
         ORG_EVENTS_ENABLED = true;
       };
     };
+
     services.nginx = {
       enable = true;
       recommendedGzipSettings = true;
@@ -49,31 +58,74 @@ in {
         };
       };
     };
+
     services.postgresql = {
       enable = true;
       package = pkgs.postgresql_17;
       ensureDatabases = [ "vaultwarden" ];
-      ensureUsers = [{
-        name = "vaultwarden";
-        ensureDBOwnership = true;
-      }];
+      ensureUsers = [
+        {
+          name = "vaultwarden";
+          ensureDBOwnership = true;
+        }
+      ];
     };
+
     services.postgresqlBackup = {
       enable = true;
       databases = [ "vaultwarden" ];
-      location = "/var/lib/postgresql/backups";
+      location = "/var/backup/postgresql";
     };
+
+    services.restic.backups.vaultwarden = lib.mkIf cfg.resticEnable {
+      environmentFile = config.sops.secrets."restic-vaultwarden-env".path;
+      passwordFile = config.sops.secrets."restic-vaultwarden-password".path;
+
+      repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/vaultwarden";
+
+      paths = [
+        "/var/lib/vaultwarden"
+        pgBackupPath
+      ];
+
+      #backupPrepareCommand = ''
+      #  echo "Lancement du dump PostgreSQL..."
+      #  ${config.systemd.services."postgresqlBackup-vaultwarden".serviceConfig.ExecStart}
+      #'';
+
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+      ];
+    };
+
     security.acme = {
       acceptTerms = true;
       defaults.email = myMeta.adminEmail;
     };
+
+    sops.secrets."restic-vaultwarden-env" = { };
+    sops.secrets."restic-vaultwarden-password" = { };
     sops.secrets."vaultwarden-env" = {
       owner = "vaultwarden";
       mode = "0400";
     };
+
     systemd.services.vaultwarden = {
-      after = ["sops-install-secrets.service" "postgresql.service"];
-      wants = ["sops-install-secrets.service" "postgresql.service"];
+      after = [
+        "sops-install-secrets.service"
+        "postgresql.service"
+      ];
+      wants = [
+        "sops-install-secrets.service"
+        "postgresql.service"
+      ];
     };
   };
 }
