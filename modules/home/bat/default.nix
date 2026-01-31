@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.bat;
-in {
+in
+{
   options.my.features.bat = {
     enable = lib.mkEnableOption "bat configuration";
   };
