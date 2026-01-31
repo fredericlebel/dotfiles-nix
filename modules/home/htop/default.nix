@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.htop;
-in {
+in
+{
   options.my.features.htop = {
     enable = lib.mkEnableOption "htop avec intégration Zsh";
   };
