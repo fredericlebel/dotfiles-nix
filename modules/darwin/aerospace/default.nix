@@ -3,10 +3,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.aerospace;
   mod = "alt";
-in {
+in
+{
   options.my.features.aerospace = {
     enable = lib.mkEnableOption "Active AeroSpace Tiling Window Manager";
   };
@@ -23,8 +25,8 @@ in {
       settings = {
         config-version = 2;
 
-        after-login-command = [];
-        after-startup-command = [];
+        after-login-command = [ ];
+        after-startup-command = [ ];
 
         enable-normalization-flatten-containers = true;
         enable-normalization-opposite-orientation-for-nested-containers = true;
@@ -35,7 +37,7 @@ in {
 
         key-mapping.preset = "qwerty";
 
-        on-focused-monitor-changed = ["move-mouse monitor-lazy-center"];
+        on-focused-monitor-changed = [ "move-mouse monitor-lazy-center" ];
 
         persistent-workspaces = lib.stringToCharacters "123456QWERTASDFGZXCVB";
 
@@ -101,10 +103,22 @@ in {
         };
 
         mode.service.binding = {
-          esc = ["reload-config" "mode main"];
-          r = ["flatten-workspace-tree" "mode main"];
-          f = ["layout floating tiling" "mode main"];
-          backspace = ["close-all-windows-but-current" "mode main"];
+          esc = [
+            "reload-config"
+            "mode main"
+          ];
+          r = [
+            "flatten-workspace-tree"
+            "mode main"
+          ];
+          f = [
+            "layout floating tiling"
+            "mode main"
+          ];
+          backspace = [
+            "close-all-windows-but-current"
+            "mode main"
+          ];
         };
 
         on-window-detected = [
