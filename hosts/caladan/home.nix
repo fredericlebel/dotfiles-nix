@@ -1,7 +1,7 @@
 {user, ...}: {
   imports = [
     ../../users/${user}/base.nix
-    ../../modules/home/bundles/desktop
+    ../../modules/home/bundles/desktop.nix
   ];
 
   my.bundles.desktop.enable = true;

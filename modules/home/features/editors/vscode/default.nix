@@ -13,6 +13,8 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    nixpkgs.config.allowUnfree = true;
+
     home.packages = with pkgs; [
       nil # Le Language Server pour Nix
       alejandra # Le formateur que tu as configuré
