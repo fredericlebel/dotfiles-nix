@@ -33,6 +33,7 @@ in {
     my.features.dev.k9s.enable = true;
 
     my.features.editors.neovim.enable = true;
+    my.features.editors.vscode.enable = true;
 
     my.features.terminals.wezterm.enable = true;
 
