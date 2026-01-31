@@ -3,9 +3,11 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.yazi;
-in {
+in
+{
   options.my.features.yazi = {
     enable = lib.mkEnableOption "Yazi Terminal File Manager";
   };
