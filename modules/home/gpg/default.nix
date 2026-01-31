@@ -3,11 +3,13 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.gpg;
 
   pinentry = pkgs.pinentry_mac;
-in {
+in
+{
   options.my.features.gpg = {
     enable = lib.mkEnableOption "Configuration GPG avec Support Keychain/TouchID";
   };
