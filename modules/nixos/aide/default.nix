@@ -3,15 +3,17 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.services.aide;
-in {
+in
+{
   options.my.services.aide = {
     enable = lib.mkEnableOption "AIDE Intrusion Detection";
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [pkgs.aide];
+    environment.systemPackages = [ pkgs.aide ];
 
     environment.etc."aide.conf".text = ''
       # AIDE Configuration
@@ -179,14 +181,23 @@ in {
         ExecStartPost = "${pkgs.coreutils}/bin/mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db";
         # AIDE exit codes: 0=no changes, 1-7=changes detected (all valid for update)
         # 1=new, 2=removed, 3=changed, 4=new+removed, 5=new+changed, 6=removed+changed, 7=all
-        SuccessExitStatus = [0 1 2 3 4 5 6 7];
+        SuccessExitStatus = [
+          0
+          1
+          2
+          3
+          4
+          5
+          6
+          7
+        ];
       };
     };
 
     systemd.services.aide-check = {
       description = "AIDE Intrusion Detection Check";
-      after = ["aide-init.service"];
-      requires = ["aide-init.service"];
+      after = [ "aide-init.service" ];
+      requires = [ "aide-init.service" ];
       serviceConfig = {
         Type = "oneshot";
         ExecStart = "${pkgs.aide}/bin/aide --check";
@@ -196,7 +207,7 @@ in {
 
     systemd.timers.aide-check = {
       description = "Daily AIDE Intrusion Detection Check";
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "daily";
         Persistent = true;
