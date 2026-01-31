@@ -3,9 +3,11 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.services.openssh;
-in {
+in
+{
   options.my.services.openssh = {
     enable = lib.mkEnableOption "OpenSSH";
   };
@@ -20,7 +22,7 @@ in {
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
         AllowAgentForwarding = false;
-        AllowTcpForwarding = false;
+        AllowTcpForwarding = true;
         X11Forwarding = false;
 
         KexAlgorithms = [
