@@ -4,9 +4,11 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.my.services.suricata;
-in {
+in
+{
   options.my.services.suricata = {
     enable = mkEnableOption "Activer Suricata IDS";
 
@@ -46,9 +48,15 @@ in {
 
         app-layer = {
           protocols = {
-            modbus = {enabled = "no";};
-            dnp3 = {enabled = "no";};
-            enip = {enabled = "no";};
+            modbus = {
+              enabled = "no";
+            };
+            dnp3 = {
+              enabled = "no";
+            };
+            enip = {
+              enabled = "no";
+            };
           };
         };
 
