@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.bundles.common;
-in {
+in
+{
   imports = [
     ../features/cli
     ../features/dev

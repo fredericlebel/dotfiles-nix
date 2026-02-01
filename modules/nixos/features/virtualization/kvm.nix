@@ -4,9 +4,11 @@
   pkgs,
   modulesPath,
   ...
-}: let
+}:
+let
   cfg = config.my.features.virtualization.kvm;
-in {
+in
+{
   options.my.features.virtualization.kvm = {
     enable = lib.mkEnableOption "Optimisations KVM/QEMU (Guest Agent + VirtIO)";
   };

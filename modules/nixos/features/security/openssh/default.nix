@@ -3,9 +3,11 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.security.openssh;
-in {
+in
+{
   options.my.features.security.openssh = {
     enable = lib.mkEnableOption "OpenSSH durci (Post-Quantum & Key-only)";
   };

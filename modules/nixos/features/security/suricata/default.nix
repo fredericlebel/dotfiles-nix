@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.security.suricata;
-in {
+in
+{
   options.my.features.security.suricata = {
     enable = lib.mkEnableOption "Suricata IDS (Low Memory Profile)";
 
@@ -30,7 +32,7 @@ in {
       settings = {
         runmode = "workers";
 
-        af-packet = [{interface = cfg.interface;}];
+        af-packet = [ { interface = cfg.interface; } ];
 
         vars.address-groups = {
           HOME_NET = cfg.homeNet;
@@ -56,7 +58,14 @@ in {
               enabled = true;
               filetype = "regular";
               filename = "eve.json";
-              types = ["alert" "http" "dns" "tls" "ssh" "stats"];
+              types = [
+                "alert"
+                "http"
+                "dns"
+                "tls"
+                "ssh"
+                "stats"
+              ];
             };
           }
         ];

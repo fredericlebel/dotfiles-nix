@@ -4,7 +4,8 @@
   myMeta,
   user,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./disko.nix
@@ -32,8 +33,11 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [80 443];
-      trustedInterfaces = ["tailscale0"];
+      allowedTCPPorts = [
+        80
+        443
+      ];
+      trustedInterfaces = [ "tailscale0" ];
 
       extraInputRules = ''
         tcp dport 22 ct state new,untracked limit rate 3/minute accept
@@ -66,7 +70,7 @@
 
   sops = {
     defaultSopsFile = ../../secrets/ix.yaml;
-    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   };
 
   system.stateVersion = "26.05";

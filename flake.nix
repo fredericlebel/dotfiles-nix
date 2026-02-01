@@ -50,7 +50,7 @@
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in
     {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
       darwinConfigurations = {
         "caladan" = mylib.mkSystem {

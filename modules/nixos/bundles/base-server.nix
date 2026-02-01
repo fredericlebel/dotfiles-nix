@@ -4,10 +4,12 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   cfg = config.my.bundles.base-server;
   myKeys = import ../../../modules/shared/keys.nix;
-in {
+in
+{
   imports = [
     ../features/cli/zsh
     ../features/security/hardening.nix
@@ -29,13 +31,13 @@ in {
     my.features.system.nix-maintenance.enable = true;
     my.features.virtualization.kvm.enable = true;
 
-    users.users.root.openssh.authorizedKeys.keys = [myKeys.flebel];
+    users.users.root.openssh.authorizedKeys.keys = [ myKeys.flebel ];
 
     security.doas = {
       enable = true;
       extraRules = [
         {
-          users = [user];
+          users = [ user ];
           keepEnv = true;
           persist = true;
         }

@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.cli.eza;
-in {
+in
+{
   options.my.features.cli.eza = {
     enable = lib.mkEnableOption "eza avec intégration Zsh";
   };

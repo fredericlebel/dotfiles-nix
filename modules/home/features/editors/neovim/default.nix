@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.editors.neovim;
-in {
+in
+{
   options.my.features.editors.neovim = {
     enable = lib.mkEnableOption "neovim avec intégration Zsh";
   };
