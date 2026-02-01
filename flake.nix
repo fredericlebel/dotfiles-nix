@@ -120,5 +120,6 @@
 
     packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
     packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
+    packages."x86_64-linux".colmena = colmena.lib.makeHive self.outputs.colmena;
   };
 }
