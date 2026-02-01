@@ -9,36 +9,37 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
+
+    ../../users/flebel/system.nix
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/features/observability
     ../../modules/features/vaultwarden
-    ../../modules/nixos/aide
-    ../../modules/nixos/openssh
     ../../modules/nixos/suricata
-    ../../modules/nixos/zsh
   ];
 
-  boot = {
-    loader.grub = {
-      enable = true;
-      efiSupport = true;
-      efiInstallAsRemovable = true;
-    };
-    kernelPackages = pkgs.linuxPackages_hardened;
-    kernel.sysctl = {
-      "kernel.dmesg_restrict" = 1;
-      "net.ipv4.conf.all.log_martians" = 1;
-      "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
-      "kernel.kptr_restrict" = 2;
-      "kernel.unprivileged_bpf_disabled" = 1;
-    };
-    tmp = {
-      cleanOnBoot = true;
-      useTmpfs = true;
-    };
+  my.bundles.base-server.enable = true;
+
+  boot.loader.grub = {
+    enable = true;
+    efiSupport = true;
+    efiInstallAsRemovable = true;
   };
 
-  fileSystems."/boot".options = ["umask=0077"];
+  networking = {
+    hostName = "ix";
+    domain = "opval.com";
+
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [22 80 443];
+      trustedInterfaces = ["tailscale0"];
+      extraInputRules = ''
+        tcp dport 22 ct state new,untracked limit rate 3/minute accept
+        tcp dport 22 drop
+      '';
+    };
+    nftables.enable = true;
+  };
 
   my.features = {
     observability = {
@@ -48,22 +49,10 @@
     vaultwarden.enable = true;
   };
 
-  my.services = {
-    aide.enable = true;
-    openssh.enable = true;
-    suricata = {
-      enable = true;
-      interface = "ens3";
-    };
+  my.services.suricata = {
+    enable = true;
+    interface = "ens3";
   };
-
-  environment.systemPackages = with pkgs; [
-    btop
-    ethtool
-    htop
-    jq
-    tcpdump
-  ];
 
   swapDevices = [
     {
@@ -72,80 +61,10 @@
     }
   ];
 
-  networking = {
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [
-        22
-        80
-        443
-      ];
-      allowedUDPPorts = [];
-      extraInputRules = ''
-        tcp dport 22 ct state new,untracked limit rate 3/minute accept
-        tcp dport 22 drop
-      '';
-      trustedInterfaces = ["tailscale0"];
-    };
-    hostName = "ix";
-    domain = "opval.com";
-    nftables.enable = true;
-  };
-
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
-  };
-
-  programs.zsh.enable = true;
-
-  time.timeZone = "America/Montreal";
-
-  users = {
-    #defaultUserShell = pkgs.zsh;
-    users = {
-      root.openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
-      ];
-
-      "${user}" = {
-        isNormalUser = true;
-        extraGroups = ["wheel"];
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFJH/EaFTiyNBESMu48Gzm5tqe0NW53+utml1n469P46 flebel@opval.com"
-        ];
-      };
-    };
-  };
-
-  security.doas = {
-    enable = true;
-    extraRules = [
-      {
-        users = ["flebel"];
-        keepEnv = true;
-        persist = true;
-      }
-    ];
-  };
-  security.sudo.wheelNeedsPassword = false;
-
   sops = {
     defaultSopsFile = ../../secrets/ix.yaml;
     age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   };
-
-  #nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "26.05";
 }
