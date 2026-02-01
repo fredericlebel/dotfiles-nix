@@ -2,9 +2,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.cli.direnv;
-in {
+in
+{
   options.my.features.cli.direnv = {
     enable = lib.mkEnableOption "direnv avec intégration Zsh";
   };

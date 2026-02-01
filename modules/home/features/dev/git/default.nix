@@ -4,9 +4,11 @@
   config,
   user,
   ...
-}: let
+}:
+let
   cfg = config.my.features.dev.git;
-in {
+in
+{
   options.my.features.dev.git = {
     enable = lib.mkEnableOption "Git avec configuration personnalisée et GPG";
   };

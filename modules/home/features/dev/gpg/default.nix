@@ -3,14 +3,13 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.dev.gpg;
 
-  pinentry =
-    if pkgs.stdenv.isDarwin
-    then pkgs.pinentry_mac
-    else pkgs.pinentry-curses;
-in {
+  pinentry = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-curses;
+in
+{
   options.my.features.dev.gpg = {
     enable = lib.mkEnableOption "Configuration GPG personnalisée avec intégration Zsh";
   };

@@ -4,10 +4,12 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.editors.vscode;
   marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
-in {
+in
+{
   options.my.features.editors.vscode = {
     enable = lib.mkEnableOption "vscode avec intégration Zsh, Nix (LSP) et Direnv";
   };
@@ -88,7 +90,7 @@ in {
             "nix.serverSettings" = {
               "nil" = {
                 "formatting" = {
-                  "command" = ["alejandra"];
+                  "command" = [ "alejandra" ];
                 };
               };
             };

@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.security.hardening;
-in {
+in
+{
   options.my.features.security.hardening = {
     enable = lib.mkEnableOption "Durcissement du noyau et du système";
   };
@@ -25,6 +27,6 @@ in {
       cleanOnBoot = true;
       useTmpfs = true;
     };
-    fileSystems."/boot".options = ["umask=0077"];
+    fileSystems."/boot".options = [ "umask=0077" ];
   };
 }

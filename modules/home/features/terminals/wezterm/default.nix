@@ -4,9 +4,11 @@
   pkgs,
   user,
   ...
-}: let
+}:
+let
   cfg = config.my.features.terminals.wezterm;
-in {
+in
+{
   options.my.features.terminals.wezterm = {
     enable = lib.mkEnableOption "Wezterm Terminal";
   };

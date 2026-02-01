@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.security.intrusion-detection;
 
   aideUpdateScript = pkgs.writeShellScriptBin "aide-accept-changes" ''
@@ -27,7 +28,8 @@
       exit 1
     fi
   '';
-in {
+in
+{
   options.my.features.security.intrusion-detection = {
     enable = lib.mkEnableOption "AIDE File Integrity Monitoring";
   };
@@ -132,7 +134,7 @@ in {
 
     systemd.timers.aide-check = {
       description = "Daily AIDE Check";
-      wantedBy = ["timers.target"];
+      wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "04:00";
         Persistent = true;

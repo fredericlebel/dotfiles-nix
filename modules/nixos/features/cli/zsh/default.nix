@@ -3,9 +3,11 @@
   lib,
   config,
   ...
-}: let
+}:
+let
   cfg = config.my.features.cli.zsh;
-in {
+in
+{
   options.my.features.cli.zsh = {
     enable = lib.mkEnableOption "Zsh System Support";
   };
@@ -17,7 +19,7 @@ in {
       enableBashCompletion = true;
     };
 
-    environment.shells = with pkgs; [zsh];
+    environment.shells = with pkgs; [ zsh ];
 
     environment.systemPackages = with pkgs; [
       zsh

@@ -3,9 +3,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.my.features.system.nix-maintenance;
-in {
+in
+{
   options.my.features.system.nix-maintenance.enable = lib.mkEnableOption "Maintenance Nix";
 
   config = lib.mkIf cfg.enable {
