@@ -14,6 +14,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    colmena = {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
     disko = {
@@ -40,6 +45,7 @@
   outputs = inputs @ {
     self,
     nixpkgs,
+    colmena,
     ...
   }: let
     user = "flebel";
@@ -70,6 +76,44 @@
           s3Endpoint = "s3.us-west-000.backblazeb2.com";
           s3Bucket = "ix-opval-com";
           vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+        };
+      };
+    };
+    colmena = {
+      meta = {
+        nixpkgs = import nixpkgs {system = "x86_64-linux";};
+
+        # On passe les arguments globaux à tous les nœuds de la ruche
+        specialArgs = {inherit inputs user;};
+      };
+
+      # Définition du nœud "ix"
+      "ix" = {
+        name,
+        nodes,
+        pkgs,
+        ...
+      }: {
+        deployment = {
+          targetHost = "ix.opval.com";
+          targetUser = "flebel";
+          tags = [
+            "vps"
+            "cloud"
+          ];
+        };
+
+        imports = [
+          ./hosts/ix/configuration.nix
+          inputs.sops-nix.nixosModules.sops
+        ];
+
+        _module.args = {
+          hostMeta = {
+            s3Endpoint = "s3.us-west-000.backblazeb2.com";
+            s3Bucket = "ix-opval-com";
+            vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+          };
         };
       };
     };
