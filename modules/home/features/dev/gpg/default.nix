@@ -53,7 +53,7 @@ in {
       enableSshSupport = true;
       enableZshIntegration = true;
 
-      pinentryPackage = pinentry;
+      pinentry.package = pinentry;
 
       defaultCacheTtl = 86400;
       maxCacheTtl = 86400;
