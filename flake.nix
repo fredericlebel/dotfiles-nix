@@ -29,50 +29,50 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      ...
-    }:
-    let
-      user = "flebel";
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    ...
+  }: let
+    user = "flebel";
 
-      mylib = import ./lib/helpers.nix { inherit inputs user; };
+    mylib = import ./lib/helpers.nix {inherit inputs user;};
 
-      systems = [
-        "aarch64-darwin"
-        "x86_64-linux"
-      ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-    in
-    {
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
+    systems = [
+      "aarch64-darwin"
+      "x86_64-linux"
+    ];
+    forAllSystems = nixpkgs.lib.genAttrs systems;
+  in {
+    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
-      darwinConfigurations = {
-        "caladan" = mylib.mkSystem {
-          hostName = "caladan";
-          system = "aarch64-darwin";
-          isDarwin = true;
-        };
+    darwinConfigurations = {
+      "caladan" = mylib.mkSystem {
+        hostName = "caladan";
+        system = "aarch64-darwin";
+        isDarwin = true;
       };
-
-      nixosConfigurations = {
-        "ix" = mylib.mkSystem {
-          hostName = "ix";
-          system = "x86_64-linux";
-          hostMeta = {
-            s3Endpoint = "s3.us-west-000.backblazeb2.com";
-            s3Bucket = "ix-opval-com";
-            vaultwardenSubdomain = "vaultwarden.ix.opval.com";
-          };
-        };
-      };
-
-      packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
-      packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
     };
+
+    nixosConfigurations = {
+      "ix" = mylib.mkSystem {
+        hostName = "ix";
+        system = "x86_64-linux";
+        hostMeta = {
+          s3Endpoint = "s3.us-west-000.backblazeb2.com";
+          s3Bucket = "ix-opval-com";
+          vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+        };
+      };
+    };
+
+    packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
+    packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
+  };
 }
