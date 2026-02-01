@@ -18,9 +18,8 @@ in
     nixpkgs.config.allowUnfree = true;
 
     home.packages = with pkgs; [
-      nil # Le Language Server pour Nix
-      alejandra # Le formateur que tu as configuré
-      nixfmt-rfc-style # (Optionnel) Alternative de formatage
+      nil
+      nixfmt
     ];
 
     programs.vscode = {
