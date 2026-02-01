@@ -14,7 +14,7 @@
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/nixos/features/observability
     ../../modules/nixos/features/vaultwarden
-    ../../modules/nixos/suricata
+    ../../modules/nixos/features/security/suricata
   ];
 
   my.bundles.base-server.enable = true;
@@ -46,12 +46,11 @@
       enable = true;
       role = "server";
     };
+    security.suricata = {
+      enable = true;
+      interface = "ens3";
+    };
     vaultwarden.enable = true;
-  };
-
-  my.services.suricata = {
-    enable = true;
-    interface = "ens3";
   };
 
   swapDevices = [
