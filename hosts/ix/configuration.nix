@@ -12,7 +12,7 @@
 
     ../../users/flebel/system.nix
     ../../modules/nixos/bundles/base-server.nix
-    ../../modules/features/observability
+    ../../modules/nixos/features/observability
     ../../modules/features/vaultwarden
     ../../modules/nixos/suricata
   ];
