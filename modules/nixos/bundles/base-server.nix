@@ -1,8 +1,13 @@
-{ config, lib, pkgs, user, ... }:
-let
-  cfg = config.my.bundles.base-server;
-in
 {
+  config,
+  lib,
+  pkgs,
+  user,
+  ...
+}: let
+  cfg = config.my.bundles.base-server;
+  myKeys = import ../../../modules/shared/keys.nix;
+in {
   imports = [
     ../features/security/hardening.nix
     ../features/system/nix-maintenance.nix
@@ -22,9 +27,18 @@ in
     my.services.openssh.enable = true;
     programs.zsh.enable = true;
 
+    users.users.root.openssh.authorizedKeys.keys = [myKeys.flebel];
+    #services.openssh.settings.PermitRootLogin = "prohibit-password";
+
     security.doas = {
       enable = true;
-      extraRules = [{ users = [ user ]; keepEnv = true; persist = true; }];
+      extraRules = [
+        {
+          users = [user];
+          keepEnv = true;
+          persist = true;
+        }
+      ];
     };
     security.sudo.wheelNeedsPassword = false;
 
