@@ -11,9 +11,9 @@ in {
   imports = [
     ../features/cli/zsh
     ../features/security/hardening.nix
+    ../features/security/intrusion-detection.nix
     ../features/security/openssh
     ../features/system/nix-maintenance.nix
-    ../aide
   ];
 
   options.my.bundles.base-server = {
@@ -23,6 +23,7 @@ in {
   config = lib.mkIf cfg.enable {
     my.features.cli.zsh.enable = true;
     my.features.security.hardening.enable = true;
+    my.features.security.intrusion-detection.enable = true;
     my.features.security.openssh.enable = true;
     my.features.system.nix-maintenance.enable = true;
 
