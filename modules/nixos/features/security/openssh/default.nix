@@ -3,31 +3,33 @@
   pkgs,
   config,
   ...
-}:
-let
-  cfg = config.my.services.openssh;
-in
-{
-  options.my.services.openssh = {
-    enable = lib.mkEnableOption "OpenSSH";
+}: let
+  cfg = config.my.features.security.openssh;
+in {
+  options.my.features.security.openssh = {
+    enable = lib.mkEnableOption "OpenSSH durci (Post-Quantum & Key-only)";
   };
 
   config = lib.mkIf cfg.enable {
     services.openssh = {
       enable = true;
+
       openFirewall = true;
 
       settings = {
-        PermitRootLogin = "no";
+        PermitRootLogin = "prohibit-password";
+
         PasswordAuthentication = false;
         KbdInteractiveAuthentication = false;
+
         AllowAgentForwarding = false;
         AllowTcpForwarding = true;
         X11Forwarding = false;
 
         KexAlgorithms = [
-          "sntrup761x25519-sha512@openssh.com" # Post-quantique
-          "curve25519-sha256" # Standard moderne
+          "sntrup761x25519-sha512@openssh.com"
+          "curve25519-sha256"
+          "curve25519-sha256@libssh.org"
         ];
 
         Ciphers = [
@@ -36,9 +38,9 @@ in
         ];
 
         MaxAuthTries = 3;
-        LoginGraceTime = 30;
+
         ClientAliveInterval = 300;
-        ClientAliveCountMax = 0;
+        ClientAliveCountMax = 2;
       };
 
       hostKeys = [
