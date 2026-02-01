@@ -1,6 +1,6 @@
 {user, ...}: {
   imports = [
-    ../../users/${user}/base.nix
+    ../../users/${user}/home.nix
     ../../modules/home/bundles/desktop.nix
   ];
 
