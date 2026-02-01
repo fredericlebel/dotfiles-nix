@@ -106,20 +106,47 @@
         imports = [
           ./hosts/ix/configuration.nix
           inputs.sops-nix.nixosModules.sops
+          inputs.disko.nixosModules.disko
         ];
 
         _module.args = {
-          hostMeta = {
+          myMeta = {
             s3Endpoint = "s3.us-west-000.backblazeb2.com";
             s3Bucket = "ix-opval-com";
             vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+            adminEmail = "flebel@opval.com";
           };
         };
       };
     };
 
-    packages."aarch64-darwin".default = self.darwinConfigurations."caladan".system;
-    packages."x86_64-linux".default = self.nixosConfigurations."ix".system;
-    packages."x86_64-linux".colmena = colmena.lib.makeHive self.outputs.colmena;
+    packages."aarch64-darwin" = {
+      default = self.darwinConfigurations."caladan".system;
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+    };
+
+    packages."x86_64-linux" = {
+      default = self.nixosConfigurations."ix".system;
+    };
+
+    devShells = forAllSystems (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.mkShell {
+        packages = [
+          pkgs.just
+          pkgs.sops
+          pkgs.ssh-to-age
+          pkgs.git
+
+          colmena.packages.${system}.colmena
+        ];
+
+        shellHook = ''
+          echo "🚀 Bienvenue dans l'environnement Nix-Config !"
+          echo "Outils dispo : colmena, just, sops"
+        '';
+      };
+    });
   };
 }
