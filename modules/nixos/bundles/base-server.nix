@@ -9,10 +9,10 @@
   myKeys = import ../../../modules/shared/keys.nix;
 in {
   imports = [
+    ../features/cli/zsh
     ../features/security/hardening.nix
     ../features/security/openssh
     ../features/system/nix-maintenance.nix
-    ../zsh
     ../aide
   ];
 
@@ -21,11 +21,10 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    my.features.cli.zsh.enable = true;
     my.features.security.hardening.enable = true;
     my.features.security.openssh.enable = true;
     my.features.system.nix-maintenance.enable = true;
-
-    programs.zsh.enable = true;
 
     users.users.root.openssh.authorizedKeys.keys = [myKeys.flebel];
 
