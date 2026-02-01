@@ -7,11 +7,12 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/profiles/qemu-guest.nix")
     ./disko.nix
 
     ../../users/flebel/system.nix
+
     ../../modules/nixos/bundles/base-server.nix
+
     ../../modules/nixos/features/observability
     ../../modules/nixos/features/vaultwarden
     ../../modules/nixos/features/security/suricata
@@ -31,8 +32,9 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [22 80 443];
+      allowedTCPPorts = [80 443];
       trustedInterfaces = ["tailscale0"];
+
       extraInputRules = ''
         tcp dport 22 ct state new,untracked limit rate 3/minute accept
         tcp dport 22 drop
@@ -46,10 +48,12 @@
       enable = true;
       role = "server";
     };
+
     security.suricata = {
       enable = true;
       interface = "ens3";
     };
+
     vaultwarden.enable = true;
   };
 

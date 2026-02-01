@@ -14,6 +14,7 @@ in {
     ../features/security/intrusion-detection.nix
     ../features/security/openssh
     ../features/system/nix-maintenance.nix
+    ../features/virtualization/kvm.nix
   ];
 
   options.my.bundles.base-server = {
@@ -26,6 +27,7 @@ in {
     my.features.security.intrusion-detection.enable = true;
     my.features.security.openssh.enable = true;
     my.features.system.nix-maintenance.enable = true;
+    my.features.virtualization.kvm.enable = true;
 
     users.users.root.openssh.authorizedKeys.keys = [myKeys.flebel];
 
