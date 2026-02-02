@@ -25,7 +25,7 @@ in
       osModules =
         if isDarwin then
           [
-            #inputs.mac-app-util.darwinModules.default
+            # inputs.mac-app-util.darwinModules.default
             inputs.nix-homebrew.darwinModules.nix-homebrew
             inputs.sops-nix.darwinModules.sops
           ]

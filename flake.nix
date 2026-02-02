@@ -42,111 +42,132 @@
     };
   };
 
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    colmena,
-    ...
-  }: let
-    user = "flebel";
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      colmena,
+      ...
+    }:
+    let
+      user = "flebel";
 
-    mylib = import ./lib/helpers.nix {inherit inputs user;};
+      mylib = import ./lib/helpers.nix { inherit inputs user; };
 
-    systems = [
-      "aarch64-darwin"
-      "x86_64-linux"
-    ];
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
+      systems = [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
 
-    darwinConfigurations = {
-      "caladan" = mylib.mkSystem {
-        hostName = "caladan";
-        system = "aarch64-darwin";
-        isDarwin = true;
-      };
-    };
-
-    nixosConfigurations = {
-      "ix" = mylib.mkSystem {
-        hostName = "ix";
-        system = "x86_64-linux";
-        hostMeta = {
-          s3Endpoint = "s3.us-west-000.backblazeb2.com";
-          s3Bucket = "ix-opval-com";
-          vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+      darwinConfigurations = {
+        "caladan" = mylib.mkSystem {
+          hostName = "caladan";
+          system = "aarch64-darwin";
+          isDarwin = true;
         };
       };
-    };
-    colmena = {
-      meta = {
-        nixpkgs = import nixpkgs {system = "x86_64-linux";};
 
-        # On passe les arguments globaux à tous les nœuds de la ruche
-        specialArgs = {inherit inputs user;};
-      };
-
-      # Définition du nœud "ix"
-      "ix" = {
-        name,
-        nodes,
-        pkgs,
-        ...
-      }: {
-        deployment = {
-          targetHost = "ix.opval.com";
-          targetUser = "flebel";
-          tags = [
-            "vps"
-            "cloud"
-          ];
-        };
-
-        imports = [
-          ./hosts/ix/configuration.nix
-          inputs.sops-nix.nixosModules.sops
-          inputs.disko.nixosModules.disko
-        ];
-
-        _module.args = {
-          myMeta = {
+      nixosConfigurations = {
+        "ix" = mylib.mkSystem {
+          hostName = "ix";
+          system = "x86_64-linux";
+          hostMeta = {
             s3Endpoint = "s3.us-west-000.backblazeb2.com";
             s3Bucket = "ix-opval-com";
             vaultwardenSubdomain = "vaultwarden.ix.opval.com";
-            adminEmail = "flebel@opval.com";
           };
         };
       };
-    };
 
-    packages."aarch64-darwin" = {
-      default = self.darwinConfigurations."caladan".system;
+      colmena = {
+        meta = {
+          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+          specialArgs = { inherit inputs user; };
+        };
+
+        "ix" =
+          {
+            name,
+            nodes,
+            pkgs,
+            ...
+          }:
+          {
+            deployment = {
+              buildOnTarget = true;
+              targetHost = "ix.opval.com";
+              targetUser = "flebel";
+              tags = [
+                "vps"
+                "cloud"
+              ];
+            };
+
+            imports = [
+              ./hosts/ix/configuration.nix
+
+              inputs.sops-nix.nixosModules.sops
+              inputs.disko.nixosModules.disko
+
+              inputs.home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = false;
+                home-manager.useUserPackages = true;
+                home-manager.backupFileExtension = "hm-backup";
+                home-manager.extraSpecialArgs = { inherit inputs user; };
+                home-manager.users.${user} = {
+                  imports = [ ./hosts/ix/home.nix ];
+                };
+              }
+            ];
+
+            _module.args = {
+              myMeta = {
+                s3Endpoint = "s3.us-west-000.backblazeb2.com";
+                s3Bucket = "ix-opval-com";
+                vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+                adminEmail = "flebel@opval.com";
+                baseDomain = "opval.com";
+              };
+            };
+          };
+      };
+
+      packages."aarch64-darwin" = {
+        default = self.darwinConfigurations."caladan".system;
+      };
+
+      packages."x86_64-linux" = {
+        default = self.nixosConfigurations."ix".system;
+      };
+
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              pkgs.just
+              pkgs.sops
+              pkgs.ssh-to-age
+              pkgs.git
+              colmena.packages.${system}.colmena
+            ];
+
+            shellHook = ''
+              echo "🚀 Bienvenue dans l'environnement Nix-Config !"
+              echo "Outils dispo : colmena, just, sops"
+            '';
+          };
+        }
+      );
+
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
     };
-
-    packages."x86_64-linux" = {
-      default = self.nixosConfigurations."ix".system;
-    };
-
-    devShells = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      default = pkgs.mkShell {
-        packages = [
-          pkgs.just
-          pkgs.sops
-          pkgs.ssh-to-age
-          pkgs.git
-
-          colmena.packages.${system}.colmena
-        ];
-
-        shellHook = ''
-          echo "🚀 Bienvenue dans l'environnement Nix-Config !"
-          echo "Outils dispo : colmena, just, sops"
-        '';
-      };
-    });
-  };
 }
