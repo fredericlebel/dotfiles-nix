@@ -24,12 +24,34 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    my.features.cli.zsh.enable = true;
-    my.features.security.hardening.enable = true;
-    my.features.security.intrusion-detection.enable = true;
-    my.features.security.openssh.enable = true;
-    my.features.system.nix-maintenance.enable = true;
-    my.features.virtualization.kvm.enable = true;
+    my.features = {
+      cli = {
+        zsh = {
+          enable = true;
+        };
+      };
+      security = {
+        hardening = {
+          enable = true;
+        };
+        "intrusion-detection" = {
+          enable = true;
+        };
+        openssh = {
+          enable = true;
+        };
+      };
+      system = {
+        "nix-maintenance" = {
+          enable = true;
+        };
+      };
+      virtualization = {
+        kvm = {
+          enable = true;
+        };
+      };
+    };
 
     users.users.root.openssh.authorizedKeys.keys = [ myKeys.flebel ];
 

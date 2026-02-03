@@ -3,17 +3,19 @@ let
   myKeys = import ../../modules/shared/keys.nix;
 in
 {
-  users.defaultUserShell = pkgs.zsh;
-  users.groups.${user} = { };
+  users = {
+    defaultUserShell = pkgs.zsh;
+    groups.${user} = { };
 
-  users.users.${user} = {
-    isNormalUser = true;
-    group = user;
-    extraGroups = [
-      "wheel"
-      "docker"
-    ];
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [ myKeys.flebel ];
+    users.${user} = {
+      isNormalUser = true;
+      group = user;
+      extraGroups = [
+        "wheel"
+        "docker"
+      ];
+      shell = pkgs.zsh;
+      openssh.authorizedKeys.keys = [ myKeys.flebel ];
+    };
   };
 }

@@ -20,21 +20,25 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    my.features.cli.bat.enable = true;
-    my.features.cli.direnv.enable = true;
-    my.features.cli.eza.enable = true;
-    my.features.cli.fzf.enable = true;
-    my.features.cli.htop.enable = true;
-    my.features.cli.screen.enable = true;
-    my.features.cli.starship.enable = true;
-    my.features.cli.yazi.enable = true;
-    my.features.cli.zsh.enable = true;
+    my.features = {
+      cli = {
+        bat.enable = true;
+        direnv.enable = true;
+        eza.enable = true;
+        fzf.enable = true;
+        htop.enable = true;
+        screen.enable = true;
+        starship.enable = true;
+        yazi.enable = true;
+        zsh.enable = true;
+      };
+      dev = {
+        git.enable = true;
+        k9s.enable = true;
+      };
 
-    my.features.dev.git.enable = true;
-    #my.features.dev.gpg.enable = true;
-    my.features.dev.k9s.enable = true;
-
-    my.features.editors.neovim.enable = true;
+      editors.neovim.enable = true;
+    };
 
     home.packages = with pkgs; [
       curl
