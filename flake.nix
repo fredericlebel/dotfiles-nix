@@ -157,6 +157,7 @@
               pkgs.sops
               pkgs.ssh-to-age
               pkgs.git
+              pkgs.nix-output-monitor
               colmena.packages.${system}.colmena
             ];
 
