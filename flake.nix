@@ -4,35 +4,40 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     colmena = {
       url = "github:zhaofengli/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
+    #git-hooks = {
+    #  url = "github:cachix/git-hooks.nix";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     mac-app-util = {
       url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -45,8 +50,9 @@
   outputs =
     inputs@{
       self,
-      nixpkgs,
       colmena,
+      #git-hooks,
+      nixpkgs,
       ...
     }:
     let
@@ -145,6 +151,21 @@
         default = self.nixosConfigurations."ix".system;
       };
 
+      #checks = forAllSystems (
+      #  system: {
+      #    pre-commit-check = git-hooks.lib.${system}.run {
+      #      src = ./.;
+      #      hooks = {
+      #        #nixfmt.enable = true;
+      #        #deadnix.enable = true;
+      #        #statix.enable = true;
+      #        #shellcheck.enable = true;
+      #        #detect-private-keys.enable = true;
+      #      };
+      #    };
+      #  }
+      #);
+
       devShells = forAllSystems (
         system:
         let
@@ -152,18 +173,23 @@
         in
         {
           default = pkgs.mkShell {
+            #packages = self.checks.${system}.pre-commit-check.enabledPackages ++ [
             packages = [
               pkgs.just
               pkgs.sops
               pkgs.ssh-to-age
               pkgs.git
+              pkgs.statix
+              pkgs.deadnix
+              pkgs.nh
               pkgs.nix-output-monitor
-              colmena.packages.${system}.colmena
+              inputs.colmena.packages.${system}.colmena
             ];
+            #${self.checks.${system}.pre-commit-check.shellHook}
 
             shellHook = ''
               echo "🚀 Bienvenue dans l'environnement Nix-Config !"
-              echo "Outils dispo : colmena, just, sops"
+              echo "Outils dispo : colmena, just, sops, nh"
             '';
           };
         }
