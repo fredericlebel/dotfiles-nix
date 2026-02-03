@@ -6,8 +6,8 @@
 }:
 let
   cfg = config.my.features.containers;
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+  inherit (pkgs.stdenv) isDarwin;
+  inherit (pkgs.stdenv) isLinux;
 in
 {
   options.my.features.containers = {

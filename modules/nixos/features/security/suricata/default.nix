@@ -33,7 +33,7 @@ in
         settings = {
           runmode = "workers";
 
-          af-packet = [ { interface = cfg.interface; } ];
+          af-packet = [ { inherit (cfg) interface; } ];
 
           vars.address-groups = {
             HOME_NET = cfg.homeNet;
