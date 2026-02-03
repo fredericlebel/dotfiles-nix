@@ -25,77 +25,80 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.suricata = {
-      enable = true;
-      package = pkgs.suricata;
+    services = {
+      suricata = {
+        enable = true;
+        package = pkgs.suricata;
 
-      settings = {
-        runmode = "workers";
+        settings = {
+          runmode = "workers";
 
-        af-packet = [ { interface = cfg.interface; } ];
+          af-packet = [ { interface = cfg.interface; } ];
 
-        vars.address-groups = {
-          HOME_NET = cfg.homeNet;
-          EXTERNAL_NET = "!$HOME_NET";
+          vars.address-groups = {
+            HOME_NET = cfg.homeNet;
+            EXTERNAL_NET = "!$HOME_NET";
+          };
+
+          detect.profile = "low";
+          flow = {
+            memcap = "128mb";
+            hash-size = 65536;
+            prealloc = 10000;
+          };
+
+          app-layer.protocols = {
+            modbus.enabled = "no";
+            dnp3.enabled = "no";
+            enip.enabled = "no";
+          };
+
+          outputs = [
+            {
+              eve-log = {
+                enabled = true;
+                filetype = "regular";
+                filename = "eve.json";
+                types = [
+                  "alert"
+                  "http"
+                  "dns"
+                  "tls"
+                  "ssh"
+                  "stats"
+                ];
+              };
+            }
+          ];
+
+          threshold-file = "/etc/suricata/threshold.config";
         };
 
-        detect.profile = "low";
-        flow = {
-          memcap = "128mb";
-          hash-size = 65536;
-          prealloc = 10000;
-        };
-
-        app-layer.protocols = {
-          modbus.enabled = "no";
-          dnp3.enabled = "no";
-          enip.enabled = "no";
-        };
-
-        outputs = [
-          {
-            eve-log = {
-              enabled = true;
-              filetype = "regular";
-              filename = "eve.json";
-              types = [
-                "alert"
-                "http"
-                "dns"
-                "tls"
-                "ssh"
-                "stats"
-              ];
-            };
-          }
+        enabledSources = [
+          "et/open"
+          "oisf/trafficid"
+          "sslbl/ja3-fingerprints"
+          "ptresearch/attackdetection"
         ];
-
-        threshold-file = "/etc/suricata/threshold.config";
       };
 
-      enabledSources = [
-        "et/open"
-        "oisf/trafficid"
-        "sslbl/ja3-fingerprints"
-        "ptresearch/attackdetection"
-      ];
+      logrotate = {
+        enable = true;
+        settings.suricata = {
+          files = "/var/lib/suricata/eve.json /var/log/suricata/fast.log";
+          frequency = "daily";
+          rotate = 7;
+          compress = true;
+          postrotate = "systemctl kill -s HUP suricata.service";
+        };
+      };
     };
-
     environment.etc."suricata/threshold.config" = {
       mode = "0644";
       text = ''
         # Suppression des faux positifs récurrents
         # suppress gen_id 1, sig_id 2200121
       '';
-    };
-
-    services.logrotate.enable = true;
-    services.logrotate.settings.suricata = {
-      files = "/var/lib/suricata/eve.json /var/log/suricata/fast.log";
-      frequency = "daily";
-      rotate = 7;
-      compress = true;
-      postrotate = "systemctl kill -s HUP suricata.service";
     };
 
     systemd.tmpfiles.rules = [

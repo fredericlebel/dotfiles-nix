@@ -19,11 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    #git-hooks = {
-    #  url = "github:cachix/git-hooks.nix";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +46,6 @@
     inputs@{
       self,
       colmena,
-      #git-hooks,
       nixpkgs,
       ...
     }:
@@ -121,11 +115,13 @@
 
               inputs.home-manager.nixosModules.home-manager
               {
-                home-manager.useGlobalPkgs = false;
-                home-manager.useUserPackages = true;
-                home-manager.backupFileExtension = "hm-backup";
-                home-manager.extraSpecialArgs = { inherit inputs user; };
-                home-manager.users.${user} = {
+                home-manager = {
+                  useGlobalPkgs = false;
+                  useUserPackages = true;
+                  backupFileExtension = "hm-backup";
+                  extraSpecialArgs = { inherit inputs user; };
+                };
+                users.${user} = {
                   imports = [ ./hosts/ix/home.nix ];
                 };
               }
@@ -151,21 +147,6 @@
         default = self.nixosConfigurations."ix".system;
       };
 
-      #checks = forAllSystems (
-      #  system: {
-      #    pre-commit-check = git-hooks.lib.${system}.run {
-      #      src = ./.;
-      #      hooks = {
-      #        #nixfmt.enable = true;
-      #        #deadnix.enable = true;
-      #        #statix.enable = true;
-      #        #shellcheck.enable = true;
-      #        #detect-private-keys.enable = true;
-      #      };
-      #    };
-      #  }
-      #);
-
       devShells = forAllSystems (
         system:
         let
@@ -173,7 +154,6 @@
         in
         {
           default = pkgs.mkShell {
-            #packages = self.checks.${system}.pre-commit-check.enabledPackages ++ [
             packages = [
               pkgs.just
               pkgs.sops
@@ -185,7 +165,6 @@
               pkgs.nix-output-monitor
               inputs.colmena.packages.${system}.colmena
             ];
-            #${self.checks.${system}.pre-commit-check.shellHook}
 
             shellHook = ''
               echo "🚀 Bienvenue dans l'environnement Nix-Config !"

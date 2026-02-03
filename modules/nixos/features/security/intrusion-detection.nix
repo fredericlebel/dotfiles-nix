@@ -109,37 +109,40 @@ in
       !/home/.*/.cache
     '';
 
-    systemd.tmpfiles.rules = [
-      "d /var/lib/aide 0700 root root -"
-      "d /var/log/aide 0755 root root -"
-    ];
+    systemd = {
+      services = {
+        aide-init = {
+          description = "Initialize AIDE database (Manual Run Only)";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${pkgs.aide}/bin/aide --init";
+            ExecStartPost = "${pkgs.coreutils}/bin/mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db";
+          };
+        };
 
-    systemd.services.aide-init = {
-      description = "Initialize AIDE database (Manual Run Only)";
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.aide}/bin/aide --init";
-        ExecStartPost = "${pkgs.coreutils}/bin/mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db";
+        aide-check = {
+          description = "AIDE Intrusion Detection Check";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "root";
+            ExecStart = "${pkgs.aide}/bin/aide --check";
+          };
+        };
       };
-    };
 
-    systemd.services.aide-check = {
-      description = "AIDE Intrusion Detection Check";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-        ExecStart = "${pkgs.aide}/bin/aide --check";
+      timers.aide-check = {
+        description = "Daily AIDE Check";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "04:00";
+          Persistent = true;
+          Unit = "aide-check.service";
+        };
       };
-    };
-
-    systemd.timers.aide-check = {
-      description = "Daily AIDE Check";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "04:00";
-        Persistent = true;
-        Unit = "aide-check.service";
-      };
+      tmpfiles.rules = [
+        "d /var/lib/aide 0700 root root -"
+        "d /var/log/aide 0755 root root -"
+      ];
     };
   };
 }

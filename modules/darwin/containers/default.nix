@@ -15,29 +15,30 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages =
-      with pkgs;
-      [
-        podman-compose
-        lazydocker
-      ]
-      ++ lib.optionals isDarwin [
-        pkgs.colima
-        pkgs.podman
-      ];
+    home = {
+      packages =
+        with pkgs;
+        [
+          podman-compose
+          lazydocker
+        ]
+        ++ lib.optionals isDarwin [
+          pkgs.colima
+          pkgs.podman
+        ];
 
-    # --- ALIAS COMMUNS ---
-    home.shellAliases = {
-      d = "podman";
-      dc = "podman-compose";
-      k = "kubectl";
-    }
-    // lib.optionalAttrs isDarwin {
-      start-colima = "colima start --runtime podman --cpu 2 --memory 4";
-    };
+      sessionVariables = lib.mkIf isDarwin {
+        DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
+      };
 
-    home.sessionVariables = lib.mkIf isDarwin {
-      DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
+      shellAliases = {
+        d = "podman";
+        dc = "podman-compose";
+        k = "kubectl";
+      }
+      // lib.optionalAttrs isDarwin {
+        start-colima = "colima start --runtime podman --cpu 2 --memory 4";
+      };
     };
   };
 }
