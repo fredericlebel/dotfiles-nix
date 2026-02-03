@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.my.features.observability;
-  types = lib.types;
+  inherit (lib) types;
 in
 {
   imports = [
