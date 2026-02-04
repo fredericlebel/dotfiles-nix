@@ -9,7 +9,7 @@
 with lib;
 let
   cfg = config.my.features.tailscale;
-  isLinux = pkgs.stdenv.isLinux;
+  inherit (pkgs.stdenv) isLinux;
 in
 {
   options.my.features.tailscale = {
@@ -33,15 +33,16 @@ in
 
     services.tailscale.enable = true;
 
-    networking.firewall = {
-      allowedUDPPorts = [ 41641 ];
-      checkReversePath = if cfg.isExitNode then "loose" else "strict";
-      trustedInterfaces = [ "tailscale0" ];
+    networking = {
+      firewall = {
+        allowedUDPPorts = [ 41641 ];
+        checkReversePath = if cfg.isExitNode then "loose" else "strict";
+        trustedInterfaces = [ "tailscale0" ];
+      };
+
+      nameservers = [ "100.100.100.100" ];
+      search = [ "taila562f9.ts.net" ];
     };
-
-    networking.nameservers = [ "100.100.100.100" ];
-    networking.search = [ "taila562f9.ts.net" ];
-
     boot.kernel.sysctl = mkIf cfg.isExitNode {
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
