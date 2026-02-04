@@ -120,9 +120,8 @@
                   useUserPackages = true;
                   backupFileExtension = "hm-backup";
                   extraSpecialArgs = { inherit inputs user; };
-                };
-                users.${user} = {
-                  imports = [ ./hosts/ix/home.nix ];
+
+                  users.${user} = import ./hosts/ix/home.nix;
                 };
               }
             ];
@@ -141,6 +140,7 @@
 
       packages."aarch64-darwin" = {
         default = self.darwinConfigurations."caladan".system;
+        colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       };
 
       packages."x86_64-linux" = {
@@ -173,7 +173,5 @@
           };
         }
       );
-
-      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
     };
 }
