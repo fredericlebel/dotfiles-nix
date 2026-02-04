@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   modulesPath,
   myMeta,
@@ -15,6 +16,7 @@
     ../../modules/nixos/bundles/base-server.nix
 
     ../../modules/nixos/features/observability
+    ../../modules/nixos/features/tailscale
     ../../modules/nixos/features/vaultwarden
     ../../modules/nixos/features/security/suricata
   ];
@@ -58,6 +60,12 @@
       interface = "ens3";
     };
 
+    tailscale = {
+      enable = true;
+      isExitNode = true;
+      authKeyFile = config.sops.secrets.tailscale-key.path;
+    };
+
     vaultwarden.enable = true;
   };
 
@@ -67,6 +75,8 @@
       size = 2048;
     }
   ];
+
+  sops.secrets.tailscale-key = { };
 
   sops = {
     defaultSopsFile = ../../secrets/ix.yaml;
