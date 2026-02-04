@@ -31,7 +31,6 @@ in
             # --- Langages & Formatage ---
             marketplace.jnoortheen.nix-ide
 
-            marketplace.kamadorueda.alejandra
             marketplace.rust-lang.rust-analyzer
             marketplace.tamasfe.even-better-toml
             marketplace.redhat.vscode-yaml
@@ -83,19 +82,20 @@ in
             "workbench.iconTheme" = "material-icon-theme";
             "workbench.colorTheme" = "GitHub Dark Default";
 
-            # --- Configuration Nix IDE (Optimisée pour 'nil') ---
+            "[nix]" = {
+              "editor.defaultFormatter" = "jnoortheen.nix-ide";
+            };
+
             "nix.enableLanguageServer" = true;
             "nix.serverPath" = "nil";
             "nix.serverSettings" = {
               "nil" = {
                 "formatting" = {
-                  "command" = [ "alejandra" ];
+                  "command" = [ "nixfmt" ];
                 };
               };
             };
 
-            # --- Configuration Direnv ---
-            # Recharge automatiquement VS Code quand ton .envrc change
             "direnv.restart.automatic" = true;
           };
 
