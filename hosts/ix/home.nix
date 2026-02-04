@@ -10,10 +10,4 @@
   ];
 
   my.bundles.server.enable = true;
-
-  #home = {
-  #  homeDirectory = "/home/${user}";
-  #  stateVersion = "26.05";
-  #  username = user;
-  #};
 }
