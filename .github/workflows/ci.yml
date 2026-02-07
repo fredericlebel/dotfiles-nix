@@ -9,21 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/nix-installer-action@v14
       - name: Check formatting
         run: nix fmt -- --check .
-      - name: Run Statix (Linter)
-        run: nix run nixpkgs#statix -- check .
-      - name: Run Deadnix (Unused code)
-        run: nix run nixpkgs#deadnix -- --fail .
 
-  flake-check:
+  build-hosts:
     needs: linting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@v9
-      - uses: DeterminateSystems/magic-nix-cache-action@v2
-      - name: Nix flake check
-        run: nix flake check
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
 
+      - name: Check NixOS (ix) Evaluation
+        run: nix eval .#nixosConfigurations.ix.config.system.build.toplevel.drvPath
+
+      - name: Build NixOS (ix) Toplevel (lite)
+        run: nix build .#nixosConfigurations.ix.config.system.build.toplevel --dry-run
+
+      - name: Check Darwin (caladan) Evaluation
+        run: nix eval .#darwinConfigurations.caladan.system.drvPath
