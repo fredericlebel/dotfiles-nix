@@ -51,7 +51,6 @@
     }:
     let
       user = "flebel";
-
       mylib = import ./lib/helpers.nix { inherit inputs user; };
 
       systems = [
@@ -90,26 +89,19 @@
         };
 
         "ix" =
-          {
-            ...
-          }:
+          { ... }:
           {
             deployment = {
               buildOnTarget = true;
               targetHost = "ix.opval.com";
               targetUser = "flebel";
-              tags = [
-                "vps"
-                "cloud"
-              ];
+              tags = [ "vps" "cloud" ];
             };
 
             imports = [
               ./hosts/ix/configuration.nix
-
               inputs.sops-nix.nixosModules.sops
               inputs.disko.nixosModules.disko
-
               inputs.home-manager.nixosModules.home-manager
               {
                 home-manager = {
@@ -117,59 +109,26 @@
                   useUserPackages = true;
                   backupFileExtension = "hm-backup";
                   extraSpecialArgs = { inherit inputs user; };
-
                   users.${user} = import ./hosts/ix/home.nix;
                 };
               }
             ];
 
-            _module.args = {
-              myMeta = {
-                s3Endpoint = "s3.us-west-000.backblazeb2.com";
-                s3Bucket = "ix-opval-com";
-                vaultwardenSubdomain = "vaultwarden.ix.opval.com";
-                adminEmail = "flebel@opval.com";
-                baseDomain = "opval.com";
-              };
+            _module.args.myMeta = {
+              s3Endpoint = "s3.us-west-000.backblazeb2.com";
+              s3Bucket = "ix-opval-com";
+              vaultwardenSubdomain = "vaultwarden.ix.opval.com";
+              adminEmail = "flebel@opval.com";
+              baseDomain = "opval.com";
             };
           };
       };
 
       colmenaHive = colmena.lib.makeHive self.outputs.colmena;
 
-      packages."aarch64-darwin" = {
-        default = self.darwinConfigurations."caladan".system;
+      packages = {
+        "aarch64-darwin".default = self.darwinConfigurations."caladan".system;
+        "x86_64-linux".default = self.nixosConfigurations."ix".config.system.build.toplevel;
       };
-
-      packages."x86_64-linux" = {
-        default = self.nixosConfigurations."ix".config.system.build.toplevel;
-      };
-
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default = pkgs.mkShell {
-            packages = [
-              pkgs.just
-              pkgs.sops
-              pkgs.ssh-to-age
-              pkgs.git
-              pkgs.statix
-              pkgs.deadnix
-              pkgs.nh
-              pkgs.nix-output-monitor
-              inputs.colmena.packages.${system}.colmena
-            ];
-
-            shellHook = ''
-              echo "🚀 Bienvenue dans l'environnement Nix-Config !"
-              echo "Outils dispo : colmena, just, sops, nh"
-            '';
-          };
-        }
-      );
     };
 }
