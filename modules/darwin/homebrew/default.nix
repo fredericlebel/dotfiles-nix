@@ -33,6 +33,9 @@
       "spotify"
       "zoom"
 
+      # terminals
+      "ghostty"
+
       # Développement & Tech
       "caido" # Sécurité / Proxy
       "maccy" # Gestionnaire de presse-papier
