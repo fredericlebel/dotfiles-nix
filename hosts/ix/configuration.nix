@@ -16,6 +16,7 @@
     ../../modules/nixos/bundles/base-server.nix
 
     ../../modules/nixos/features/observability
+    ../../modules/nixos/features/home-assistant
     ../../modules/nixos/features/tailscale
     ../../modules/nixos/features/vaultwarden
     ../../modules/nixos/features/security/suricata
@@ -48,6 +49,8 @@
     };
     nftables.enable = true;
   };
+
+  my.features.home-assistant.enable = true;
 
   my.features = {
     observability = {
