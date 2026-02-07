@@ -51,6 +51,8 @@
     }:
     let
       user = "flebel";
+
+      inventory = import ./nix/lib/inventory.nix;
       mylib = import ./nix/lib/helpers.nix { inherit inputs user; };
 
       systems = [
@@ -65,20 +67,14 @@
       darwinConfigurations = {
         "caladan" = mylib.mkSystem {
           hostName = "caladan";
-          system = "aarch64-darwin";
-          isDarwin = true;
+          inherit (inventory.caladan) system isDarwin;
         };
       };
 
       nixosConfigurations = {
         "ix" = mylib.mkSystem {
           hostName = "ix";
-          system = "x86_64-linux";
-          hostMeta = {
-            s3Endpoint = "s3.us-west-000.backblazeb2.com";
-            s3Bucket = "ix-opval-com";
-            vaultwardenSubdomain = "vaultwarden.ix.opval.com";
-          };
+          inherit (inventory.ix) system isDarwin;
         };
       };
 
@@ -90,16 +86,16 @@
 
         "ix" =
           { ... }:
+          let
+            hostMeta = import ./hosts/ix/host-meta.nix;
+          in
           {
-            deployment = {
+            deployment = inventory.ix.deployment // {
               buildOnTarget = true;
-              targetHost = "ix.opval.com";
-              targetUser = "flebel";
-              tags = [
-                "vps"
-                "cloud"
-              ];
+              targetUser = user;
             };
+
+            _module.args.myMeta = mylib.defaultMeta // hostMeta;
 
             imports = [
               ./hosts/ix/configuration.nix
@@ -116,14 +112,6 @@
                 };
               }
             ];
-
-            _module.args.myMeta = {
-              s3Endpoint = "s3.us-west-000.backblazeb2.com";
-              s3Bucket = "ix-opval-com";
-              vaultwardenSubdomain = "vaultwarden.ix.opval.com";
-              adminEmail = "flebel@opval.com";
-              baseDomain = "opval.com";
-            };
           };
       };
 
