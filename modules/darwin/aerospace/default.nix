@@ -180,7 +180,7 @@ in
       };
 
       skhd = {
-        enable = true;
+        enable = false;
 
         skhdConfig = ''
           # --- WORKSPACES (Navigation) ---
