@@ -1,8 +1,4 @@
-{
-  inputs,
-  user,
-  ...
-}:
+{ inputs, user, ... }:
 let
   defaultMeta = {
     adminEmail = "flebel@opval.com";
@@ -10,22 +6,24 @@ let
   };
 in
 {
+  inherit defaultMeta;
+
   mkSystem =
     {
       hostName,
       system,
       isDarwin ? false,
-      hostMeta ? { },
+      hostMeta ? null,
     }:
     let
-      myMeta = defaultMeta // hostMeta;
+      localMeta = if hostMeta != null then hostMeta else import ../../hosts/${hostName}/host-meta.nix;
+      myMeta = defaultMeta // localMeta;
 
       builder = if isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
 
       osModules =
         if isDarwin then
           [
-            # inputs.mac-app-util.darwinModules.default
             inputs.nix-homebrew.darwinModules.nix-homebrew
             inputs.sops-nix.darwinModules.sops
           ]
