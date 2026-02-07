@@ -1,11 +1,9 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
-  cfg = config.my.features.observability;
   inherit (lib) types;
 in
 {

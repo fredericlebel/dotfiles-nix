@@ -91,9 +91,6 @@
 
         "ix" =
           {
-            name,
-            nodes,
-            pkgs,
             ...
           }:
           {
