@@ -50,9 +50,9 @@
     nftables.enable = true;
   };
 
-  my.features.home-assistant.enable = true;
-
   my.features = {
+    home-assistant.enable = true;
+
     observability = {
       enable = true;
       role = "server";
