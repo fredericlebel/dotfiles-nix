@@ -135,13 +135,14 @@
           };
       };
 
+      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
+
       packages."aarch64-darwin" = {
         default = self.darwinConfigurations."caladan".system;
-        colmenaHive = colmena.lib.makeHive self.outputs.colmena;
       };
 
       packages."x86_64-linux" = {
-        default = self.nixosConfigurations."ix".system;
+        default = self.nixosConfigurations."ix".config.system.build.toplevel;
       };
 
       devShells = forAllSystems (
