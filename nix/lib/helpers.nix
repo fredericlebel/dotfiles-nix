@@ -1,9 +1,6 @@
 { inputs, user, ... }:
 let
-  defaultMeta = {
-    adminEmail = "flebel@opval.com";
-    baseDomain = "opval.com";
-  };
+  defaultMeta = import ./default-meta.nix;
 in
 {
   inherit defaultMeta;
@@ -18,7 +15,6 @@ in
     let
       localMeta = if hostMeta != null then hostMeta else import ../../hosts/${hostName}/host-meta.nix;
       myMeta = defaultMeta // localMeta;
-
       builder = if isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
 
       osModules =
