@@ -95,7 +95,10 @@
               buildOnTarget = true;
               targetHost = "ix.opval.com";
               targetUser = "flebel";
-              tags = [ "vps" "cloud" ];
+              tags = [
+                "vps"
+                "cloud"
+              ];
             };
 
             imports = [
