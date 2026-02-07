@@ -1,0 +1,29 @@
+name: "Nix CI"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v9
+      - name: Check formatting
+        run: nix fmt -- --check .
+      - name: Run Statix (Linter)
+        run: nix run nixpkgs#statix -- check .
+      - name: Run Deadnix (Unused code)
+        run: nix run nixpkgs#deadnix -- --fail .
+
+  flake-check:
+    needs: linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v9
+      - uses: DeterminateSystems/magic-nix-cache-action@v2
+      - name: Nix flake check
+        run: nix flake check
+
