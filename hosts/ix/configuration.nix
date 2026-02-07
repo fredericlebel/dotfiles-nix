@@ -1,9 +1,6 @@
 {
   config,
-  pkgs,
   modulesPath,
-  myMeta,
-  user,
   ...
 }:
 {
