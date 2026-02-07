@@ -46,7 +46,7 @@ in
       specialArgs = { inherit inputs user myMeta; };
 
       modules = osModules ++ [
-        ../hosts/${hostName}/configuration.nix
+        ../../hosts/${hostName}/configuration.nix
 
         homeManagerModule
         {
@@ -57,7 +57,7 @@ in
             extraSpecialArgs = { inherit inputs user myMeta; };
             users.${user} = {
               imports = [
-                ../hosts/${hostName}/home.nix
+                ../../hosts/${hostName}/home.nix
               ];
             };
           };

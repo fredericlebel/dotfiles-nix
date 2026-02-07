@@ -51,7 +51,7 @@
     }:
     let
       user = "flebel";
-      mylib = import ./lib/helpers.nix { inherit inputs user; };
+      mylib = import ./nix/lib/helpers.nix { inherit inputs user; };
 
       systems = [
         "aarch64-darwin"
