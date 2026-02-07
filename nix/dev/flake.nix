@@ -14,6 +14,7 @@
     {
       nixpkgs,
       colmena,
+      ...
     }:
     let
       # On supporte tes deux architectures
