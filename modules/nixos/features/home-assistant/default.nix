@@ -9,7 +9,6 @@ let
   cfg = config.my.features.home-assistant;
 
   hassConfig = pkgs.writeText "configuration.yaml" ''
-
     # Config de base
     default_config:
 
@@ -40,6 +39,22 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    services.nginx = {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+      virtualHosts."hass.ix.opval.com" = {
+        forceSSL = true;
+        enableACME = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8123";
+          proxyWebsockets = true;
+        };
+      };
+    };
+
     virtualisation.oci-containers.backend = "podman";
 
     systemd.tmpfiles.rules = [
@@ -61,8 +76,6 @@ in
 
       environment.TZ = "America/Toronto";
     };
-
-    #networking.firewall.allowedTCPPorts = [ 8123 ];
 
     environment.systemPackages = [ pkgs.home-assistant-cli ];
   };
