@@ -11,12 +11,7 @@
     ../../users/flebel/system.nix
 
     ../../modules/nixos/bundles/base-server.nix
-
-    ../../modules/nixos/features/observability
-    ../../modules/nixos/features/home-assistant
-    ../../modules/nixos/features/tailscale
-    ../../modules/nixos/features/vaultwarden
-    ../../modules/nixos/features/security/suricata
+    ../../modules/nixos/features
   ];
 
   my.bundles.base-server.enable = true;
@@ -48,7 +43,12 @@
   };
 
   my.features = {
-    home-assistant.enable = true;
+    caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
+
+    home-assistant = {
+      enable = true;
+      subdomain = "hass";
+    };
 
     observability = {
       enable = true;
@@ -66,7 +66,10 @@
       authKeyFile = config.sops.secrets.tailscale-key.path;
     };
 
-    vaultwarden.enable = true;
+    vaultwarden = {
+      enable = true;
+      subdomain = "vault";
+    };
   };
 
   swapDevices = [

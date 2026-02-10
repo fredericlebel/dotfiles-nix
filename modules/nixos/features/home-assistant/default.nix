@@ -1,18 +1,18 @@
 {
   config,
   lib,
+  myLib,
+  myMeta,
   pkgs,
   ...
 }:
 
 let
   cfg = config.my.features.home-assistant;
-
+  internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
   hassConfig = pkgs.writeText "configuration.yaml" ''
-    # Config de base
     default_config:
 
-    # HTTP est requis pour le reverse proxy ou l'accès direct
     http:
       server_port: 8123
       use_x_forwarded_for: true
@@ -20,7 +20,6 @@ let
         - 127.0.0.1
         - ::1
 
-    # Infos générales (Hardcodées ou via variables Nix)
     homeassistant:
       name: "Maison Lebel"
       latitude: 46.8138
@@ -30,51 +29,45 @@ let
       time_zone: "America/Toronto"
       currency: CAD
   '';
-
 in
 {
   options.my.features.home-assistant = {
-    enable = lib.mkEnableOption "Enable Home Assistant (Containerized)";
+    enable = lib.mkEnableOption "Enable Home Assistant (Containerized with Caddy/Tailscale)";
+
+    subdomain = lib.mkOption {
+      type = lib.types.str;
+      default = myMeta.subdomain;
+      description = "Le sous-domaine utilisé pour l'identité réseau (Tailscale).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
 
-    services.nginx = {
-      enable = true;
-      recommendedGzipSettings = true;
-      recommendedOptimisation = true;
-      recommendedProxySettings = true;
-      recommendedTlsSettings = true;
-      virtualHosts."hass.ix.opval.com" = {
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://127.0.0.1:8123";
-          proxyWebsockets = true;
-        };
+    my.features.caddy.enable = true;
+
+    services.caddy.virtualHosts."${internalDomain}" = {
+      extraConfig = myLib.caddy.mkTailscaleHost {
+        inherit (cfg) subdomain;
+        port = 8123;
       };
     };
 
-    virtualisation.oci-containers.backend = "podman";
-
     systemd.tmpfiles.rules = [
       "d /var/lib/homeassistant 0755 root root -"
+      "d /var/log/caddy 0755 caddy caddy -"
     ];
 
-    virtualisation.oci-containers.containers.home-assistant = {
-      image = "ghcr.io/home-assistant/home-assistant:stable";
-
-      extraOptions = [ "--network=host" ];
-
-      volumes = [
-        # Mutable
-        "/var/lib/homeassistant:/config"
-
-        # Immutable
-        "${hassConfig}:/config/configuration.yaml:ro"
-      ];
-
-      environment.TZ = "America/Toronto";
+    virtualisation.oci-containers = {
+      backend = "podman";
+      containers.home-assistant = {
+        image = "ghcr.io/home-assistant/home-assistant:stable";
+        extraOptions = [ "--network=host" ];
+        volumes = [
+          "/var/lib/homeassistant:/config"
+          "${hassConfig}:/config/configuration.yaml:ro"
+        ];
+        environment.TZ = "America/Toronto";
+      };
     };
 
     environment.systemPackages = [ pkgs.home-assistant-cli ];

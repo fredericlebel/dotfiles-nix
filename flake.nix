@@ -46,9 +46,9 @@
       inventory = import ./nix/lib/inventory.nix;
       mylib = import ./nix/lib/helpers.nix { inherit inputs user; };
 
-      nixosHosts = nixpkgs.lib.filterAttrs (n: v: !v.isDarwin) inventory;
-      darwinHosts = nixpkgs.lib.filterAttrs (n: v: v.isDarwin) inventory;
-      colmenaHosts = nixpkgs.lib.filterAttrs (n: v: v.deployment != null) inventory;
+      nixosHosts = nixpkgs.lib.filterAttrs (_n: v: !v.isDarwin) inventory;
+      darwinHosts = nixpkgs.lib.filterAttrs (_n: v: v.isDarwin) inventory;
+      colmenaHosts = nixpkgs.lib.filterAttrs (_n: v: v.deployment != null) inventory;
 
       systems = [
         "aarch64-darwin"
@@ -113,7 +113,7 @@
       packages = forAllSystems (
         system:
         let
-          matchingHosts = nixpkgs.lib.filterAttrs (n: v: v.system == system) inventory;
+          matchingHosts = nixpkgs.lib.filterAttrs (_n: v: v.system == system) inventory;
         in
         nixpkgs.lib.mapAttrs' (
           name: conf:

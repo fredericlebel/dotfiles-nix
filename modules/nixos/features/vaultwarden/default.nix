@@ -1,62 +1,56 @@
 {
   config,
   lib,
+  myLib,
   myMeta,
   pkgs,
   ...
 }:
 let
   cfg = config.my.features.vaultwarden;
-  pgBackupPath = "${config.services.postgresqlBackup.location}/vaultwarden.sql.gz";
+  internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
 in
 {
   options.my.features.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
 
-    domain = lib.mkOption {
+    subdomain = lib.mkOption {
       type = lib.types.str;
-      default = myMeta.vaultwardenSubdomain;
-      description = "Le domaine dynamique de vaultwarden";
+      default = myMeta.subdomain;
+      description = "Le sous-domaine utilisé pour l'identité réseau (Tailscale).";
     };
 
     resticEnable = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Activer les backups Restic pour Vaultwarden";
+      description = "Activer les sauvegardes automatisées vers S3 via Restic.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services = {
-      logrotate.checkConfig = false;
+    my.features.caddy.enable = true;
 
+    services.caddy.virtualHosts."${internalDomain}" = {
+      extraConfig = myLib.caddy.mkTailscaleHost {
+        inherit (cfg) subdomain;
+        port = config.services.vaultwarden.config.ROCKET_PORT;
+      };
+    };
+
+    services = {
       vaultwarden = {
         enable = true;
         dbBackend = "postgresql";
         environmentFile = config.sops.secrets."vaultwarden-env".path;
+
         config = {
-          DOMAIN = "https://${cfg.domain}/";
+          DOMAIN = "https://${internalDomain}/";
           SIGNUPS_ALLOWED = false;
           SHOW_PASSWORD_HINT = false;
           ROCKET_ADDRESS = "127.0.0.1";
           ROCKET_PORT = 8222;
           ROCKET_LOG = "critical";
           ORG_EVENTS_ENABLED = true;
-        };
-      };
-
-      nginx = {
-        enable = true;
-        recommendedGzipSettings = true;
-        recommendedOptimisation = true;
-        recommendedProxySettings = true;
-        recommendedTlsSettings = true;
-        virtualHosts."${cfg.domain}" = {
-          forceSSL = true;
-          enableACME = true;
-          locations."/" = {
-            proxyPass = "http://127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}";
-          };
         };
       };
 
@@ -78,37 +72,31 @@ in
         location = "/var/backup/postgresql";
       };
 
-      restic.backups.vaultwarden = lib.mkIf cfg.resticEnable {
-        environmentFile = config.sops.secrets."restic-vaultwarden-env".path;
-        passwordFile = config.sops.secrets."restic-vaultwarden-password".path;
+      restic.backups.vaultwarden =
+        let
+          pgBackupPath = "${config.services.postgresqlBackup.location}/vaultwarden.sql.gz";
+        in
+        lib.mkIf cfg.resticEnable {
+          environmentFile = config.sops.secrets."restic-vaultwarden-env".path;
+          passwordFile = config.sops.secrets."restic-vaultwarden-password".path;
+          repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/vaultwarden";
 
-        repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/vaultwarden";
+          paths = [
+            "/var/lib/vaultwarden"
+            pgBackupPath
+          ];
 
-        paths = [
-          "/var/lib/vaultwarden"
-          pgBackupPath
-        ];
+          timerConfig = {
+            OnCalendar = "daily";
+            Persistent = true;
+          };
 
-        #backupPrepareCommand = ''
-        #  echo "Lancement du dump PostgreSQL..."
-        #  ${config.systemd.services."postgresqlBackup-vaultwarden".serviceConfig.ExecStart}
-        #'';
-
-        timerConfig = {
-          OnCalendar = "daily";
-          Persistent = true;
+          pruneOpts = [
+            "--keep-daily 7"
+            "--keep-weekly 4"
+            "--keep-monthly 6"
+          ];
         };
-
-        pruneOpts = [
-          "--keep-daily 7"
-          "--keep-weekly 4"
-          "--keep-monthly 6"
-        ];
-      };
-    };
-    security.acme = {
-      acceptTerms = true;
-      defaults.email = myMeta.adminEmail;
     };
 
     sops.secrets = {
