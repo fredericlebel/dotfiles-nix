@@ -32,7 +32,6 @@ in
 
         settings = {
           runmode = "workers";
-
           af-packet = [ { inherit (cfg) interface; } ];
 
           vars.address-groups = {
@@ -82,17 +81,25 @@ in
         ];
       };
 
-      logrotate = {
-        enable = true;
-        settings.suricata = {
-          files = "/var/lib/suricata/eve.json /var/log/suricata/fast.log";
+      logrotate.enable = true;
+
+      logrotate.settings = {
+        suricata-eve = {
+          files = "/var/log/suricata/eve.json";
           frequency = "daily";
           rotate = 7;
           compress = true;
-          postrotate = "systemctl kill -s HUP suricata.service";
+          delaycompress = true;
+          missingok = true;
+          notifempty = true;
+          su = "suricata suricata";
+          postrotate = "systemctl kill -s SIGHUP suricata";
         };
       };
     };
+
+    services.logrotate.checkConfig = false;
+
     environment.etc."suricata/threshold.config" = {
       mode = "0644";
       text = ''
@@ -102,8 +109,9 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/lib/suricata/rules 0750 suricata suricata -"
-      "d /var/log/suricata 0750 suricata suricata -"
+      "d /var/log/suricata 0755 suricata suricata - -"
+      "d /var/lib/suricata 0750 suricata suricata - -"
+      "d /etc/suricata/rules 0755 suricata suricata - -"
     ];
   };
 }
