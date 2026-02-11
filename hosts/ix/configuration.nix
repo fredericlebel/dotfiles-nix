@@ -28,10 +28,6 @@
 
     firewall = {
       enable = true;
-      allowedTCPPorts = [
-        80
-        443
-      ];
       trustedInterfaces = [ "tailscale0" ];
 
       extraInputRules = ''
@@ -53,6 +49,7 @@
     observability = {
       enable = true;
       role = "server";
+      subdomain = "grafana";
     };
 
     security.suricata = {
