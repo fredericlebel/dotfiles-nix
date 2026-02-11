@@ -54,12 +54,6 @@ in
       environmentFile = cfg.tailscaleAuthFile;
     };
 
-    networking.firewall.allowedTCPPorts = [
-      80
-      443
-    ];
-    networking.firewall.allowedUDPPorts = [ 443 ];
-
     systemd.tmpfiles.rules = [
       "d /var/log/caddy 0750 caddy caddy -"
     ];
