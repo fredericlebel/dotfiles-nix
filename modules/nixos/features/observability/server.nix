@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  myLib,
+  myMeta,
   ...
 }:
 let
@@ -10,13 +12,20 @@ let
   promPort = config.services.prometheus.port;
   nodePort = config.services.prometheus.exporters.node.port;
 
-  myHost = config.networking.hostName;
-  myDomain = config.networking.domain or "local";
+  myHost = cfg.subdomain;
+  myDomain = myMeta.connectivity.tailnet or "local";
   myFqdn = "${myHost}.${myDomain}";
 in
 {
   config = lib.mkIf (cfg.enable && cfg.role == "server") {
     services = {
+      caddy.virtualHosts."${myFqdn}" = {
+        extraConfig = myLib.caddy.mkTailscaleHost {
+          inherit (cfg) subdomain;
+          port = 3000;
+        };
+      };
+
       grafana = {
         enable = true;
         settings.server = {
