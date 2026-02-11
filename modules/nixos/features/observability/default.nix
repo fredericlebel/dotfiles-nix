@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  myMeta,
   ...
 }:
 let
@@ -14,6 +15,12 @@ in
 
   options.my.features.observability = {
     enable = lib.mkEnableOption "la stack d'observabilité complète";
+
+    subdomain = lib.mkOption {
+      type = lib.types.str;
+      default = myMeta.subdomain;
+      description = "Le sous-domaine utilisé pour l'identité réseau (Tailscale).";
+    };
 
     role = lib.mkOption {
       type = types.enum [
