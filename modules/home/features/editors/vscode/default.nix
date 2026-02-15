@@ -8,6 +8,9 @@
 let
   cfg = config.my.features.editors.vscode;
   marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
+  withExtension =
+    ext: settings:
+    lib.optionalAttrs (builtins.elem ext config.programs.vscode.profiles.default.extensions) settings;
 in
 {
   options.my.features.editors.vscode = {
@@ -30,7 +33,6 @@ in
           extensions = [
             # --- Langages & Formatage ---
             marketplace.jnoortheen.nix-ide
-
             marketplace.rust-lang.rust-analyzer
             marketplace.tamasfe.even-better-toml
             marketplace.redhat.vscode-yaml
@@ -42,70 +44,60 @@ in
             # --- Python ---
             marketplace.ms-python.python
             marketplace.ms-python.debugpy
-            #marketplace.ms-python.vscode-pylance
             marketplace.ms-python.vscode-python-envs
 
-            # --- Intelligence Artificielle ---
-            #marketplace.github.copilot
-            #marketplace.github.copilot-chat
+            # --- AI ---
             marketplace.google.geminicodeassist
 
-            # --- Docker & Remote ---
-            #marketplace.docker.docker
-            #marketplace.ms-azuretools.vscode-docker
-            #marketplace.ms-azuretools.vscode-containers
-            #marketplace.ms-vscode-remote.remote-containers
-            #marketplace.ms-vscode.remote-repositories
-
-            # --- GitHub & Git ---
+            # --- Git ---
             marketplace.github.github-vscode-theme
             marketplace.github.remotehub
             marketplace.github.vscode-github-actions
             marketplace.github.vscode-pull-request-github
             marketplace.ms-vscode.azure-repos
 
-            # --- Utilitaires & UI ---
+            # --- Utilitaires ---
             marketplace.pkief.material-icon-theme
             marketplace.signageos.signageos-vscode-sops
-
-            # AJOUTÉ : Indispensable pour charger le contexte du dossier (flake/devShell)
             marketplace.mkhl.direnv
-
             marketplace.irongeek.vscode-env
-            #marketplace.yzane.markdown-pdf
             marketplace.yzhang.markdown-all-in-one
           ];
 
-          userSettings = {
-            # --- Apparence & Base ---
-            "editor.formatOnSave" = true;
-            "workbench.iconTheme" = "material-icon-theme";
-            "workbench.colorTheme" = "GitHub Dark Default";
-
-            "[nix]" = {
-              "editor.defaultFormatter" = "jnoortheen.nix-ide";
-            };
-
-            "nix.enableLanguageServer" = true;
-            "nix.serverPath" = "nil";
-            "nix.serverSettings" = {
-              "nil" = {
-                "formatting" = {
-                  "command" = [ "nixfmt" ];
-                };
-              };
-            };
-
-            "direnv.restart.automatic" = true;
-          };
-
           keybindings = [
-            # See https://code.visualstudio.com/docs/getstarted/keybindings#_advanced-customization
             {
               key = "shift+cmd+j";
               command = "workbench.action.focusActiveEditorGroup";
               when = "terminalFocus";
             }
+          ];
+
+          userSettings = lib.mkMerge [
+            {
+              "editor.formatOnSave" = true;
+              "workbench.iconTheme" = "material-icon-theme";
+              "workbench.colorTheme" = "GitHub Dark Default";
+              "direnv.restart.automatic" = true;
+            }
+
+            (withExtension marketplace.jnoortheen.nix-ide {
+              "[nix]" = {
+                "editor.defaultFormatter" = "jnoortheen.nix-ide";
+              };
+              "nix.enableLanguageServer" = true;
+              "nix.serverPath" = "nil";
+              "nix.serverSettings" = {
+                "nil" = {
+                  "formatting" = {
+                    "command" = [ "nixfmt" ];
+                  };
+                };
+              };
+            })
+
+            (withExtension marketplace.ms-python.python {
+              "python.languageServer" = "Pylance";
+            })
           ];
         };
       };
