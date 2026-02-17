@@ -78,6 +78,16 @@ in
               "workbench.iconTheme" = "material-icon-theme";
               "workbench.colorTheme" = "GitHub Dark Default";
               "direnv.restart.automatic" = true;
+
+              "editor.fontFamily" = "FiraCode Nerd Font Mono";
+              "editor.fontSize" = 13;
+              "editor.minimap.enabled" = false;
+              "editor.renderWhitespace" = "trailing";
+              "editor.lineNumbers" = "relative";
+              "editor.rulers" = [
+                80
+                120
+              ];
             }
 
             (withExtension marketplace.jnoortheen.nix-ide {
