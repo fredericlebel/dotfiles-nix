@@ -21,8 +21,8 @@ in
     nixpkgs.config.allowUnfree = true;
 
     home.packages = with pkgs; [
-      nil
-      nixfmt
+      nixd
+      nixfmt-rfc-style
     ];
 
     programs.vscode = {
@@ -95,9 +95,9 @@ in
                 "editor.defaultFormatter" = "jnoortheen.nix-ide";
               };
               "nix.enableLanguageServer" = true;
-              "nix.serverPath" = "nil";
+              "nix.serverPath" = "nixd";
               "nix.serverSettings" = {
-                "nil" = {
+                "nixd" = {
                   "formatting" = {
                     "command" = [ "nixfmt" ];
                   };
