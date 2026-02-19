@@ -14,18 +14,14 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    homebrew.casks = [
-      "ghostty"
-    ];
-
     programs.ghostty = {
       enable = true;
       package = null;
 
       settings = {
-        theme = "catppuccin-mocha";
-        font-family = "JetBrainsMono Nerd Font";
-        font-size = 12;
+        theme = "Catppuccin mocha";
+        font-family = "FiraCode Nerd Font Mono";
+        font-size = 13;
         window-padding-x = 10;
         window-padding-y = 10;
         command = "${pkgs.zsh}/bin/zsh";
@@ -33,7 +29,5 @@ in
         confirm-close-surface = false;
       };
     };
-
-    home.packages = [ pkgs.ghostty ];
   };
 }
