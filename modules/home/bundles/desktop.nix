@@ -42,7 +42,10 @@ in
         neovim.enable = true;
         vscode.enable = true;
       };
-      terminals.wezterm.enable = true;
+      terminals = {
+        ghostty.enable = true;
+        wezterm.enable = true;
+      };
     };
 
     home.packages = with pkgs; [
