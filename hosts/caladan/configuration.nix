@@ -20,8 +20,8 @@
   # The "Where"
   system.defaults.dock.persistent-apps = [
     "/Applications/Google Chrome.app"
+    "/Applications/Ghostty.app"
     "/Users/flebel/Applications/Home\ Manager\ Apps/Visual\ Studio \Code.app"
-    "/Users/flebel/Applications/Home\ Manager\ Apps/WezTerm.app"
     "/Applications/Logseq.app"
     "/Applications/Spotify.app"
     "/Applications/Discord.app"

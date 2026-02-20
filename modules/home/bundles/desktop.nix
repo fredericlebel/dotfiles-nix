@@ -44,7 +44,7 @@ in
       };
       terminals = {
         ghostty.enable = true;
-        wezterm.enable = true;
+        wezterm.enable = false;
       };
     };
 
