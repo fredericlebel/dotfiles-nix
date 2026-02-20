@@ -9,13 +9,15 @@
     ../../modules/darwin/logseq
   ];
 
+  nix.enable = false;
+
+  nixpkgs.config.allowUnfree = true;
+
   # The "What"
   my.features = {
     aerospace.enable = true;
     logseq.enable = true;
   };
-
-  services.openssh.enable = false;
 
   # The "Where"
   system.defaults.dock.persistent-apps = [
@@ -28,6 +30,4 @@
     "/Applications/Bitwarden.app"
     "/System/Applications/System Settings.app"
   ];
-
-  nix.enable = false;
 }
