@@ -7,7 +7,6 @@
     ../../modules/darwin/bundles/laptop.nix
   ];
 
-
   users.users.${user} = {
     home = "/Users/${user}";
   };

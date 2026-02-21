@@ -7,7 +7,8 @@ let
   cfg = config.my.features.infrastructure.nix-core;
 in
 {
-  options.my.features.infrastructure.nix-core.enable = lib.mkEnableOption "Core Nix daemon settings & GC";
+  options.my.features.infrastructure.nix-core.enable =
+    lib.mkEnableOption "Core Nix daemon settings & GC";
 
   config = lib.mkIf cfg.enable {
     nix = {
