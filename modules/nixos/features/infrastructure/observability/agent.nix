@@ -4,7 +4,7 @@
   ...
 }:
 let
-  cfg = config.my.features.observability;
+  cfg = config.my.features.infrastructure.observability;
 in
 {
   config = lib.mkIf cfg.enable {

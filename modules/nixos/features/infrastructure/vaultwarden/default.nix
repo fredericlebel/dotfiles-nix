@@ -7,11 +7,11 @@
   ...
 }:
 let
-  cfg = config.my.features.vaultwarden;
+  cfg = config.my.features.infrastructure.vaultwarden;
   internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
 in
 {
-  options.my.features.vaultwarden = {
+  options.my.features.infrastructure.vaultwarden = {
     enable = lib.mkEnableOption "Vaultwarden";
 
     subdomain = lib.mkOption {
@@ -28,7 +28,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    my.features.caddy.enable = true;
+    my.features.infrastructure.caddy.enable = true;
 
     services.caddy.virtualHosts."${internalDomain}" = {
       extraConfig = myLib.caddy.mkTailscaleHost {

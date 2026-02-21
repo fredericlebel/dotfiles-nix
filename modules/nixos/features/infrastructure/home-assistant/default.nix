@@ -8,7 +8,7 @@
 }:
 
 let
-  cfg = config.my.features.home-assistant;
+  cfg = config.my.features.infrastructure.home-assistant;
   internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
   hassConfig = pkgs.writeText "configuration.yaml" ''
     default_config:
@@ -31,7 +31,7 @@ let
   '';
 in
 {
-  options.my.features.home-assistant = {
+  options.my.features.infrastructure.home-assistant = {
     enable = lib.mkEnableOption "Enable Home Assistant (Containerized with Caddy/Tailscale)";
 
     subdomain = lib.mkOption {
@@ -43,7 +43,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    my.features.caddy.enable = true;
+    my.features.infrastructure.caddy.enable = true;
 
     services.caddy.virtualHosts."${internalDomain}" = {
       extraConfig = myLib.caddy.mkTailscaleHost {

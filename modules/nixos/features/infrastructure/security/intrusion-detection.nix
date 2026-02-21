@@ -5,7 +5,7 @@
   ...
 }:
 let
-  cfg = config.my.features.security.intrusion-detection;
+  cfg = config.my.features.infrastructure.security.intrusion-detection;
 
   aideUpdateScript = pkgs.writeShellScriptBin "aide-accept-changes" ''
     if [ "$EUID" -ne 0 ]; then
@@ -30,7 +30,7 @@ let
   '';
 in
 {
-  options.my.features.security.intrusion-detection = {
+  options.my.features.infrastructure.security.intrusion-detection = {
     enable = lib.mkEnableOption "AIDE File Integrity Monitoring";
   };
 

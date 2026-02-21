@@ -7,11 +7,11 @@
 
 with lib;
 let
-  cfg = config.my.features.tailscale;
+  cfg = config.my.features.infrastructure.tailscale;
   inherit (pkgs.stdenv) isLinux;
 in
 {
-  options.my.features.tailscale = {
+  options.my.features.infrastructure.tailscale = {
     enable = mkEnableOption "Tailscale Mesh VPN";
 
     isExitNode = mkOption {

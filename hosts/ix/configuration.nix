@@ -44,33 +44,35 @@
   };
 
   my.features = {
-    caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
+    infrastructure = {
+      caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
 
-    home-assistant = {
-      enable = true;
-      subdomain = "hass";
-    };
+      home-assistant = {
+        enable = true;
+        subdomain = "hass";
+      };
 
-    observability = {
-      enable = true;
-      role = "server";
-      subdomain = "grafana";
-    };
+      observability = {
+        enable = true;
+        role = "server";
+        subdomain = "grafana";
+      };
 
-    security.suricata = {
-      enable = true;
-      interface = "ens3";
-    };
+      security.suricata = {
+        enable = true;
+        interface = "ens3";
+      };
 
-    tailscale = {
-      enable = true;
-      isExitNode = true;
-      authKeyFile = config.sops.secrets.tailscale-key.path;
-    };
+      tailscale = {
+        enable = true;
+        isExitNode = true;
+        authKeyFile = config.sops.secrets.tailscale-key.path;
+      };
 
-    vaultwarden = {
-      enable = true;
-      subdomain = "vault";
+      vaultwarden = {
+        enable = true;
+        subdomain = "vault";
+      };
     };
   };
 

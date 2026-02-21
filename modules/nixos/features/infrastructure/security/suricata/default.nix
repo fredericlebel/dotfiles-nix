@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.my.features.security.suricata;
+  cfg = config.my.features.infrastructure.security.suricata;
 in
 {
-  options.my.features.security.suricata = {
+  options.my.features.infrastructure.security.suricata = {
     enable = lib.mkEnableOption "Suricata IDS (Low Memory Profile)";
 
     interface = lib.mkOption {

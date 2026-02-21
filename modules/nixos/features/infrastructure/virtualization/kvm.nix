@@ -4,16 +4,14 @@
   ...
 }:
 let
-  cfg = config.my.features.virtualization.kvm;
+  cfg = config.my.features.infrastructure.virtualization.kvm;
 in
 {
-  options.my.features.virtualization.kvm = {
+  options.my.features.infrastructure.virtualization.kvm = {
     enable = lib.mkEnableOption "Optimisations KVM/QEMU (Guest Agent + VirtIO)";
   };
 
   config = lib.mkIf cfg.enable {
-    #imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
-
     services.qemuGuest.enable = true;
 
     boot = {

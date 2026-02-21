@@ -24,30 +24,30 @@ in
 
   config = lib.mkIf cfg.enable {
     my.features = {
-      cli = {
+      provision.cli = {
         zsh = {
           enable = true;
         };
       };
-      security = {
-        hardening = {
-          enable = true;
-        };
-        "intrusion-detection" = {
-          enable = true;
-        };
-        openssh = {
-          enable = true;
-        };
-      };
       infrastructure = {
+        security = {
+          hardening = {
+            enable = true;
+          };
+          "intrusion-detection" = {
+            enable = true;
+          };
+          openssh = {
+            enable = true;
+          };
+        };
         "nix-core" = {
           enable = true;
         };
-      };
-      virtualization = {
-        kvm = {
-          enable = true;
+        virtualization = {
+          kvm = {
+            enable = true;
+          };
         };
       };
     };
