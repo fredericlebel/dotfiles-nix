@@ -7,6 +7,7 @@
     ../../modules/darwin/homebrew
     ../../modules/darwin/aerospace
     ../../modules/darwin/logseq
+    ../../modules/home/features/terminals/ghostty
   ];
 
   nix.enable = false;
@@ -17,6 +18,7 @@
   my.features = {
     aerospace.enable = true;
     logseq.enable = true;
+    terminals.ghostty.enable = true;
   };
 
   # The "Where"
