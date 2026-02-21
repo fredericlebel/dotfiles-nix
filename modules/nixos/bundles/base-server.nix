@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ../features/provision/admin-cli.nix
     ../features/provision/cli/zsh
     ../features/infrastructure/security/hardening.nix
     ../features/infrastructure/security/intrusion-detection.nix
@@ -24,9 +25,12 @@ in
 
   config = lib.mkIf cfg.enable {
     my.features = {
-      provision.cli = {
-        zsh = {
-          enable = true;
+      provision = {
+        admin-cli.enable = true;
+        cli = {
+          zsh = {
+            enable = true;
+          };
         };
       };
       infrastructure = {
