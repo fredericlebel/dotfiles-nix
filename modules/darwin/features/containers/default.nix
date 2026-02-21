@@ -27,7 +27,8 @@ in
         ];
 
       sessionVariables = lib.mkIf isDarwin {
-        DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
+        #DOCKER_HOST = "unix://${config.home.homeDirectory}/.colima/default/docker.sock";
+        DOCKER_HOST = "unix://$HOME/.colima/default/docker.sock";
       };
 
       shellAliases = {
