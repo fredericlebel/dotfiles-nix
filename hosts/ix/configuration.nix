@@ -11,7 +11,13 @@
     ../../users/flebel/system.nix
 
     ../../modules/nixos/bundles/base-server.nix
-    ../../modules/nixos/features
+    ../../modules/nixos/features/infrastructure/caddy
+    ../../modules/nixos/features/infrastructure/home-assistant
+    ../../modules/nixos/features/infrastructure/observability
+    ../../modules/nixos/features/infrastructure/security/openssh
+    ../../modules/nixos/features/infrastructure/security/suricata
+    ../../modules/nixos/features/infrastructure/tailscale
+    ../../modules/nixos/features/infrastructure/vaultwarden
   ];
 
   my.bundles.base-server.enable = true;
