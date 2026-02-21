@@ -34,7 +34,6 @@
 
     firewall = {
       enable = true;
-      trustedInterfaces = [ "tailscale0" ];
 
       extraInputRules = ''
         tcp dport 22 ct state new,untracked limit rate 3/minute accept
