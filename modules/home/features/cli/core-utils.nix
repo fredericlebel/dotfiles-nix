@@ -18,30 +18,31 @@ in
       ncdu
     ];
 
-    programs.htop.enable = true;
+    programs = {
+      htop.enable = true;
 
-    programs.fzf = {
-      enable = true;
-      enableZshIntegration = true;
+      fzf = {
+        enable = true;
+        enableZshIntegration = true;
+      };
+
+      bat = {
+        enable = true;
+        config.theme = "TwoDark";
+      };
+
+      direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+        enableZshIntegration = true;
+      };
+
+      eza = {
+        enable = true;
+        enableZshIntegration = true;
+        icons = "auto";
+        git = true;
+      };
     };
-
-    programs.bat = {
-      enable = true;
-      config.theme = "TwoDark";
-    };
-
-    programs.direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableZshIntegration = true;
-    };
-
-    programs.eza = {
-      enable = true;
-      enableZshIntegration = true;
-      icons = "auto";
-      git = true;
-    };
-
   };
 }
