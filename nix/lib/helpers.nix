@@ -27,7 +27,7 @@ in
           ]
         else
           [
-            inputs.inputs.disko.nixosModules.disko
+            inputs.disko.nixosModules.disko
             inputs.sops-nix.nixosModules.sops
           ];
 
@@ -38,10 +38,10 @@ in
           inputs.home-manager.nixosModules.home-manager;
     in
     builder {
-      inherit system;
       specialArgs = { inherit inputs user myMeta; };
 
       modules = osModules ++ [
+        { nixpkgs.hostPlatform = system; }
         ../../hosts/${hostName}/configuration.nix
         hmModule
         {
