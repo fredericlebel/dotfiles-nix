@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.my.features.editors.vscode;
-  marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
+  marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system}.vscode-marketplace;
   withExtension =
     ext: settings:
     lib.optionalAttrs (builtins.elem ext config.programs.vscode.profiles.default.extensions) settings;
@@ -18,8 +18,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    nixpkgs.config.allowUnfree = true;
-
     home.packages = with pkgs; [
       nixd
       nixfmt
