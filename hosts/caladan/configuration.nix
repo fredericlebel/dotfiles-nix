@@ -3,10 +3,7 @@
 }:
 {
   imports = [
-    ../../modules/darwin/system-defaults
-    ../../modules/darwin/homebrew
-    ../../modules/darwin/aerospace
-    ../../modules/darwin/logseq
+    ../../modules/darwin/bundles/laptop.nix
     ../../modules/home/features/terminals/ghostty
   ];
 
