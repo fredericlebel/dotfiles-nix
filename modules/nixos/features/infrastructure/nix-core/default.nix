@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.my.features.system.nix-maintenance;
+  cfg = config.my.features.infrastructure.nix-core;
 in
 {
-  options.my.features.system.nix-maintenance.enable = lib.mkEnableOption "Maintenance Nix";
+  options.my.features.infrastructure.nix-core.enable = lib.mkEnableOption "Core Nix daemon settings & GC";
 
   config = lib.mkIf cfg.enable {
     nix = {
@@ -25,11 +25,5 @@ in
         options = "--delete-older-than 14d";
       };
     };
-
-    environment.systemPackages = with pkgs; [
-      htop
-      btop
-      curl
-    ];
   };
 }

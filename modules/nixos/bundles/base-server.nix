@@ -14,7 +14,7 @@ in
     ../features/infrastructure/security/hardening.nix
     ../features/infrastructure/security/intrusion-detection.nix
     ../features/infrastructure/security/openssh
-    ../features/system/nix-maintenance.nix
+    ../features/infrastructure/nix-core
     ../features/infrastructure/virtualization/kvm.nix
   ];
 
@@ -40,8 +40,8 @@ in
           enable = true;
         };
       };
-      system = {
-        "nix-maintenance" = {
+      infrastructure = {
+        "nix-core" = {
           enable = true;
         };
       };
