@@ -6,9 +6,4 @@
   ];
 
   my.bundles.desktop.enable = true;
-
-  home = {
-    username = user;
-    homeDirectory = "/Users/${user}";
-  };
 }
