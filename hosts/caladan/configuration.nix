@@ -1,10 +1,16 @@
 {
+  user,
   ...
 }:
 {
   imports = [
     ../../modules/darwin/bundles/laptop.nix
   ];
+
+
+  users.users.${user} = {
+    home = "/Users/${user}";
+  };
 
   nix.enable = false;
 

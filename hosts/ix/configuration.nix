@@ -1,6 +1,7 @@
 {
   config,
   modulesPath,
+  user,
   ...
 }:
 {
@@ -8,7 +9,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./disko.nix
 
-    ../../users/flebel/system.nix
+    ../../users/${user}/system.nix
 
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/nixos/features/infrastructure/caddy
@@ -26,6 +27,14 @@
     enable = true;
     efiSupport = true;
     efiInstallAsRemovable = true;
+  };
+
+  users.users.${user} = {
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
+    home = "/home/${user}";
   };
 
   networking = {

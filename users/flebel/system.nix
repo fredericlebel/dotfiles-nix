@@ -4,16 +4,12 @@ let
 in
 {
   users = {
-    defaultUserShell = pkgs.zsh;
     groups.${user} = { };
 
     users.${user} = {
       isNormalUser = true;
+      description = "Frédéric Lebel";
       group = user;
-      extraGroups = [
-        "wheel"
-        "docker"
-      ];
       shell = pkgs.zsh;
       openssh.authorizedKeys.keys = [ myKeys.flebel ];
     };
