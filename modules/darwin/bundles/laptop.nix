@@ -1,8 +1,8 @@
 {
   imports = [
     ../features/aerospace
-    ../features/homebrew
-    ../features/logseq
+    ../features/provision/homebrew
+    ../features/provision/logseq
     ../features/system-defaults
   ];
 }
