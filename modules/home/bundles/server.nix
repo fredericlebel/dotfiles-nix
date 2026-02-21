@@ -9,7 +9,12 @@ let
 in
 {
   imports = [
-    ../features/cli
+    ../features/cli/core-utils.nix
+    ../features/cli/htop
+    ../features/cli/screen
+    ../features/cli/starship
+    ../features/cli/yazi
+    ../features/cli/zsh
     ../features/dev
     ../features/editors
     ../features/terminals
@@ -22,10 +27,7 @@ in
   config = lib.mkIf cfg.enable {
     my.features = {
       cli = {
-        bat.enable = true;
-        direnv.enable = true;
-        eza.enable = true;
-        fzf.enable = true;
+        core-utils.enable = true;
         htop.enable = true;
         screen.enable = true;
         starship.enable = true;
@@ -34,19 +36,13 @@ in
       };
       dev = {
         git.enable = true;
+        gpg.enable = true;
         k9s.enable = true;
       };
 
-      editors.neovim.enable = true;
+      editors = {
+        neovim.enable = true;
+      };
     };
-
-    home.packages = with pkgs; [
-      curl
-      wget
-      jq
-      ripgrep
-      fd
-      ncdu
-    ];
   };
 }
