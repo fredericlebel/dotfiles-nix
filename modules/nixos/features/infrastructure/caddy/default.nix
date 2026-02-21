@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.my.features.caddy;
+  cfg = config.my.features.infrastructure.caddy;
 
   mkTailscaleHost =
     { subdomain, port }:
@@ -24,7 +24,7 @@ let
     '';
 in
 {
-  options.my.features.caddy = {
+  options.my.features.infrastructure.caddy = {
     enable = lib.mkEnableOption "Global Caddy instance with Tailscale";
     tailscaleAuthFile = lib.mkOption {
       type = lib.types.path;

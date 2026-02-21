@@ -4,10 +4,10 @@
   ...
 }:
 let
-  cfg = config.my.features.security.openssh;
+  cfg = config.my.features.infrastructure.security.openssh;
 in
 {
-  options.my.features.security.openssh = {
+  options.my.features.infrastructure.security.openssh = {
     enable = lib.mkEnableOption "OpenSSH durci (Post-Quantum & Key-only)";
   };
 

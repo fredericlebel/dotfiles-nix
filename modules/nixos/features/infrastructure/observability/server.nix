@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.my.features.observability;
+  cfg = config.my.features.infrastructure.observability;
 
   alertPort = 9093;
   promPort = config.services.prometheus.port;

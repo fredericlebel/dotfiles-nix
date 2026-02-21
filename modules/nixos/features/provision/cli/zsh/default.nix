@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.my.features.cli.zsh;
+  cfg = config.my.features.provision.cli.zsh;
 in
 {
-  options.my.features.cli.zsh = {
+  options.my.features.provision.cli.zsh = {
     enable = lib.mkEnableOption "Zsh System Support";
   };
 

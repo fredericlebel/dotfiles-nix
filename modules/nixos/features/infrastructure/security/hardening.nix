@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.my.features.security.hardening;
+  cfg = config.my.features.infrastructure.security.hardening;
 in
 {
-  options.my.features.security.hardening = {
+  options.my.features.infrastructure.security.hardening = {
     enable = lib.mkEnableOption "Durcissement du noyau et du système";
   };
 

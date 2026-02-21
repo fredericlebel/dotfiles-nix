@@ -13,7 +13,7 @@ in
     ./server.nix
   ];
 
-  options.my.features.observability = {
+  options.my.features.infrastructure.observability = {
     enable = lib.mkEnableOption "la stack d'observabilité complète";
 
     subdomain = lib.mkOption {
