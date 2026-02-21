@@ -4,7 +4,6 @@
 {
   imports = [
     ../../modules/darwin/bundles/laptop.nix
-    ../../modules/home/features/terminals/ghostty
   ];
 
   nix.enable = false;
