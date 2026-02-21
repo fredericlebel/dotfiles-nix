@@ -16,6 +16,30 @@ in
       ripgrep
       fd
       ncdu
+      tree
+
+      # Base System
+      ripgrep
+
+      # Kubernetes
+      fluxcd
+      k9s
+      kubectl
+      kubernetes-helm
+      kustomize
+
+      # Réseau & Sécurité
+      age
+      nmap
+      sops
+      sshpass
+      wireshark-cli
+
+      # développement
+      gh
+      just
+      python3
+      yq-go
     ];
 
     programs = {
