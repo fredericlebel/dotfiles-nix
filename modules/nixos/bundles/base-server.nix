@@ -10,12 +10,12 @@ let
 in
 {
   imports = [
-    ../features/cli/zsh
-    ../features/security/hardening.nix
-    ../features/security/intrusion-detection.nix
-    ../features/security/openssh
+    ../features/provision/cli/zsh
+    ../features/infrastructure/security/hardening.nix
+    ../features/infrastructure/security/intrusion-detection.nix
+    ../features/infrastructure/security/openssh
     ../features/system/nix-maintenance.nix
-    ../features/virtualization/kvm.nix
+    ../features/infrastructure/virtualization/kvm.nix
   ];
 
   options.my.bundles.base-server = {

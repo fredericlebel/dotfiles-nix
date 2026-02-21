@@ -1,13 +1,13 @@
 {
   imports = [
-    ./caddy
-    ./cli
-    ./home-assistant
-    ./observability
-    ./security
+    ./infrastructure/caddy
+    ./provision/cli
+    ./infrastructure/home-assistant
+    ./infrastructure/observability
+    ./infrastructure/security
     ./system
-    ./tailscale
-    ./vaultwarden
-    ./virtualization
+    ./infrastructure/tailscale
+    ./infrastructure/vaultwarden
+    ./infrastructure/virtualization
   ];
 }

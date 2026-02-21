@@ -28,10 +28,13 @@ in
 
       grafana = {
         enable = true;
-        settings.server = {
-          http_addr = "127.0.0.1";
-          http_port = 3000;
-          domain = "localhost";
+        settings = {
+          security.secret_key = config.sops.secrets."grafana-security-secret-key".path;
+          server = {
+            http_addr = "127.0.0.1";
+            http_port = 3000;
+            domain = "localhost";
+          };
         };
 
         provision = {
@@ -143,6 +146,9 @@ in
       };
     };
 
+    sops.secrets."grafana-security-secret-key" = {
+      owner = config.systemd.services.grafana.serviceConfig.User;
+    };
     sops.secrets."prometheus-alertmanager-webhook-url" = { };
   };
 }
