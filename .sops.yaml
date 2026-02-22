@@ -1,5 +1,6 @@
 keys:
   - &host_caladan age1uxze7ur4xxj2r4zfx3mdkr2c6kslpgtfd52kh6r3s306xmtteceqj5nv6z
+  - &host_ecaz age1nm7yy47kjecvnx899ga2vuxrhkqn0y0zlmg9ejn69x0456gekyesmsmyg8
   - &host_ix age12vnun3ngclc3tnpq7r35v7azam2pkukxusxyj0n02wkx56cx3q3qf5wrwg
   - &flebel age1uxze7ur4xxj2r4zfx3mdkr2c6kslpgtfd52kh6r3s306xmtteceqj5nv6z
 creation_rules:
@@ -13,6 +14,9 @@ creation_rules:
   - path_regex: secrets/caladan\.yaml$
     key_groups:
       - age: [ *flebel, *host_caladan ]
+  - path_regex: secrets/ecaz\.yaml$
+    key_groups:
+      - age: [ *flebel, *host_ecaz ]
   - path_regex: secrets/ix\.yaml$
     key_groups:
       - age: [ *flebel, *host_ix ]
