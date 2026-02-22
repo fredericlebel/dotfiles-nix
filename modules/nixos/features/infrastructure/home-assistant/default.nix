@@ -53,7 +53,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/lib/homeassistant 0755 root root -"
+      "d /var/lib/home-assistant 0755 root root -"
       "d /var/log/caddy 0755 caddy caddy -"
     ];
 
@@ -63,8 +63,7 @@ in
         image = "ghcr.io/home-assistant/home-assistant:stable";
         extraOptions = [ "--network=host" ];
         volumes = [
-          "/var/lib/homeassistant:/config"
-          "${hassConfig}:/config/configuration.yaml:ro"
+          "/var/lib/home-assistant:/config"
         ];
         environment.TZ = "America/Toronto";
       };
