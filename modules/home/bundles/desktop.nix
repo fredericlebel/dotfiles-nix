@@ -9,6 +9,7 @@ in
 {
   imports = [
     ../features/cli/core-utils.nix
+    ../features/cli/desktop-utils.nix
     ../features/cli/htop
     ../features/cli/screen
     ../features/cli/starship
@@ -27,6 +28,7 @@ in
     my.features = {
       cli = {
         core-utils.enable = true;
+        desktop-utils.enable = true;
         htop.enable = true;
         screen.enable = true;
         starship.enable = true;
