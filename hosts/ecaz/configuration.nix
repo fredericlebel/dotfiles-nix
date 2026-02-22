@@ -13,6 +13,7 @@
 
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/nixos/features/infrastructure/security/openssh
+    ../../modules/nixos/features/infrastructure/tailscale
   ];
 
   my.bundles.base-server.enable = true;
@@ -28,6 +29,16 @@
       "wheel"
     ];
     home = "/home/${user}";
+  };
+
+  my.features = {
+    infrastructure = {
+      tailscale = {
+        enable = true;
+        isExitNode = true;
+        authKeyFile = config.sops.secrets.tailscale-key.path;
+      };
+    };
   };
 
   networking = {
@@ -46,6 +57,8 @@
       size = 2048;
     }
   ];
+
+  sops.secrets.tailscale-key = { };
 
   sops = {
     defaultSopsFile = ../../secrets/ecaz.yaml;
