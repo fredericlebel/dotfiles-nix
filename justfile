@@ -38,7 +38,7 @@ install host ip:
     @echo "{{green}}💿 Installation "Day 0" sur {{host}} ({{ip}})...{{reset}}"
     git add .
     nix run github:nix-community/nixos-anywhere -- \
-        --build-on-remote \
+        --build-on remote \
         --flake .#{{host}} \
         root@{{ip}}
 
