@@ -1,4 +1,26 @@
-# dotfiles-nix
+# ❄️ Dotfiles & Nix Configurations
+
+[![Nix CI](https://github.com/fredericlebel/dotfiles-nix/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fredericlebel/dotfiles-nix/actions/workflows/ci.yml)
+[![Built with Nix](https://img.shields.io/badge/Built_with-Nix-5277C3.svg?logo=nixos&logoColor=white)](https://builtwithnix.org)
+[![Nix Flakes](https://img.shields.io/badge/Nix-Flakes-41439a?logo=nixos&logoColor=white)](https://nixos.wiki/wiki/Flakes)
+
+Ce dépôt contient l'infrastructure déclarative de mes machines, gérée entièrement via **Nix Flakes**, **NixOS**, et **nix-darwin**. Maintenu par Frédéric Lebel.
+
+## 📂 Structure du dépôt
+
+```text
+.
+├── flake.nix             # Point d'entrée principal (définition des inputs et outputs)
+├── hosts/
+│   ├── ix/               # Configuration spécifique à NixOS (hardware, services)
+│   └── caladan/          # Configuration spécifique à macOS (Homebrew, system defaults)
+├── modules/              # Modules Nix réutilisables à travers les machines
+├── nix/dev/              # DevShells (environnements de développement locaux)
+└── .github/workflows/    # Pipeline CI/CD (validation, formatage, dry-run)
+```
+
+
+## Installation
 
 > curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 info: downloading installer
