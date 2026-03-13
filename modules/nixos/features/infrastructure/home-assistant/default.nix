@@ -10,25 +10,6 @@
 let
   cfg = config.my.features.infrastructure.home-assistant;
   internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
-  hassConfig = pkgs.writeText "configuration.yaml" ''
-    default_config:
-
-    http:
-      server_port: 8123
-      use_x_forwarded_for: true
-      trusted_proxies:
-        - 127.0.0.1
-        - ::1
-
-    homeassistant:
-      name: "Maison Lebel"
-      latitude: 46.8138
-      longitude: -71.2080
-      elevation: 90
-      unit_system: metric
-      time_zone: "America/Toronto"
-      currency: CAD
-  '';
 in
 {
   options.my.features.infrastructure.home-assistant = {
