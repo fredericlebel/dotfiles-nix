@@ -33,8 +33,6 @@ in
         theme = "robbyrussell";
         plugins = [
           "direnv"
-          "docker"
-          "docker-compose"
           "git"
           "git-flow"
           "git-flow-avh"
