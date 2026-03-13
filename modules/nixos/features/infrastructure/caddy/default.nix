@@ -48,7 +48,7 @@ in
         plugins = [
           "github.com/tailscale/caddy-tailscale@v0.0.0-20250207163903-69a970c84556"
         ];
-        hash = "sha256-OydhzUGG3SUNeGXAsB9nqXtnwvD36+2p3QzDtU4YyFg=";
+        hash = "sha256-oOW8PmJnqZkiDoU1eDFuMH2DNzd1O0oguQJgP3IdnDs=";
       };
 
       environmentFile = cfg.tailscaleAuthFile;
