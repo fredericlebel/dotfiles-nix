@@ -21,7 +21,6 @@
     ];
 
     brews = [
-      "mas"
       "pinentry-touchid"
       "wifi-password"
     ];
@@ -38,12 +37,11 @@
       "maccy" # Gestionnaire de presse-papier
       "pgadmin4" # PostgreSQL
       "podman-desktop" # Alternative Docker
-      #"visual-studio-code"
       "wireshark-app" # Analyse réseau
 
       # Productivité & Système
       "alt-tab" # Gestionnaire de fenêtres Windows-style
-      "bitwarden" # Gestionnaire de mots de passe
+      "bitwarden"
       "google-drive"
 
       # Fonts (Typographies)
@@ -51,11 +49,5 @@
       "font-fira-code-nerd-font"
       "font-jetbrains-mono-nerd-font"
     ];
-
-    # --- Mac App Store (Identifiants numériques) ---
-    masApps = {
-      "Bitwarden" = 1352778147;
-      "Tailscale" = 1475387142;
-    };
   };
 }
