@@ -19,6 +19,35 @@ Ce dépôt contient l'infrastructure déclarative de mes machines, gérée enti�
 └── .github/workflows/    # Pipeline CI/CD (validation, formatage, dry-run)
 ```
 
+## Cycle de vie : day 0, 1, 2
+
+## 🏗️ Day 0 : Provisioning & Bootstrap (Le Socle)
+Le Day 0 concerne tout ce qui doit être fait avant que Nix ne soit fonctionnel ou que le système ne soit déployé. C'est l'étape de préparation brute.
+
+Actions : Installation de l'installateur Nix (Determinate Systems), configuration initiale du Mac (Xcode, Homebrew), ou déploiement initial de NixOS sur un serveur vierge via nixos-anywhere.
+
+Objectif : Passer d'une machine "nue" à un système capable de comprendre les Flakes Nix.
+
+## 🏁 Day 1 : Initialisation & Code (Le premier lancement)
+Le Day 1 se concentre sur la mise en conformité du projet et les premières vérifications. C'est le pont entre l'installation et l'exploitation.
+
+Actions : Formatage du code (fmt), vérification de la syntaxe du Flake (check), et s'assurer que l'environnement de développement est sain.
+
+Objectif : Garantir que la configuration est valide et prête à être appliquée.
+
+## 🛠️ Day 2 : Operations & Maintenance (Le "Run" quotidien)
+Le Day 2 représente 99 % de la vie du projet. C'est l'étape de maintenance continue, de mise à jour et de surveillance.
+
+Actions :
+
+Deploy : Appliquer les changements sur le Mac local ou les serveurs distants via Colmena.
+
+Secrets : Gestion et rotation des clés de chiffrement (SOPS).
+
+Maintenance : Nettoyage du cache Nix (Garbage Collection), mise à jour des entrées du Flake (flake update), et consultation des logs.
+
+Objectif : Maintenir le système à jour, sécurisé et performant sur le long terme.
+
 
 ## Installation
 
