@@ -109,8 +109,8 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/log/suricata 0755 suricata suricata - -"
-      "d /var/lib/suricata 0750 suricata suricata - -"
+      "d /var/log/suricata.nix 0755 suricata suricata - -"
+      "d /var/lib/suricata.nix 0750 suricata suricata - -"
       "d /etc/suricata/rules 0755 suricata suricata - -"
     ];
   };

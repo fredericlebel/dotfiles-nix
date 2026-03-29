@@ -1,6 +1,6 @@
 {
   imports = [
-    ./ghostty
-    ./wezterm
+    ./ghostty.nix
+    ./wezterm.nix
   ];
 }
