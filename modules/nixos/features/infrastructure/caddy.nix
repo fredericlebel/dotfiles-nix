@@ -55,7 +55,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/log/caddy 0750 caddy caddy -"
+      "d /var/log/caddy.nix 0750 caddy caddy -"
     ];
 
     systemd.services.tailscaled.environment.TS_PERMIT_CERT_UID = "caddy";
