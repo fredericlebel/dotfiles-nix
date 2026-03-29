@@ -1,0 +1,3 @@
+name = "deploy"
+description = "Déploie une cible via colmena"
+prompt = "Je veux déployer la cible {args}. Exécute la commande `just deploy {args}`. Si une erreur survient, analyse les logs et explique pourquoi le déploiement a échoué."
