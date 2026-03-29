@@ -11,7 +11,7 @@ in
 {
   imports = [
     ../features/provision/admin-cli.nix
-    ../features/provision/cli/zsh.nix
+    ../../shared/zsh.nix
     ../features/infrastructure/security/hardening.nix
     ../features/infrastructure/security/intrusion-detection.nix
     ../features/infrastructure/security/openssh.nix
@@ -25,13 +25,9 @@ in
 
   config = lib.mkIf cfg.enable {
     my.features = {
+      zsh.enable = true;
       provision = {
         admin-cli.enable = true;
-        cli = {
-          zsh = {
-            enable = true;
-          };
-        };
       };
       infrastructure = {
         security = {

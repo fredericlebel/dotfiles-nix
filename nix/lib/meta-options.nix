@@ -39,5 +39,21 @@
       default = [ ];
       description = "Tags de déploiement (vps, cloud, desktop)";
     };
+    subdomain = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Sous-domaine spécifique à l'hôte ou au service";
+    };
+    # S3 / Sauvegardes
+    s3Bucket = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Nom du bucket S3 pour les sauvegardes";
+    };
+    s3Endpoint = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Endpoint S3 (ex: s3.amazonaws.com)";
+    };
   };
 }
