@@ -47,14 +47,16 @@ in
         hmModule
         {
           # On injecte les valeurs dans myMeta via une configuration anonyme
-          config.myMeta = myMeta;
-          home-manager = {
-            useGlobalPkgs = true; # Source unique de vérité pour les paquets
-            useUserPackages = true;
-            backupFileExtension = "hm-backup";
-            extraSpecialArgs = { inherit inputs user myMeta; };
-            users.${user} = {
-              imports = [ ../../hosts/${hostName}/home.nix ];
+          config = {
+            myMeta = myMeta;
+            home-manager = {
+              useGlobalPkgs = true; # Source unique de vérité pour les paquets
+              useUserPackages = true;
+              backupFileExtension = "hm-backup";
+              extraSpecialArgs = { inherit inputs user myMeta; };
+              users.${user} = {
+                imports = [ ../../hosts/${hostName}/home.nix ];
+              };
             };
           };
         }
