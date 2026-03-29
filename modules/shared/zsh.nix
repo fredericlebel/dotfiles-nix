@@ -1,12 +1,14 @@
 {
   lib,
   config,
+  options,
   pkgs,
   ...
 }:
 let
   cfg = config.my.features.zsh;
-  isHomeManager = lib.hasAttr "home" config;
+  isHomeManager = lib.hasAttr "home" options;
+  isSystem = lib.hasAttr "environment" options;
 in
 {
   options.my.features.zsh = {
@@ -15,19 +17,21 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
-      # Configuration partagée (plugins, omz, etc.)
+      # 1. Configuration commune
       {
         programs.zsh = {
           enable = true;
           enableCompletion = true;
-          autosuggestion.enable = true;
-          syntaxHighlighting.enable = true;
         };
       }
 
-      # Spécificités Home Manager (config interactive)
-      (lib.mkIf isHomeManager {
+      # 2. Configuration Home Manager
+      (lib.optionalAttrs isHomeManager {
         programs.zsh = {
+          # Home Manager utilise 'autosuggestion' (singulier)
+          autosuggestion.enable = true;
+          syntaxHighlighting.enable = true;
+
           history = {
             size = 100000;
             save = 100000;
@@ -65,8 +69,8 @@ in
         };
       })
 
-      # Spécificités NixOS (System support)
-      (lib.mkIf (!isHomeManager) {
+      # 3. Support système (NixOS / Darwin)
+      (lib.optionalAttrs isSystem {
         programs.zsh.enableBashCompletion = true;
         environment.shells = [ pkgs.zsh ];
         environment.systemPackages = with pkgs; [
@@ -74,7 +78,7 @@ in
           zsh-syntax-highlighting
           zsh-autosuggestions
         ];
-        users.defaultUserShell = pkgs.zsh;
+        users.defaultUserShell = lib.mkIf pkgs.stdenv.isLinux pkgs.zsh;
       })
     ]
   );
