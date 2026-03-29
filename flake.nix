@@ -7,141 +7,108 @@
       url = "github:zhaofengli/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mac-app-util = {
-      url = "github:hraban/mac-app-util";
+    darwin = {
+      url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
+    disko = {
+      url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      colmena,
-      treefmt-nix,
-      ...
-    }:
+    inputs@{ self, nixpkgs, ... }:
     let
       user = "flebel";
-      inventory = import ./nix/lib/inventory.nix;
-      mylib = import ./nix/lib/helpers.nix { inherit inputs user; };
+      lib = nixpkgs.lib;
+      helpers = import ./nix/lib/helpers.nix { inherit inputs user; };
 
-      nixosHosts = nixpkgs.lib.filterAttrs (_n: v: !v.isDarwin) inventory;
-      darwinHosts = nixpkgs.lib.filterAttrs (_n: v: v.isDarwin) inventory;
-      colmenaHosts = nixpkgs.lib.filterAttrs (_n: v: v.deployment != null) inventory;
+      # On lit dynamiquement les hôtes depuis les fichiers spec.nix
+      hosts = {
+        ix = import ./hosts/ix/spec.nix;
+        ecaz = import ./hosts/ecaz/spec.nix;
+        caladan = import ./hosts/caladan/spec.nix;
+      };
 
-      systems = [
-        "aarch64-darwin"
+      # Configuration treefmt pour tous les systèmes
+      eachSystem = lib.genAttrs [
         "x86_64-linux"
+        "aarch64-darwin"
       ];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-
-      treefmtEval = forAllSystems (
+      treefmtEval = eachSystem (
         system:
-        treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
+        inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
           projectRootFile = "flake.nix";
           programs.nixfmt.enable = true;
-          programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt;
+          programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
         }
       );
+
+      # On sépare les configurations Darwin et NixOS
+      darwinHosts = lib.filterAttrs (_: spec: spec.isDarwin) hosts;
+      nixosHosts = lib.filterAttrs (_: spec: !spec.isDarwin) hosts;
+
     in
     {
-      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
-
-      checks = forAllSystems (system: {
-        formatting = treefmtEval.${system}.config.build.check self;
-      });
-
-      darwinConfigurations = nixpkgs.lib.mapAttrs (
-        name: conf:
-        mylib.mkSystem {
+      # Usine à systèmes (Darwin)
+      darwinConfigurations = lib.mapAttrs (
+        name: spec:
+        helpers.mkSystem {
           hostName = name;
-          inherit (conf) system isDarwin;
+          inherit spec;
         }
       ) darwinHosts;
 
-      nixosConfigurations = nixpkgs.lib.mapAttrs (
-        name: conf:
-        mylib.mkSystem {
+      # Usine à systèmes (NixOS)
+      nixosConfigurations = lib.mapAttrs (
+        name: spec:
+        helpers.mkSystem {
           hostName = name;
-          inherit (conf) system isDarwin;
+          inherit spec;
         }
       ) nixosHosts;
 
-      colmena = {
-        meta = {
-          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-          specialArgs = { inherit inputs user; };
-        };
-      }
-      // (nixpkgs.lib.mapAttrs (
-        name: conf:
-        { ... }:
-        {
-          deployment = conf.deployment // {
-            buildOnTarget = true;
-            targetUser = user;
-          };
-          _module.args.myMeta = mylib.defaultMeta // (import ./hosts/${name}/host-meta.nix);
-
-          imports = [
-            ./hosts/${name}/configuration.nix
-            inputs.sops-nix.nixosModules.sops
-            inputs.disko.nixosModules.disko
-            inputs.home-manager.nixosModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = false;
-                useUserPackages = true;
-                extraSpecialArgs = { inherit inputs user; };
-                users.${user} = import ./hosts/${name}/home.nix;
-              };
-            }
-          ];
-        }
-      ) colmenaHosts);
-
-      colmenaHive = colmena.lib.makeHive self.outputs.colmena;
-
-      packages = forAllSystems (
-        system:
+      # Configuration Colmena (Déploiement)
+      colmena =
         let
-          matchingHosts = nixpkgs.lib.filterAttrs (_n: v: v.system == system) inventory;
+          deploymentHosts = lib.filterAttrs (_: spec: spec.deployment != null) nixosHosts;
         in
-        nixpkgs.lib.mapAttrs' (
-          name: conf:
-          nixpkgs.lib.nameValuePair name (
-            if conf.isDarwin then
-              self.darwinConfigurations.${name}.system
-            else
-              self.nixosConfigurations.${name}.config.system.build.toplevel
-          )
-        ) matchingHosts
-      );
+        {
+          meta = {
+            nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+            specialArgs = { inherit inputs user; };
+          };
+        }
+        // (lib.mapAttrs (name: spec: {
+          deployment = spec.deployment;
+          imports = self.nixosConfigurations.${name}._module.args.modules;
+        }) deploymentHosts);
+
+      # Formattage unifié via treefmt
+      formatter = eachSystem (system: treefmtEval.${system}.config.build.wrapper);
+
+      # Checks
+      checks = eachSystem (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
     };
 }
