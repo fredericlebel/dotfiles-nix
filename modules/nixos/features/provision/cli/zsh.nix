@@ -1,32 +1,14 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
   ...
 }:
-let
-  cfg = config.my.features.provision.cli.zsh;
-in
 {
+  imports = [ ../../../../shared/zsh.nix ];
+
   options.my.features.provision.cli.zsh = {
-    enable = lib.mkEnableOption "Zsh System Support";
+    enable = lib.mkEnableOption "Zsh System Support (deprecated, use my.features.zsh.enable)";
   };
 
-  config = lib.mkIf cfg.enable {
-    programs.zsh = {
-      enable = true;
-      enableCompletion = true;
-      enableBashCompletion = true;
-    };
-
-    environment.shells = with pkgs; [ zsh ];
-
-    environment.systemPackages = with pkgs; [
-      zsh
-      zsh-syntax-highlighting
-      zsh-autosuggestions
-    ];
-
-    users.defaultUserShell = pkgs.zsh;
-  };
+  config.my.features.zsh.enable = config.my.features.provision.cli.zsh.enable;
 }
