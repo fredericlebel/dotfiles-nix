@@ -2,6 +2,8 @@
   config,
   modulesPath,
   user,
+  hostSpec,
+  lib,
   ...
 }:
 {
@@ -21,6 +23,15 @@
     ../../modules/nixos/features/infrastructure/vaultwarden.nix
   ];
 
+  # On fusionne la Spec unifiée avec la config technique locale
+  my.features = lib.recursiveUpdate (hostSpec.features or { }) {
+    infrastructure = {
+      caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
+      tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
+    };
+  };
+
+  # Activation manuelle du bundle (importé via imports)
   my.bundles.base-server.enable = true;
 
   boot.loader.grub = {
@@ -50,39 +61,6 @@
       '';
     };
     nftables.enable = true;
-  };
-
-  my.features = {
-    infrastructure = {
-      caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
-
-      home-assistant = {
-        enable = true;
-        subdomain = "hass";
-      };
-
-      observability = {
-        enable = true;
-        role = "server";
-        subdomain = "grafana";
-      };
-
-      security.suricata = {
-        enable = true;
-        interface = "ens3";
-      };
-
-      tailscale = {
-        enable = true;
-        isExitNode = true;
-        authKeyFile = config.sops.secrets.tailscale-key.path;
-      };
-
-      vaultwarden = {
-        enable = true;
-        subdomain = "vault";
-      };
-    };
   };
 
   swapDevices = [

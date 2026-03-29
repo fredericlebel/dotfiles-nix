@@ -1,53 +1,67 @@
-{ user, ... }:
 {
-  nix-homebrew = {
-    enable = true;
-    enableRosetta = true;
-    inherit user;
-    autoMigrate = true;
+  user,
+  lib,
+  config,
+  ...
+}:
+let
+  cfg = config.my.features.homebrew;
+in
+{
+  options.my.features.homebrew = {
+    enable = lib.mkEnableOption "Homebrew & Casks Support";
   };
 
-  homebrew = {
-    enable = true;
-
-    onActivation = {
-      cleanup = "zap";
-      autoUpdate = true;
-      upgrade = true;
+  config = lib.mkIf cfg.enable {
+    nix-homebrew = {
+      enable = true;
+      enableRosetta = true;
+      inherit user;
+      autoMigrate = true;
     };
 
-    taps = [
-      "jorgelbg/tap"
-    ];
+    homebrew = {
+      enable = true;
 
-    brews = [
-      "pinentry-touchid"
-      "wifi-password"
-    ];
+      onActivation = {
+        cleanup = "zap";
+        autoUpdate = true;
+        upgrade = true;
+      };
 
-    casks = [
-      # Communication & Navigation
-      "discord"
-      "google-chrome"
-      "spotify"
-      "zoom"
+      taps = [
+        "jorgelbg/tap"
+      ];
 
-      # Développement & Tech
-      "caido" # Sécurité / Proxy
-      "maccy" # Gestionnaire de presse-papier
-      "pgadmin4" # PostgreSQL
-      "podman-desktop" # Alternative Docker
-      "wireshark-app" # Analyse réseau
+      brews = [
+        "pinentry-touchid"
+        "wifi-password"
+      ];
 
-      # Productivité & Système
-      "alt-tab" # Gestionnaire de fenêtres Windows-style
-      "bitwarden"
-      "google-drive"
+      casks = [
+        # Communication & Navigation
+        "discord"
+        "google-chrome"
+        "spotify"
+        "zoom"
 
-      # Fonts (Typographies)
-      "font-fira-code"
-      "font-fira-code-nerd-font"
-      "font-jetbrains-mono-nerd-font"
-    ];
+        # Développement & Tech
+        "caido" # Sécurité / Proxy
+        "maccy" # Gestionnaire de presse-papier
+        "pgadmin4" # PostgreSQL
+        "podman-desktop" # Alternative Docker
+        "wireshark-app" # Analyse réseau
+
+        # Productivité & Système
+        "alt-tab" # Gestionnaire de fenêtres Windows-style
+        "bitwarden"
+        "google-drive"
+
+        # Fonts (Typographies)
+        "font-fira-code"
+        "font-fira-code-nerd-font"
+        "font-jetbrains-mono-nerd-font"
+      ];
+    };
   };
 }
