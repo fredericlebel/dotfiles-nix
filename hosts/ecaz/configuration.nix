@@ -2,6 +2,8 @@
   config,
   modulesPath,
   user,
+  hostSpec,
+  lib,
   ...
 }:
 {
@@ -16,6 +18,12 @@
     ../../modules/nixos/features/infrastructure/tailscale.nix
   ];
 
+  # On fusionne la Spec unifiée avec la config technique locale
+  my.features = lib.recursiveUpdate (hostSpec.features or { }) {
+    infrastructure.tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
+  };
+
+  # Activation manuelle du bundle (importé via imports)
   my.bundles.base-server.enable = true;
 
   boot.loader.grub = {
@@ -29,16 +37,6 @@
       "wheel"
     ];
     home = "/home/${user}";
-  };
-
-  my.features = {
-    infrastructure = {
-      tailscale = {
-        enable = true;
-        isExitNode = true;
-        authKeyFile = config.sops.secrets.tailscale-key.path;
-      };
-    };
   };
 
   networking = {

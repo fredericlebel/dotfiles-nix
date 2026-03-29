@@ -8,13 +8,17 @@ in
   mkSystem =
     {
       hostName,
-      system,
-      isDarwin ? false,
-      hostMeta ? null,
+      spec,
     }:
     let
-      localMeta = if hostMeta != null then hostMeta else import ../../hosts/${hostName}/host-meta.nix;
-      myMeta = defaultMeta // localMeta;
+      # On fusionne les metas par défaut avec celles de la spec
+      myMeta = (defaultMeta // (spec.meta or { })) // {
+        inherit (spec) system isDarwin;
+        tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
+      };
+
+      isDarwin = spec.isDarwin or false;
+      system = spec.system;
 
       # Pattern Factory : On choisit le constructeur selon l'OS
       builder = if isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
@@ -38,7 +42,11 @@ in
           inputs.home-manager.nixosModules.home-manager;
     in
     builder {
-      specialArgs = { inherit inputs user myMeta; };
+      # On injecte la spec complete dans specialArgs pour que tous les modules y aient accès
+      specialArgs = {
+        inherit inputs user myMeta;
+        hostSpec = spec;
+      };
 
       modules = osModules ++ [
         { nixpkgs.hostPlatform = system; }
@@ -46,14 +54,17 @@ in
         ../../hosts/${hostName}/configuration.nix
         hmModule
         {
-          # On injecte les valeurs dans myMeta via une configuration anonyme
+          # On injecte myMeta et on configure Home Manager
           config = {
             myMeta = myMeta;
             home-manager = {
-              useGlobalPkgs = true; # Source unique de vérité pour les paquets
+              useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "hm-backup";
-              extraSpecialArgs = { inherit inputs user myMeta; };
+              extraSpecialArgs = {
+                inherit inputs user myMeta;
+                hostSpec = spec;
+              };
               users.${user} = {
                 imports = [ ../../hosts/${hostName}/home.nix ];
               };

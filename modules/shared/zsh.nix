@@ -9,6 +9,8 @@ let
   cfg = config.my.features.zsh;
   isHomeManager = lib.hasAttr "home" options;
   isSystem = lib.hasAttr "environment" options;
+  # Détection Linux sans dépendre de pkgs pour éviter la récursion
+  isLinux = lib.hasAttr "boot" options;
 in
 {
   options.my.features.zsh = {
@@ -19,16 +21,13 @@ in
     lib.mkMerge [
       # 1. Configuration commune
       {
-        programs.zsh = {
-          enable = true;
-          enableCompletion = true;
-        };
+        programs.zsh.enable = true;
+        programs.zsh.enableCompletion = true;
       }
 
       # 2. Configuration Home Manager
       (lib.optionalAttrs isHomeManager {
         programs.zsh = {
-          # Home Manager utilise 'autosuggestion' (singulier)
           autosuggestion.enable = true;
           syntaxHighlighting.enable = true;
 
@@ -78,7 +77,11 @@ in
           zsh-syntax-highlighting
           zsh-autosuggestions
         ];
-        users.defaultUserShell = lib.mkIf pkgs.stdenv.isLinux pkgs.zsh;
+      })
+
+      # Spécificités NixOS uniquement (defaultUserShell)
+      (lib.optionalAttrs (isSystem && isLinux) {
+        users.defaultUserShell = pkgs.zsh;
       })
     ]
   );

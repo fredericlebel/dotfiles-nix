@@ -37,6 +37,8 @@
             # On utilise nativeBuildInputs pour les outils CLI
             nativeBuildInputs = [
               pkgs.just
+              pkgs.treefmt
+              pkgs.nixfmt-rfc-style
               pkgs.sops
               pkgs.ssh-to-age
               pkgs.git
@@ -50,7 +52,7 @@
 
             shellHook = ''
               echo "🛡️  Environnement de dev ISOLÉ chargé (nix/dev)"
-              echo "🚀 Outils prêts : colmena, just, sops, nh, statix"
+              echo "🚀 Outils prêts : colmena, just, treefmt, sops, nh, statix"
             '';
           };
         }

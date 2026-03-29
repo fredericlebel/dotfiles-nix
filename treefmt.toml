@@ -1,0 +1,11 @@
+# Configuration Treefmt pour nix-config
+
+[formatter.nix]
+command = "nixfmt"
+options = [ "--line-width=120" ]
+includes = ["*.nix"]
+
+[formatter.markdown]
+command = "prettier"
+options = ["--prose-wrap", "always"]
+includes = ["*.md"]
