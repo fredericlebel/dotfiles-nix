@@ -42,9 +42,12 @@ in
 
       modules = osModules ++ [
         { nixpkgs.hostPlatform = system; }
+        ../../nix/lib/meta-options.nix
         ../../hosts/${hostName}/configuration.nix
         hmModule
         {
+          # On injecte les valeurs dans myMeta via une configuration anonyme
+          config.myMeta = myMeta;
           home-manager = {
             useGlobalPkgs = true; # Source unique de vérité pour les paquets
             useUserPackages = true;
