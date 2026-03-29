@@ -1,7 +1,7 @@
 {
   imports = [
-    ./git
-    ./gpg
-    ./k9s
+    ./git.nix
+    ./gpg.nix
+    ./k9s.nix
   ];
 }

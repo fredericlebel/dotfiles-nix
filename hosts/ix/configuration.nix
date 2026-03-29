@@ -12,13 +12,13 @@
     ../../users/${user}/system.nix
 
     ../../modules/nixos/bundles/base-server.nix
-    ../../modules/nixos/features/infrastructure/caddy
-    ../../modules/nixos/features/infrastructure/home-assistant
+    ../../modules/nixos/features/infrastructure/caddy.nix
+    ../../modules/nixos/features/infrastructure/home-assistant.nix
     ../../modules/nixos/features/infrastructure/observability
-    ../../modules/nixos/features/infrastructure/security/openssh
-    ../../modules/nixos/features/infrastructure/security/suricata
-    ../../modules/nixos/features/infrastructure/tailscale
-    ../../modules/nixos/features/infrastructure/vaultwarden
+    ../../modules/nixos/features/infrastructure/security/openssh.nix
+    ../../modules/nixos/features/infrastructure/security/suricata.nix
+    ../../modules/nixos/features/infrastructure/tailscale.nix
+    ../../modules/nixos/features/infrastructure/vaultwarden.nix
   ];
 
   my.bundles.base-server.enable = true;

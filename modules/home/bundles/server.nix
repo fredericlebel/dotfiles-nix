@@ -9,11 +9,11 @@ in
 {
   imports = [
     ../features/cli/core-utils.nix
-    ../features/cli/htop
-    ../features/cli/screen
-    ../features/cli/starship
-    ../features/cli/yazi
-    ../features/cli/zsh
+    ../features/cli/htop.nix
+    ../features/cli/screen.nix
+    ../features/cli/starship.nix
+    ../features/cli/yazi.nix
+    ../features/cli/zsh.nix
     ../features/dev
     ../features/editors
     ../features/terminals

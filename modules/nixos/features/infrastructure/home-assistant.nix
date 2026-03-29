@@ -34,8 +34,8 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /var/lib/home-assistant 0755 root root -"
-      "d /var/log/caddy 0755 caddy caddy -"
+      "d /var/lib/home-assistant.nix 0755 root root -"
+      "d /var/log/caddy.nix 0755 caddy caddy -"
     ];
 
     virtualisation.oci-containers = {

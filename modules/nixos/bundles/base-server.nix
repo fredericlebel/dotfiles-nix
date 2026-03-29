@@ -11,11 +11,11 @@ in
 {
   imports = [
     ../features/provision/admin-cli.nix
-    ../features/provision/cli/zsh
+    ../features/provision/cli/zsh.nix
     ../features/infrastructure/security/hardening.nix
     ../features/infrastructure/security/intrusion-detection.nix
-    ../features/infrastructure/security/openssh
-    ../features/infrastructure/nix-core
+    ../features/infrastructure/security/openssh.nix
+    ../features/infrastructure/nix-core.nix
     ../features/infrastructure/virtualization/kvm.nix
   ];
 

@@ -12,8 +12,8 @@
     ../../users/${user}/system.nix
 
     ../../modules/nixos/bundles/base-server.nix
-    ../../modules/nixos/features/infrastructure/security/openssh
-    ../../modules/nixos/features/infrastructure/tailscale
+    ../../modules/nixos/features/infrastructure/security/openssh.nix
+    ../../modules/nixos/features/infrastructure/tailscale.nix
   ];
 
   my.bundles.base-server.enable = true;
