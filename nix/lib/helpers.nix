@@ -11,6 +11,8 @@ in
       spec,
     }:
     let
+      lib = inputs.nixpkgs.lib;
+
       # On fusionne les metas par défaut avec celles de la spec
       myMeta = (defaultMeta // (spec.meta or { })) // {
         inherit (spec) system isDarwin;
@@ -19,6 +21,11 @@ in
 
       isDarwin = spec.isDarwin or false;
       system = spec.system;
+
+      # Découverte automatique du fichier de secret (ex: secrets/ix.yaml)
+      # On utilise une chaine pour le test puis on convertit en path si existant
+      sopsFile = ../../secrets/${hostName}.yaml;
+      hasSops = builtins.pathExists sopsFile;
 
       # Pattern Factory : On choisit le constructeur selon l'OS
       builder = if isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
@@ -54,9 +61,13 @@ in
         ../../hosts/${hostName}/configuration.nix
         hmModule
         {
-          # On injecte myMeta et on configure Home Manager
+          # On injecte myMeta et on configure Home Manager et SOPS
           config = {
             myMeta = myMeta;
+
+            # Automatisation SOPS : Si le fichier secrets/<host>.yaml existe, on l utilise par défaut
+            sops.defaultSopsFile = lib.mkIf hasSops sopsFile;
+
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;

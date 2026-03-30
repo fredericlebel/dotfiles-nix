@@ -72,10 +72,7 @@
 
   sops.secrets.tailscale-key = { };
 
-  sops = {
-    defaultSopsFile = ../../secrets/ix.yaml;
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  };
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   system.stateVersion = "26.05";
 }
