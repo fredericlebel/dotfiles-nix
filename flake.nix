@@ -59,7 +59,7 @@
         inputs.treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${system} {
           projectRootFile = "flake.nix";
           programs.nixfmt.enable = true;
-          programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt-rfc-style;
+          programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt;
         }
       );
 

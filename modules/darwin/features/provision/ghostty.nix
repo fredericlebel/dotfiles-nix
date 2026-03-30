@@ -17,5 +17,7 @@ in
     homebrew.casks = [
       "ghostty"
     ];
+
+    my.registry.dockApps = [ "/Applications/Ghostty.app" ];
   };
 }

@@ -25,6 +25,10 @@ in
       nixfmt
     ];
 
+    my.registry.dockApps = lib.mkIf pkgs.stdenv.isDarwin [
+      "/Users/${config.home.username}/Applications/Home Manager Apps/Visual Studio Code.app"
+    ];
+
     programs.vscode = {
       enable = true;
 
