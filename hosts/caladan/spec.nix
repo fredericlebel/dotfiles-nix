@@ -15,6 +15,7 @@
     zsh.enable = true;
     aerospace.enable = true;
     logseq.enable = true;
+    gemini-cli.enable = true;
     terminals.ghostty.enable = true;
   };
 
