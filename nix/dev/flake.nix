@@ -38,7 +38,7 @@
             nativeBuildInputs = [
               pkgs.just
               pkgs.treefmt
-              pkgs.nixfmt-rfc-style
+              pkgs.nixfmt
               pkgs.sops
               pkgs.ssh-to-age
               pkgs.git

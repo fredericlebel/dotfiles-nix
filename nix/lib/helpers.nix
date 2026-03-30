@@ -57,6 +57,7 @@ in
 
       modules = osModules ++ [
         { nixpkgs.hostPlatform = system; }
+        ../../modules/shared/registry.nix
         ../../nix/lib/meta-options.nix
         ../../hosts/${hostName}/configuration.nix
         hmModule
@@ -77,7 +78,10 @@ in
                 hostSpec = spec;
               };
               users.${user} = {
-                imports = [ ../../hosts/${hostName}/home.nix ];
+                imports = [
+                  ../../modules/shared/registry.nix
+                  ../../hosts/${hostName}/home.nix
+                ];
               };
             };
           };
