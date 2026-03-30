@@ -17,5 +17,7 @@ in
     homebrew.casks = [
       "logseq"
     ];
+
+    my.registry.dockApps = [ "/Applications/Logseq.app" ];
   };
 }

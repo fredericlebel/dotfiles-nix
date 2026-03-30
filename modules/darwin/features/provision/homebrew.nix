@@ -63,5 +63,12 @@ in
         "font-jetbrains-mono-nerd-font"
       ];
     };
+
+    my.registry.dockApps = [
+      "/Applications/Google Chrome.app"
+      "/Applications/Spotify.app"
+      "/Applications/Discord.app"
+      "/Applications/Bitwarden.app"
+    ];
   };
 }
