@@ -61,12 +61,12 @@ in
       serviceConfig.Type = "oneshot";
       script = ''
         sleep 2
-        status=$(${pkgs.tailscale}/bin/tailscale.nix status -json | ${pkgs.jq}/bin/jq -r .BackendState)
+        status=$(${pkgs.tailscale}/bin/tailscale status -json | ${pkgs.jq}/bin/jq -r .BackendState)
         if [ "$status" = "Running" ]; then
           exit 0
         fi
 
-        ${pkgs.tailscale}/bin/tailscale.nix up -authkey $(cat ${cfg.authKeyFile}) --ssh
+        ${pkgs.tailscale}/bin/tailscale up -authkey $(cat ${cfg.authKeyFile}) --ssh
       '';
     };
   };
