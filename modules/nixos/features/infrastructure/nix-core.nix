@@ -27,6 +27,10 @@ in
     };
 
     boot.kernel.sysctl = {
+      # Nécessaire pour le sandboxing de Nix (isolation des builds).
+      # Bien que le noyau 'hardened' le désactive par défaut pour limiter la surface d'attaque,
+      # son activation est indispensable pour permettre à Nix de construire des dérivations
+      # en mode sandbox, particulièrement lors de builds distants ou sur la cible.
       "kernel.unprivileged_userns_clone" = 1;
     };
   };
