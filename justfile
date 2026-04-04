@@ -95,7 +95,7 @@ switch-mac host=`hostname -s`:
 deploy +TARGETS:
     @echo "{{green}}☁️  Day 2 (Deploy): Colmena apply sur {{ TARGETS }}...{{reset}}"
     git add .
-    colmena apply --verbose --on {{ TARGETS }} switch
+    colmena apply --verbose --on {{ TARGETS }} --build-on-target switch
 
 # [Day 2] Déployer sur tous les serveurs Linux définis dans l'inventaire via Colmena
 [group('day-2')]
@@ -103,7 +103,7 @@ deploy +TARGETS:
 deploy-all:
     @echo "{{green}}☁️  Day 2 (Deploy): Colmena apply sur ...{{reset}}"
     git add .
-    colmena apply --verbose switch
+    colmena apply --verbose --build-on-target switch
 
 # [Day 2] Déployer sur les serveurs Linux ciblés avec reboot via Colmena
 [group('day-2')]
@@ -111,7 +111,7 @@ deploy-all:
 deploy-reboot +TARGETS:
     @echo "{{green}}☁️  Day 2 (Deploy): Colmena apply + reboot sur {{ TARGETS }}...{{reset}}"
     git add .
-    colmena apply --verbose --on {{ TARGETS }} --reboot
+    colmena apply --verbose --on {{ TARGETS }} --build-on-target --reboot
 
 # DAY 2 : SECRETS (Gestion SOPS)
 
