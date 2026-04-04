@@ -25,5 +25,9 @@ in
         options = "--delete-older-than 14d";
       };
     };
+
+    boot.kernel.sysctl = {
+      "kernel.unprivileged_userns_clone" = 1;
+    };
   };
 }
