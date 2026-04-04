@@ -22,7 +22,7 @@ in
       pkgs.podman-compose
     ];
 
-    # Optionnel: on peut aussi ajouter au Dock si on le souhaite
-    # my.registry.dockApps = [ "/Applications/Podman Desktop.app" ];
+    # Ajout de l'icône au Dock
+    my.registry.dockApps = [ "/Applications/Podman Desktop.app" ];
   };
 }
