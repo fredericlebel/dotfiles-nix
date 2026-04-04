@@ -49,7 +49,6 @@ in
         "caido" # Sécurité / Proxy
         "maccy" # Gestionnaire de presse-papier
         "pgadmin4" # PostgreSQL
-        "podman-desktop" # Alternative Docker
         "wireshark-app" # Analyse réseau
 
         # Productivité & Système

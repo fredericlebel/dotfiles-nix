@@ -12,6 +12,7 @@ in
     ../features/provision/ghostty.nix
     ../features/provision/homebrew.nix
     ../features/provision/logseq.nix
+    ../features/podman.nix
     ../features/system-defaults.nix
     ../features/gemini-cli.nix
     ../../shared/zsh.nix
@@ -27,6 +28,7 @@ in
       logseq.enable = lib.mkDefault true;
       terminals.ghostty.enable = lib.mkDefault true;
       homebrew.enable = lib.mkDefault true;
+      podman.enable = lib.mkDefault true;
       gemini-cli.enable = lib.mkDefault true;
     };
   };
