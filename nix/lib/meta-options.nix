@@ -55,5 +55,11 @@
       default = null;
       description = "Endpoint S3 (ex: s3.amazonaws.com)";
     };
+    # La Spec unifiée (le "Quoi")
+    hostSpec = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "La spécification d'intention de l'hôte (features, bundles, etc)";
+    };
   };
 }

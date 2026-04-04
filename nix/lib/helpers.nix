@@ -1,34 +1,26 @@
 { inputs, user, ... }:
 let
   defaultMeta = import ./default-meta.nix;
-in
-{
-  inherit defaultMeta;
 
-  mkSystem =
+  # Prépare les modules et arguments pour un système (NixOS, Darwin ou Colmena)
+  mkModules =
     {
       hostName,
       spec,
     }:
     let
       lib = inputs.nixpkgs.lib;
-
-      # On fusionne les metas par défaut avec celles de la spec
       myMeta = (defaultMeta // (spec.meta or { })) // {
         inherit (spec) system isDarwin;
         tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
+        hostSpec = spec; # On injecte la spec complete pour eviter la recursion
       };
 
       isDarwin = spec.isDarwin or false;
       system = spec.system;
 
-      # Découverte automatique du fichier de secret (ex: secrets/ix.yaml)
-      # On utilise une chaine pour le test puis on convertit en path si existant
       sopsFile = ../../secrets/${hostName}.yaml;
       hasSops = builtins.pathExists sopsFile;
-
-      # Pattern Factory : On choisit le constructeur selon l'OS
-      builder = if isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
 
       osModules =
         if isDarwin then
@@ -47,12 +39,9 @@ in
           inputs.home-manager.darwinModules.home-manager
         else
           inputs.home-manager.nixosModules.home-manager;
-    in
-    builder {
-      # On injecte la spec complete dans specialArgs pour que tous les modules y aient accès
+
       specialArgs = {
         inherit inputs user myMeta;
-        hostSpec = spec;
       };
 
       modules = osModules ++ [
@@ -62,21 +51,15 @@ in
         ../../hosts/${hostName}/configuration.nix
         hmModule
         {
-          # On injecte myMeta et on configure Home Manager et SOPS
           config = {
-            myMeta = myMeta;
-
-            # Automatisation SOPS : Si le fichier secrets/<host>.yaml existe, on l utilise par défaut
+            inherit myMeta;
             sops.defaultSopsFile = lib.mkIf hasSops sopsFile;
 
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "hm-backup";
-              extraSpecialArgs = {
-                inherit inputs user myMeta;
-                hostSpec = spec;
-              };
+              extraSpecialArgs = specialArgs;
               users.${user} = {
                 imports = [
                   ../../modules/shared/registry.nix
@@ -87,5 +70,37 @@ in
           };
         }
       ];
+    in
+    {
+      inherit
+        modules
+        specialArgs
+        myMeta
+        system
+        isDarwin
+        ;
+    };
+in
+{
+  inherit defaultMeta mkModules;
+
+  # Calcule les métadonnées finales pour un hôte
+  mkMeta =
+    { spec }:
+    (defaultMeta // (spec.meta or { })) // {
+      inherit (spec) system isDarwin;
+      tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
+    };
+
+  # Construit le système final via nixosSystem ou darwinSystem
+  mkSystem =
+    args:
+    let
+      config = mkModules args;
+      builder =
+        if config.isDarwin then inputs.darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem;
+    in
+    builder {
+      inherit (config) modules specialArgs;
     };
 }
