@@ -88,20 +88,23 @@
       ) nixosHosts;
 
       # Configuration Colmena (Déploiement)
-      colmena =
+      colmenaHive = inputs.colmena.lib.makeHive ({
+        meta = {
+          nixpkgs = import nixpkgs { system = "x86_64-linux"; };
+          specialArgs = { inherit inputs user; };
+        };
+      } // (lib.mapAttrs (name: spec:
         let
-          deploymentHosts = lib.filterAttrs (_: spec: spec.deployment != null) nixosHosts;
+          config = helpers.mkModules { hostName = name; inherit spec; };
         in
         {
-          meta = {
-            nixpkgs = import nixpkgs { system = "x86_64-linux"; };
-            specialArgs = { inherit inputs user; };
+          deployment = spec.deployment;
+          imports = config.modules;
+          _module.args = {
+            inherit (config) myMeta;
           };
         }
-        // (lib.mapAttrs (name: spec: {
-          deployment = spec.deployment;
-          imports = self.nixosConfigurations.${name}._module.args.modules;
-        }) deploymentHosts);
+      ) nixosHosts));
 
       # Formattage unifié via treefmt
       formatter = eachSystem (system: treefmtEval.${system}.config.build.wrapper);
