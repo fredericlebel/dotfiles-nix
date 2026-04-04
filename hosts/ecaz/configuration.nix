@@ -2,7 +2,6 @@
   config,
   modulesPath,
   user,
-  hostSpec,
   lib,
   ...
 }:
@@ -19,7 +18,7 @@
   ];
 
   # On fusionne la Spec unifiée avec la config technique locale
-  my.features = lib.recursiveUpdate (hostSpec.features or { }) {
+  my.features = lib.recursiveUpdate (config.myMeta.hostSpec.features or { }) {
     infrastructure.tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
   };
 
