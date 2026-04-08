@@ -17,7 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     homebrew.casks = [ "podman-desktop" ];
 
-    home.packages = [
+    environment.systemPackages = [
       pkgs.podman
       pkgs.podman-compose
     ];
