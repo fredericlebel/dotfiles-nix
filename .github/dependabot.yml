@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Automatisation des mises à jour des inputs Nix Flakes (Nixpkgs, Home-manager, etc.)
+  - package-ecosystem: "nix"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      # Optionnel: regrouper les inputs fréquents pour éviter trop de PR
+      nix-core:
+        patterns:
+          - "nixpkgs"
+          - "home-manager"
+          - "darwin"
+          - "sops-nix"
+    open-pull-requests-limit: 10
