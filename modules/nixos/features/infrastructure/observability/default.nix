@@ -46,5 +46,11 @@ in
         };
       };
     };
+
+    scrapeAddress = lib.mkOption {
+      type = types.str;
+      default = "127.0.0.1";
+      description = "L'adresse sur laquelle les exporters écoutent. Utiliser '0.0.0.0' ou l'IP Tailscale pour permettre le scrape distant.";
+    };
   };
 }
