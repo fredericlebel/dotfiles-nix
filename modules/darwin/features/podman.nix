@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.my.features.podman;
-  # On ne peut pas facilement ajouter des casks conditionnels 
+  # On ne peut pas facilement ajouter des casks conditionnels
   # via nix-homebrew sans injecter dans homebrew.casks
 in
 {
