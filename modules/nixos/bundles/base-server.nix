@@ -15,6 +15,7 @@ in
     ../features/infrastructure/security/hardening.nix
     ../features/infrastructure/security/intrusion-detection.nix
     ../features/infrastructure/security/openssh.nix
+    ../features/infrastructure/security/fail2ban.nix
     ../features/infrastructure/nix-core.nix
     ../features/infrastructure/virtualization/kvm.nix
   ];
@@ -38,6 +39,9 @@ in
             enable = true;
           };
           openssh = {
+            enable = true;
+          };
+          fail2ban = {
             enable = true;
           };
         };
