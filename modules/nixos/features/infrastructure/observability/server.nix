@@ -53,6 +53,7 @@ in
       prometheus = {
         enable = true;
         port = 9090;
+        listenAddress = "127.0.0.1";
 
         retentionTime = "30d";
         globalConfig.scrape_interval = "15s";
@@ -114,6 +115,7 @@ in
       prometheus.alertmanager = {
         enable = true;
         port = alertPort;
+        listenAddress = "127.0.0.1";
         extraFlags = [ "--cluster.listen-address=" ];
         checkConfig = false; # Nécessaire pour les variables d'env ($DISCORD_WEBHOOK)
         environmentFile = config.sops.secrets."prometheus-alertmanager-webhook-url".path;

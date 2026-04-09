@@ -11,7 +11,7 @@ in
     services.prometheus.exporters.node = {
       enable = true;
       enabledCollectors = [ "systemd" ];
-      listenAddress = "127.0.0.1";
+      listenAddress = cfg.scrapeAddress;
       port = 9100;
     };
 
@@ -19,7 +19,7 @@ in
       enable = true;
       user = "postgres";
       dataSourceName = "user=postgres host=/run/postgresql dbname=postgres sslmode=disable";
-      listenAddress = "127.0.0.1";
+      listenAddress = cfg.scrapeAddress;
       port = 9187;
     };
 
