@@ -20,6 +20,11 @@
   features = {
     zsh.enable = true;
     infrastructure = {
+      observability = {
+        enable = true;
+        role = "agent";
+        scrapeAddress = "100.87.11.46";
+      };
       tailscale = {
         enable = true;
         isExitNode = true;
