@@ -73,7 +73,11 @@ in
             static_configs = [
               {
                 targets = [ "127.0.0.1:${toString nodePort}" ];
-                labels.instance = myFqdn;
+                labels.instance = "ix";
+              }
+              {
+                targets = [ "100.87.11.46:${toString nodePort}" ];
+                labels.instance = "ecaz";
               }
             ];
           }
