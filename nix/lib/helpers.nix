@@ -87,7 +87,8 @@ in
   # Calcule les métadonnées finales pour un hôte
   mkMeta =
     { spec }:
-    (defaultMeta // (spec.meta or { })) // {
+    (defaultMeta // (spec.meta or { }))
+    // {
       inherit (spec) system isDarwin;
       tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
     };
