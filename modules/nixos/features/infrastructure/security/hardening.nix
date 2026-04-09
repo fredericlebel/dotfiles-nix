@@ -22,8 +22,6 @@ in
         "kernel.unprivileged_bpf_disabled" = 1;
       };
 
-      kernelPackages = pkgs.linuxPackages_hardened;
-
       tmp = {
         cleanOnBoot = true;
         useTmpfs = true;
