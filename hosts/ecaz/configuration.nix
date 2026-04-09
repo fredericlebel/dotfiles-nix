@@ -15,6 +15,7 @@
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/nixos/features/infrastructure/security/openssh.nix
     ../../modules/nixos/features/infrastructure/tailscale.nix
+    ../../modules/nixos/features/infrastructure/observability
   ];
 
   # On fusionne la Spec unifiée avec la config technique locale
