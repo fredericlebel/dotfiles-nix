@@ -42,7 +42,7 @@ in
       backend = "podman";
       containers.home-assistant = {
         image = "ghcr.io/home-assistant/home-assistant:stable";
-        extraOptions = [ "--network=host" ];
+        ports = [ "127.0.0.1:8123:8123" ];
         volumes = [
           "/var/lib/home-assistant:/config"
         ];
