@@ -20,28 +20,43 @@ in
   config = lib.mkIf (cfg.enable && cfg.role == "server") {
     services = {
       caddy.virtualHosts."${myFqdn}" = {
-        extraConfig = myLib.caddy.mkTailscaleHost {
-          inherit (cfg) subdomain;
-          port = 3000;
-        };
+        extraConfig = ''
+          bind tailscale/${cfg.subdomain}
+
+          tls {
+            get_certificate tailscale
+          }
+
+          reverse_proxy 127.0.0.1:3000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+          }
+        '';
       };
 
       grafana = {
         enable = true;
         settings = {
-          security.secret_key = config.sops.secrets."grafana-security-secret-key".path;
+          security.secret_key = "$__file{${config.sops.secrets."grafana-security-secret-key".path}}";
           server = {
             http_addr = "127.0.0.1";
             http_port = 3000;
-            domain = "localhost";
+            domain = myFqdn;
           };
         };
 
         provision = {
           enable = true;
+          dashboards.settings.providers = [
+            {
+              name = "Default";
+              options.path = ./dashboards;
+            }
+          ];
           datasources.settings.datasources = [
             {
               name = "Prometheus";
+              uid = "prometheus";
               type = "prometheus";
               url = "http://127.0.0.1:${toString promPort}";
               isDefault = true;
