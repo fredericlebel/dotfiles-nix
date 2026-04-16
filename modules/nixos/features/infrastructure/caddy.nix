@@ -44,6 +44,11 @@ in
 
     services.caddy = {
       enable = true;
+      globalConfig = ''
+        metrics {
+          per_host
+        }
+      '';
       package = pkgs.caddy.withPlugins {
         plugins = [
           "github.com/tailscale/caddy-tailscale@v0.0.0-20250207163903-69a970c84556"
@@ -65,7 +70,6 @@ in
 
     systemd.services.caddy = {
       reloadTriggers = [ ];
-      serviceConfig.ExecReload = lib.mkForce "";
     };
   };
 }

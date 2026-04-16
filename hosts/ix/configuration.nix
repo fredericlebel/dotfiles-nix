@@ -53,11 +53,6 @@
 
     firewall = {
       enable = true;
-
-      extraInputRules = ''
-        tcp dport 22 ct state new,untracked limit rate 3/minute accept
-        tcp dport 22 drop
-      '';
     };
     nftables.enable = true;
   };

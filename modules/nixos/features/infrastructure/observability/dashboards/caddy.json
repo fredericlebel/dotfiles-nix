@@ -1,0 +1,144 @@
+{
+  "annotations": { "list": [ { "builtIn": 1, "datasource": { "type": "grafana", "uid": "-- Grafana --" }, "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] },
+  "editable": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 10,
+      "panels": [],
+      "title": "Global Gateway Overview",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 1 },
+      "id": 1,
+      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
+      "title": "Total Traffic (Requests/sec)",
+      "type": "stat",
+      "targets": [ { "expr": "sum(rate(caddy_http_requests_total{instance=~\"$instance\"}[5m]))", "refId": "A" } ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 1 },
+      "id": 2,
+      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
+      "title": "Global Error Rate (%)",
+      "type": "stat",
+      "targets": [ { "expr": "sum(rate(caddy_http_responses_total{code=~\"[45]..\",instance=~\"$instance\"}[5m])) / sum(rate(caddy_http_responses_total{instance=~\"$instance\"}[5m]))", "refId": "A" } ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 1 },
+      "id": 3,
+      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
+      "title": "Avg Latency (ms)",
+      "type": "stat",
+      "targets": [ { "expr": "avg(rate(caddy_http_request_duration_seconds_sum{instance=~\"$instance\"}[5m]) / rate(caddy_http_request_duration_seconds_count{instance=~\"$instance\"}[5m])) * 1000", "refId": "A" } ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 20,
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+          "id": 21,
+          "title": "Vault: Traffic by Code",
+          "type": "timeseries",
+          "targets": [ { "expr": "sum by (code) (rate(caddy_http_responses_total{host=~\"vault.*\",instance=~\"$instance\"}[5m]))", "legendFormat": "{{code}}", "refId": "A" } ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+          "id": 22,
+          "title": "Vault: Median Latency",
+          "type": "timeseries",
+          "targets": [ { "expr": "histogram_quantile(0.5, sum by (le) (rate(caddy_http_request_duration_seconds_bucket{host=~\"vault.*\",instance=~\"$instance\"}[5m])))", "refId": "A" } ]
+        }
+      ],
+      "title": "Service: Vaultwarden",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 6 },
+      "id": 30,
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 7 },
+          "id": 31,
+          "title": "HASS: Traffic by Code",
+          "type": "timeseries",
+          "targets": [ { "expr": "sum by (code) (rate(caddy_http_responses_total{host=~\"hass.*\",instance=~\"$instance\"}[5m]))", "legendFormat": "{{code}}", "refId": "A" } ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 7 },
+          "id": 32,
+          "title": "HASS: Median Latency",
+          "type": "timeseries",
+          "targets": [ { "expr": "histogram_quantile(0.5, sum by (le) (rate(caddy_http_request_duration_seconds_bucket{host=~\"hass.*\",instance=~\"$instance\"}[5m])))", "refId": "A" } ]
+        }
+      ],
+      "title": "Service: Home Assistant",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 7 },
+      "id": 40,
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+          "id": 41,
+          "title": "Grafana: Traffic by Code",
+          "type": "timeseries",
+          "targets": [ { "expr": "sum by (code) (rate(caddy_http_responses_total{host=~\"grafana.*\",instance=~\"$instance\"}[5m]))", "legendFormat": "{{code}}", "refId": "A" } ]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+          "id": 42,
+          "title": "Grafana: Median Latency",
+          "type": "timeseries",
+          "targets": [ { "expr": "histogram_quantile(0.5, sum by (le) (rate(caddy_http_request_duration_seconds_bucket{host=~\"grafana.*\",instance=~\"$instance\"}[5m])))", "refId": "A" } ]
+        }
+      ],
+      "title": "Service: Grafana Internal",
+      "type": "row"
+    }
+  ],
+  "schemaVersion": 38,
+  "tags": [ "web", "caddy", "services" ],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "definition": "label_values(caddy_http_requests_total, instance)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Host",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(caddy_http_requests_total, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "title": "Web Gateway: Services Detail",
+  "uid": "caddy-services"
+}
