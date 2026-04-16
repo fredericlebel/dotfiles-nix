@@ -97,6 +97,19 @@ in
             ];
           }
           {
+            job_name = "caddy";
+            static_configs = [
+              {
+                targets = [ "127.0.0.1:2019" ];
+                labels.instance = "ix";
+              }
+              {
+                targets = [ "100.87.11.46:2019" ];
+                labels.instance = "ecaz";
+              }
+            ];
+          }
+          {
             job_name = "prometheus";
             static_configs = [
               {
