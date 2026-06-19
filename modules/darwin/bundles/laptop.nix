@@ -14,7 +14,7 @@ in
     ../features/provision/logseq.nix
     ../features/podman.nix
     ../features/system-defaults.nix
-    ../features/gemini-cli.nix
+    ../features/antigravity-cli.nix
     ../../shared/zsh.nix
   ];
 
@@ -29,7 +29,7 @@ in
       terminals.ghostty.enable = lib.mkDefault true;
       homebrew.enable = lib.mkDefault true;
       podman.enable = lib.mkDefault true;
-      gemini-cli.enable = lib.mkDefault true;
+      antigravity-cli.enable = lib.mkDefault true;
     };
   };
 }
