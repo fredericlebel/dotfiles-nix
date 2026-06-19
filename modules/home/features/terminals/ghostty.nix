@@ -23,7 +23,7 @@ in
         window-padding-x = 10;
         window-padding-y = 10;
         macos-titlebar-proxy-icon = "hidden";
-        command = "${pkgs.zsh}/bin/zsh.nix";
+        command = "${pkgs.zsh}/bin/zsh";
         focus-follows-mouse = true;
         mouse-hide-while-typing = true;
         confirm-close-surface = false;
