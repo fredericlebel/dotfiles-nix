@@ -66,7 +66,7 @@ in
             # Utilitaires
             marketplace.pkief.material-icon-theme
             marketplace.signageos.signageos-vscode-sops
-            marketplace.mkhl.direnv
+            #marketplace.mkhl.direnv
             marketplace.irongeek.vscode-env
             marketplace.yzhang.markdown-all-in-one
           ];
