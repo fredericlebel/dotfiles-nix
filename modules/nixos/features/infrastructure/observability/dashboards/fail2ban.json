@@ -70,11 +70,23 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Nombre de tentatives échouées par minute. Permet de visualiser les vagues d'attaques.",
+      "description": "Quantité réelle de tentatives échouées par fenêtre de 5 minutes. Chiffres entiers uniquement.",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "decimals": 0 } },
       "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "id": 8,
+      "options": { "legend": { "displayMode": "list", "placement": "right" } },
+      "title": "KPI: Attack Volume (Actual Event Count)",
+      "type": "timeseries",
+      "targets": [ { "expr": "sum by (instance) (increase(fail2ban_failed_total{instance=~\"$instance\"}[5m]))", "legendFormat": "{{instance}}", "refId": "A" } ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "description": "Nombre de tentatives échouées par minute (moyenne lissée). Permet de visualiser les vagues d'attaques.",
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
       "id": 2,
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
-      "title": "KRI: Attack Pressure (Failed attempts/min)",
+      "options": { "legend": { "displayMode": "list", "placement": "right" } },
+      "title": "KRI: Attack Pressure (Averaged Rate/min)",
       "type": "timeseries",
       "targets": [ { "expr": "sum by (instance) (rate(fail2ban_failed_total{instance=~\"$instance\"}[5m]) * 60)", "legendFormat": "{{instance}}", "refId": "A" } ]
     }
