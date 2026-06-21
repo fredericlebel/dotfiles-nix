@@ -34,9 +34,9 @@ Avant toute action modifiant le code du dépôt, respecte rigoureusement ce flux
   ```bash
   git push -u origin HEAD
   ```
-- Crée systématiquement une Pull Request (PR) sur GitHub. Utilise la CLI GitHub (`gh`) si elle est disponible et configurée :
+- Crée systématiquement une Pull Request (PR) sur GitHub. Utilise la CLI GitHub (`gh`) si elle est disponible et configurée. Privilégie la rédaction d'un titre et d'une description clairs (via les options `--title` et `--body`) décrivant précisément les changements, plutôt que d'utiliser uniquement `--fill` (qui peut laisser la description vide) :
   ```bash
-  gh pr create --fill
+  gh pr create --title "type(scope): titre explicite" --body "Description détaillée des changements"
   ```
 - Si la CLI `gh` n'est pas disponible ou non connectée, demande poliment au utilisateur de créer la PR et fournis-lui le lien pour le faire.
 
