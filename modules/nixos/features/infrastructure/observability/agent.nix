@@ -10,7 +10,10 @@ in
   config = lib.mkIf cfg.enable {
     services.prometheus.exporters.node = {
       enable = true;
-      enabledCollectors = [ "systemd" "textfile" ];
+      enabledCollectors = [
+        "systemd"
+        "textfile"
+      ];
       extraFlags = [ "--collector.textfile.directory=/var/lib/prometheus-node-exporter-textfiles" ];
       listenAddress = cfg.scrapeAddress;
       port = 9100;

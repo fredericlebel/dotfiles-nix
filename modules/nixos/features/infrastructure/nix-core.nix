@@ -18,7 +18,7 @@ in
           "nix-command"
           "flakes"
         ];
-        # Conserver les derivations pour permettre le debug si besoin, 
+        # Conserver les derivations pour permettre le debug si besoin,
         # mais supprimer les outputs inutilises
         keep-outputs = true;
         keep-derivations = true;
@@ -35,7 +35,7 @@ in
       };
     };
 
-    # Script pour supprimer les vieilles generations de systeme 
+    # Script pour supprimer les vieilles generations de systeme
     # (sinon la GC ne peut pas les supprimer du store)
     system.activationScripts.cleanup-generations = {
       text = ''
