@@ -17,7 +17,7 @@ let
       };
 
       isDarwin = spec.isDarwin or false;
-      system = spec.system;
+      inherit (spec) system;
 
       sopsFile = ../../secrets/${hostName}.yaml;
       hasSops = builtins.pathExists sopsFile;

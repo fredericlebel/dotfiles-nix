@@ -8,3 +8,13 @@ includes = ["*.nix"]
 command = "prettier"
 options = ["--prose-wrap", "always"]
 includes = ["*.md"]
+
+[formatter.deadnix]
+command = "deadnix"
+options = ["-e"]
+includes = ["*.nix"]
+
+[formatter.statix]
+command = "statix"
+options = ["fix"]
+includes = ["*.nix"]
