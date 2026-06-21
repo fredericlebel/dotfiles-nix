@@ -27,14 +27,26 @@ jobs:
         with:
           use-flakehub: false
 
-      - name: Evaluate NixOS (ix)
-        run: nix eval .#nixosConfigurations.ix.config.system.build.toplevel.drvPath
+      - name: Evaluate all NixOS hosts
+        run: |
+          for host in $(nix eval --json .#nixosConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
+            echo "Evaluating NixOS host: $host"
+            nix eval .#nixosConfigurations."$host".config.system.build.toplevel.drvPath
+          done
 
-      - name: Evaluate Darwin (caladan)
-        run: nix eval .#darwinConfigurations.caladan.system.drvPath
+      - name: Evaluate all Darwin hosts
+        run: |
+          for host in $(nix eval --json .#darwinConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
+            echo "Evaluating Darwin host: $host"
+            nix eval .#darwinConfigurations."$host".system.drvPath
+          done
 
-      - name: Dry-run Build
-        run: nix build .#nixosConfigurations.ix.config.system.build.toplevel --dry-run
+      - name: Dry-run Build all NixOS hosts
+        run: |
+          for host in $(nix eval --json .#nixosConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
+            echo "Dry-run building NixOS host: $host"
+            nix build .#nixosConfigurations."$host".config.system.build.toplevel --dry-run
+          done
 
   check-devshell:
     needs: linting
