@@ -40,7 +40,7 @@
     inputs@{ self, nixpkgs, ... }:
     let
       user = "flebel";
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib;
       helpers = import ./nix/lib/helpers.nix { inherit inputs user; };
 
       # On lit dynamiquement les hôtes depuis les fichiers spec.nix
@@ -61,6 +61,8 @@
           projectRootFile = "flake.nix";
           programs.nixfmt.enable = true;
           programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt;
+          programs.deadnix.enable = true;
+          programs.statix.enable = true;
         }
       );
 
@@ -105,7 +107,7 @@
             };
           in
           {
-            deployment = spec.deployment;
+            inherit (spec) deployment;
             imports = config.modules;
             _module.args = {
               inherit (config) myMeta;
