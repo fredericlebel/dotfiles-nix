@@ -1,3 +1,0 @@
-name = "check"
-description = "Vérifie le flake et analyse les erreurs"
-prompt = "Exécute la commande `just check`. Si la commande échoue, analyse la trace d'erreur et propose une correction en respectant l'architecture définie dans GEMINI.md."
