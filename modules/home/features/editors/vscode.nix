@@ -183,6 +183,8 @@ in
                 # Masque les fichiers systèmes de macOS
                 "**/.DS_Store" = true;
               };
+
+              "dev.containers.dockerPath" = "podman";
             }
 
             # CONFIGURATIONS LIÉES AUX EXTENSIONS
