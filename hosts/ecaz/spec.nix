@@ -10,6 +10,8 @@
   };
 
   meta = {
+    s3Endpoint = "s3.us-west-000.backblazeb2.com";
+    s3Bucket = "ecaz-opval-com";
     tags = [
       "vps"
       "cloud"
@@ -28,6 +30,7 @@
       postgresql = {
         enable = true;
         databases = [ "opentofu" ];
+        resticEnable = true;
       };
       tailscale = {
         enable = true;

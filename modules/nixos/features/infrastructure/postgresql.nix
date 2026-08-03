@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  myMeta,
   ...
 }:
 let
@@ -39,6 +40,12 @@ in
       type = lib.types.bool;
       default = true;
       description = "Activer la sauvegarde automatique locale de PostgreSQL";
+    };
+
+    resticEnable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Activer la sauvegarde Restic chiffrée des dumps PostgreSQL vers S3 (Backblaze B2)";
     };
 
     enableSSL = lib.mkOption {
@@ -122,6 +129,38 @@ in
       enable = true;
       inherit (cfg) databases;
       location = "/var/backup/postgresql";
+    };
+
+    services.restic.backups.postgresql = lib.mkIf (cfg.enableBackup && cfg.resticEnable) {
+      environmentFile = config.sops.secrets."restic-postgres-env".path;
+      passwordFile = config.sops.secrets."restic-postgres-password".path;
+      repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/postgresql.nix";
+
+      paths = [
+        config.services.postgresqlBackup.location
+      ];
+
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
+
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+        "--keep-monthly 6"
+      ];
+    };
+
+    sops.secrets = lib.mkIf (cfg.enableBackup && cfg.resticEnable) {
+      "restic-postgres-env" = {
+        owner = "root";
+        mode = "0400";
+      };
+      "restic-postgres-password" = {
+        owner = "root";
+        mode = "0400";
+      };
     };
   };
 }
