@@ -7,7 +7,10 @@
 {
   home = {
     homeDirectory = lib.mkForce (if pkgs.stdenv.isDarwin then "/Users/flebel" else "/home/flebel");
-    packages = [ pkgs.restic ];
+    packages = with pkgs; [
+      restic
+      bitwarden-cli
+    ];
 
     stateVersion = "26.05";
   };
