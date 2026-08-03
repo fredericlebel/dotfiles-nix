@@ -19,9 +19,11 @@ secrets.decrypted.yaml
 .AppleDouble
 .LSOverride
 
-# Editeurs
+# Editeurs & Notes
 .vscode/
 *.swp
+tmp.md
+todolist.org
 
 # OpenTofu / Terraform
 .terraform/
