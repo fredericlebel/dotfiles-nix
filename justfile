@@ -119,14 +119,14 @@ deploy-reboot +TARGETS:
 [group('day-2')]
 [group('secrets')]
 edit-secret host:
-    sops hosts/{{host}}/secrets.yaml
+    sops secrets/{{host}}.yaml
 
 # [Day 2] Rotation des clés (re-chiffrage complet)
 [group('day-2')]
 [group('secrets')]
 rotate-secrets:
     @echo "{{green}}🔄 Day 2 (Secrets): Rotation SOPS...{{reset}}"
-    find . -name "secrets.yaml" -exec sops updatekeys {} \;
+    find secrets/ -name "*.yaml" -exec sops updatekeys -y {} \;
 
 # DAY 2 : OPS & MAINTENANCE
 
