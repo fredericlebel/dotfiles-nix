@@ -62,6 +62,7 @@ let
               extraSpecialArgs = specialArgs;
               users.${user} = {
                 imports = [
+                  inputs.sops-nix.homeManagerModules.sops
                   ../../modules/shared/registry.nix
                   ../../hosts/${hostName}/home.nix
                 ];
