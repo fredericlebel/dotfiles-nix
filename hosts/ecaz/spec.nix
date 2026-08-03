@@ -25,6 +25,10 @@
         role = "agent";
         scrapeAddress = "100.87.11.46";
       };
+      postgresql = {
+        enable = true;
+        databases = [ "opentofu" ];
+      };
       tailscale = {
         enable = true;
         isExitNode = true;
