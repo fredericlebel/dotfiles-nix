@@ -16,6 +16,7 @@ in
       htop
       btop
       curl
+      restic
       ghostty.terminfo
     ];
   };
