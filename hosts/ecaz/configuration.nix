@@ -15,12 +15,16 @@
     ../../modules/nixos/bundles/base-server.nix
     ../../modules/nixos/features/infrastructure/security/openssh.nix
     ../../modules/nixos/features/infrastructure/tailscale.nix
+    ../../modules/nixos/features/infrastructure/postgresql.nix
     ../../modules/nixos/features/infrastructure/observability
   ];
 
   # On fusionne la Spec unifiée avec la config technique locale
   my.features = lib.recursiveUpdate (config.myMeta.hostSpec.features or { }) {
     infrastructure.tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
+    infrastructure.postgresql.userPasswordFiles = {
+      opentofu = config.sops.secrets.postgres-opentofu-password.path;
+    };
   };
 
   # Activation manuelle du bundle (importé via imports)
@@ -56,7 +60,12 @@
     }
   ];
 
-  sops.secrets.tailscale-key = { };
+  sops.secrets = {
+    tailscale-key = { };
+    postgres-opentofu-password = {
+      owner = "postgres";
+    };
+  };
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
