@@ -40,6 +40,12 @@ in
       default = true;
       description = "Activer la sauvegarde automatique locale de PostgreSQL";
     };
+
+    enableSSL = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Activer le chiffrement SSL/TLS natif sur PostgreSQL avec certificat TLS auto-signé";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -54,6 +60,12 @@ in
 
       enableTCPIP = cfg.enableTailscaleAccess;
 
+      settings = lib.mkIf cfg.enableSSL {
+        ssl = "on";
+        ssl_cert_file = "/var/lib/postgresql/server.crt";
+        ssl_key_file = "/var/lib/postgresql/server.key";
+      };
+
       authentication = lib.mkIf cfg.enableTailscaleAccess (
         lib.mkOverride 10 ''
           # TYPE  DATABASE        USER            ADDRESS                 METHOD
@@ -64,6 +76,20 @@ in
         ''
       );
     };
+
+    systemd.services.postgresql.preStart = lib.mkIf cfg.enableSSL (
+      lib.mkAfter ''
+        if [ ! -f /var/lib/postgresql/server.key ]; then
+          ${pkgs.openssl}/bin/openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+            -keyout /var/lib/postgresql/server.key \
+            -out /var/lib/postgresql/server.crt \
+            -subj "/CN=ecaz.taila562f9.ts.net"
+          chmod 0600 /var/lib/postgresql/server.key
+          chmod 0644 /var/lib/postgresql/server.crt
+          chown postgres:postgres /var/lib/postgresql/server.key /var/lib/postgresql/server.crt
+        fi
+      ''
+    );
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.enableTailscaleAccess [ 5432 ];
 
