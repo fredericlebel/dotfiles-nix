@@ -79,7 +79,7 @@ in
         lib.mkIf cfg.resticEnable {
           environmentFile = config.sops.secrets."restic-vaultwarden-env".path;
           passwordFile = config.sops.secrets."restic-vaultwarden-password".path;
-          repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/vaultwarden.nix";
+          repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/${config.networking.hostName}/vaultwarden.nix";
 
           paths = [
             "/var/lib/vaultwarden.nix"
