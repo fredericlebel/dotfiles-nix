@@ -1,0 +1,44 @@
+// Tailscale ACL Policy - Gérée par OpenTofu (01-core-network)
+{
+	// Groupes d'utilisateurs
+	"groups": {
+		"group:admin": ["autogroup:admin"],
+		"group:users": ["autogroup:member"]
+	},
+
+	// Tag Owners (pour les serveurs et nœuds automatisés)
+	"tagOwners": {
+		"tag:server": ["group:admin", "autogroup:admin"],
+		"tag:exit-node": ["group:admin", "autogroup:admin"],
+		"tag:k8s": ["group:admin", "autogroup:admin"],
+		"tag:vps": ["group:admin", "autogroup:admin"],
+		"tag:nixos": ["group:admin", "autogroup:admin"]
+	},
+
+	// Contrôle d'accès (ACLs)
+	"acls": [
+		// Les administrateurs ont accès à toutes les machines et tous les ports
+		{
+			"action": "accept",
+			"src": ["group:admin", "autogroup:admin", "autogroup:member"],
+			"dst": ["*:*"]
+		},
+		// Accès par défaut entre machines taguées et utilisateurs
+		{
+			"action": "accept",
+			"src": ["group:users"],
+			"dst": ["tag:server:*"]
+		}
+	],
+
+	// Directives SSH
+	"ssh": [
+		{
+			"action": "check",
+			"src": ["group:admin", "autogroup:admin", "autogroup:member"],
+			"dst": ["tag:server", "tag:vps", "tag:nixos", "autogroup:self"],
+			"users": ["root", "flebel"],
+			"checkPeriod": "12h"
+		}
+	]
+}
