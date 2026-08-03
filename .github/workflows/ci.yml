@@ -56,3 +56,21 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v14
       - name: Check DevShell
         run: nix flake check ./nix/dev
+
+  tofu-check:
+    needs: linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.8.0
+      - name: Check OpenTofu formatting
+        run: tofu fmt -check -recursive infrastructure/
+      - name: Validate OpenTofu 01-core-network layer
+        run: |
+          cd infrastructure/01-core-network
+          tofu init -backend=false
+          tofu validate
+
+

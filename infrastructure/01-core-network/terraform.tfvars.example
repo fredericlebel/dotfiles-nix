@@ -1,0 +1,7 @@
+# Exemple de configuration des variables (Copier vers terraform.tfvars)
+# NOTE: Ne pas commiter les clés d'API ni les secrets dans Git.
+#
+# tailscale_api_key   = "tskey-api-k..."
+# tailscale_tailnet   = "votre-tailnet.ts.net"
+# dns_nameservers     = ["1.1.1.1", "1.0.0.1"]
+# enable_magic_dns    = true
