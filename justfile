@@ -154,33 +154,43 @@ update-input input:
 
 # DAY 2 : OPENTOFU / INFRASTRUCTURE AS CODE
 
+# Recette privée : Centralisation et injection Just-In-Time des secrets SOPS pour OpenTofu
+[private]
+with-secrets *cmd:
+    @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' secrets/ecaz.yaml)@ecaz.taila562f9.ts.net:5432/opentofu?sslmode=require" && \
+     export TAILSCALE_OAUTH_CLIENT_ID="$(sops -d --extract '["tailscale-oauth-client-id"]' secrets/tailscale.yaml)" && \
+     export TAILSCALE_OAUTH_CLIENT_SECRET="$(sops -d --extract '["tailscale-oauth-client-secret"]' secrets/tailscale.yaml)" && \
+     export TF_VAR_discord_webhook_url="$(sops -d --extract '["tailscale-discord-webhook-url"]' secrets/tailscale.yaml)" && \
+     export TF_VAR_tailscale_contact_email="$(sops -d --extract '["tailscale-contact-email"]' secrets/tailscale.yaml)" && \
+     {{cmd}}
+
 # [Day 2] OpenTofu: Initialiser un niveau d'infrastructure
 [group('day-2')]
 [group('tofu')]
 tofu-init layer='01-core-network':
     @echo "{{green}}🧅 OpenTofu: Initialisation (niveau: {{layer}})...{{reset}}"
-    tofu -chdir=infrastructure/{{layer}} init
+    @just with-secrets tofu -chdir=infrastructure/{{layer}} init
 
 # [Day 2] OpenTofu: Prévisualiser les changements (plan)
 [group('day-2')]
 [group('tofu')]
 tofu-plan layer='01-core-network':
     @echo "{{green}}🧅 OpenTofu: Planification (niveau: {{layer}})...{{reset}}"
-    tofu -chdir=infrastructure/{{layer}} plan
+    @just with-secrets tofu -chdir=infrastructure/{{layer}} plan
 
 # [Day 2] OpenTofu: Appliquer les changements (apply)
 [group('day-2')]
 [group('tofu')]
 tofu-apply layer='01-core-network' args='-lock=false':
     @echo "{{green}}🧅 OpenTofu: Application des changements (niveau: {{layer}})...{{reset}}"
-    tofu -chdir=infrastructure/{{layer}} apply {{args}}
+    @just with-secrets tofu -chdir=infrastructure/{{layer}} apply {{args}}
 
 # [Day 2] OpenTofu: Déverrouiller un verrou d'état
 [group('day-2')]
 [group('tofu')]
 tofu-unlock lock_id layer='01-core-network':
     @echo "{{green}}🧅 OpenTofu: Déverrouillage d'état (niveau: {{layer}})...{{reset}}"
-    tofu -chdir=infrastructure/{{layer}} force-unlock {{lock_id}}
+    @just with-secrets tofu -chdir=infrastructure/{{layer}} force-unlock {{lock_id}}
 
 # [Day 2] OpenTofu: Formater tout le code HCL
 [group('day-2')]
@@ -194,7 +204,7 @@ tofu-fmt:
 [group('tofu')]
 tofu-validate layer='01-core-network':
     @echo "{{green}}🧅 OpenTofu: Validation (niveau: {{layer}})...{{reset}}"
-    tofu -chdir=infrastructure/{{layer}} validate
+    @just with-secrets tofu -chdir=infrastructure/{{layer}} validate
 
 # DAY 2 : RESTIC & BACKUPS (Sauvegardes S3)
 
