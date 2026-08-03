@@ -151,3 +151,50 @@ logs host service:
 update-input input:
     @echo "{{green}}📦 Day 2 (Ops): Update de {{input}}...{{reset}}"
     nix flake lock --update-input {{input}}
+
+# DAY 2 : OPENTOFU / INFRASTRUCTURE AS CODE
+
+# [Day 2] OpenTofu: Initialiser un niveau d'infrastructure
+[group('day-2')]
+[group('tofu')]
+tofu-init layer='01-core-network':
+    @echo "{{green}}🧅 OpenTofu: Initialisation (niveau: {{layer}})...{{reset}}"
+    tofu -chdir=infrastructure/{{layer}} init
+
+# [Day 2] OpenTofu: Prévisualiser les changements (plan)
+[group('day-2')]
+[group('tofu')]
+tofu-plan layer='01-core-network':
+    @echo "{{green}}🧅 OpenTofu: Planification (niveau: {{layer}})...{{reset}}"
+    tofu -chdir=infrastructure/{{layer}} plan
+
+# [Day 2] OpenTofu: Appliquer les changements (apply)
+[group('day-2')]
+[group('tofu')]
+tofu-apply layer='01-core-network' args='-lock=false':
+    @echo "{{green}}🧅 OpenTofu: Application des changements (niveau: {{layer}})...{{reset}}"
+    tofu -chdir=infrastructure/{{layer}} apply {{args}}
+
+# [Day 2] OpenTofu: Déverrouiller un verrou d'état
+[group('day-2')]
+[group('tofu')]
+tofu-unlock lock_id layer='01-core-network':
+    @echo "{{green}}🧅 OpenTofu: Déverrouillage d'état (niveau: {{layer}})...{{reset}}"
+    tofu -chdir=infrastructure/{{layer}} force-unlock {{lock_id}}
+
+# [Day 2] OpenTofu: Formater tout le code HCL
+[group('day-2')]
+[group('tofu')]
+tofu-fmt:
+    @echo "{{green}}🧅 OpenTofu: Formatage du code HCL...{{reset}}"
+    tofu fmt -recursive infrastructure/
+
+# [Day 2] OpenTofu: Valider la configuration d'un niveau
+[group('day-2')]
+[group('tofu')]
+tofu-validate layer='01-core-network':
+    @echo "{{green}}🧅 OpenTofu: Validation (niveau: {{layer}})...{{reset}}"
+    tofu -chdir=infrastructure/{{layer}} validate
+
+
+
