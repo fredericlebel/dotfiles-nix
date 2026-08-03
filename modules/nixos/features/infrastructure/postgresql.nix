@@ -135,7 +135,7 @@ in
       initialize = true;
       environmentFile = config.sops.secrets."restic-postgres-env".path;
       passwordFile = config.sops.secrets."restic-postgres-password".path;
-      repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/postgresql.nix";
+      repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/${config.networking.hostName}/postgresql.nix";
 
       paths = [
         config.services.postgresqlBackup.location
