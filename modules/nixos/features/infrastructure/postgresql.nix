@@ -86,7 +86,6 @@ in
             -subj "/CN=ecaz.taila562f9.ts.net"
           chmod 0600 /var/lib/postgresql/server.key
           chmod 0644 /var/lib/postgresql/server.crt
-          chown postgres:postgres /var/lib/postgresql/server.key /var/lib/postgresql/server.crt
         fi
       ''
     );
