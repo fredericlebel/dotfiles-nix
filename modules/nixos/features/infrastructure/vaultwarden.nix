@@ -77,12 +77,13 @@ in
           pgBackupPath = "${config.services.postgresqlBackup.location}/vaultwarden.sql.gz";
         in
         lib.mkIf cfg.resticEnable {
+          initialize = true;
           environmentFile = config.sops.secrets."restic-vaultwarden-env".path;
           passwordFile = config.sops.secrets."restic-vaultwarden-password".path;
           repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/${config.networking.hostName}/vaultwarden";
 
           paths = [
-            "/var/lib/vaultwarden.nix"
+            "/var/lib/vaultwarden"
             pgBackupPath
           ];
 
