@@ -198,6 +198,22 @@ tofu-validate layer='01-core-network':
 
 # DAY 2 : RESTIC & BACKUPS (Sauvegardes S3)
 
+# [Day 2] Restic: Lister tous les hôtes ayant des sauvegardes dans le bucket S3 (Niveau 1)
+[group('day-2')]
+[group('restic')]
+restic-hosts auth_host='ecaz':
+    @echo "{{green}}🔍 Restic: Hôtes enregistrés dans le bucket S3 (Niveau 1)...{{reset}}"
+    @export $(sops -d --extract '["restic-postgres-env"]' secrets/{{auth_host}}.yaml | xargs) && \
+     nix run nixpkgs#rclone -- lsf --s3-provider Other --s3-access-key-id "$AWS_ACCESS_KEY_ID" --s3-secret-access-key "$AWS_SECRET_ACCESS_KEY" --s3-endpoint "s3.us-west-000.backblazeb2.com" :s3:backups-opval-com/
+
+# [Day 2] Restic: Lister tous les services/dépôts de sauvegardes d'un hôte (Niveau 2)
+[group('day-2')]
+[group('restic')]
+restic-services host='ecaz' auth_host='ecaz':
+    @echo "{{green}}🔍 Restic: Services sauvegardés pour {{host}} (Niveau 2)...{{reset}}"
+    @export $(sops -d --extract '["restic-postgres-env"]' secrets/{{auth_host}}.yaml | xargs) && \
+     nix run nixpkgs#rclone -- lsf --s3-provider Other --s3-access-key-id "$AWS_ACCESS_KEY_ID" --s3-secret-access-key "$AWS_SECRET_ACCESS_KEY" --s3-endpoint "s3.us-west-000.backblazeb2.com" :s3:backups-opval-com/{{host}}/
+
 # [Day 2] Restic: Lister les snapshots d'un hôte et service (ex: just restic-snapshots ecaz)
 [group('day-2')]
 [group('restic')]
