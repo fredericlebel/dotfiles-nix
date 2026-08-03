@@ -183,7 +183,7 @@ in
       owner = "grafana";
     };
     sops.secrets."prometheus-alertmanager-webhook-url" = {
-      owner = "alertmanager";
+      owner = "prometheus";
     };
   };
 }
