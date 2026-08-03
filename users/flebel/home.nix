@@ -7,6 +7,7 @@
 {
   home = {
     homeDirectory = lib.mkForce (if pkgs.stdenv.isDarwin then "/Users/flebel" else "/home/flebel");
+    packages = [ pkgs.restic ];
 
     stateVersion = "26.05";
   };
