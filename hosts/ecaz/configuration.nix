@@ -61,9 +61,13 @@
   ];
 
   sops.secrets = {
-    tailscale-key = { };
+    tailscale-key = {
+      owner = "root";
+      mode = "0400";
+    };
     postgres-opentofu-password = {
       owner = "postgres";
+      mode = "0400";
     };
   };
 
