@@ -39,6 +39,7 @@
               pkgs.just
               pkgs.treefmt
               pkgs.nixfmt
+              pkgs.opentofu
               pkgs.sops
               pkgs.ssh-to-age
               pkgs.git
