@@ -64,7 +64,10 @@
     }
   ];
 
-  sops.secrets.tailscale-key = { };
+  sops.secrets.tailscale-key = {
+    owner = "root";
+    mode = "0400";
+  };
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 

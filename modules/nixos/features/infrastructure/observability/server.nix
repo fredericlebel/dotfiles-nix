@@ -180,8 +180,10 @@ in
     };
 
     sops.secrets."grafana-security-secret-key" = {
-      owner = config.systemd.services.grafana.serviceConfig.User;
+      owner = "grafana";
     };
-    sops.secrets."prometheus-alertmanager-webhook-url" = { };
+    sops.secrets."prometheus-alertmanager-webhook-url" = {
+      owner = "alertmanager";
+    };
   };
 }

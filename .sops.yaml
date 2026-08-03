@@ -1,5 +1,5 @@
 keys:
-  - &host_caladan age1uxze7ur4xxj2r4zfx3mdkr2c6kslpgtfd52kh6r3s306xmtteceqj5nv6z
+  - &host_caladan age163t5fn5ftfd0m3mfu4axsqkkg4td2wfqy3rqgwl4qn0wjhxmnczsqq2rme
   - &host_ecaz age1nm7yy47kjecvnx899ga2vuxrhkqn0y0zlmg9ejn69x0456gekyesmsmyg8
   - &host_ix age12vnun3ngclc3tnpq7r35v7azam2pkukxusxyj0n02wkx56cx3q3qf5wrwg
   - &flebel age1uxze7ur4xxj2r4zfx3mdkr2c6kslpgtfd52kh6r3s306xmtteceqj5nv6z
@@ -7,12 +7,10 @@ creation_rules:
   - path_regex: secrets/(common|tailscale|vaultwarden)\.yaml$
     key_groups:
       - age:
-          # caladan
-          - age1uxze7ur4xxj2r4zfx3mdkr2c6kslpgtfd52kh6r3s306xmtteceqj5nv6z
-          # ix
-          - age12vnun3ngclc3tnpq7r35v7azam2pkukxusxyj0n02wkx56cx3q3qf5wrwg
-          # ecaz
-          - age1nm7yy47kjecvnx899ga2vuxrhkqn0y0zlmg9ejn69x0456gekyesmsmyg8
+          - *flebel
+          - *host_caladan
+          - *host_ix
+          - *host_ecaz
   - path_regex: secrets/caladan\.yaml$
     key_groups:
       - age: [ *flebel, *host_caladan ]
