@@ -132,6 +132,7 @@ in
     };
 
     services.restic.backups.postgresql = lib.mkIf (cfg.enableBackup && cfg.resticEnable) {
+      initialize = true;
       environmentFile = config.sops.secrets."restic-postgres-env".path;
       passwordFile = config.sops.secrets."restic-postgres-password".path;
       repository = "s3:${myMeta.s3Endpoint}/${myMeta.s3Bucket}/postgresql.nix";
