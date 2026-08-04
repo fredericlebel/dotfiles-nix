@@ -74,6 +74,23 @@ in
 
     systemd.services.caddy = {
       reloadTriggers = [ ];
+      serviceConfig = {
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          "/var/lib/caddy"
+          "/var/log/caddy.nix"
+        ];
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        NoNewPrivileges = true;
+        CapabilityBoundingSet = [
+          "CAP_NET_BIND_SERVICE"
+          "CAP_NET_ADMIN"
+        ];
+      };
     };
   };
 }
