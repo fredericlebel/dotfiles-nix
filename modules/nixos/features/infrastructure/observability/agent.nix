@@ -27,6 +27,32 @@ in
       port = 9187;
     };
 
+    systemd.services.prometheus-node-exporter = {
+      after = [
+        "tailscaled.service"
+        "network-online.target"
+      ];
+      wants = [
+        "tailscaled.service"
+        "network-online.target"
+      ];
+      serviceConfig.FreeBind = true;
+    };
+
+    systemd.services.prometheus-postgres-exporter = lib.mkIf cfg.exporters.postgres.enable {
+      after = [
+        "tailscaled.service"
+        "network-online.target"
+        "postgresql.service"
+      ];
+      wants = [
+        "tailscaled.service"
+        "network-online.target"
+        "postgresql.service"
+      ];
+      serviceConfig.FreeBind = true;
+    };
+
     networking.firewall.allowedTCPPorts = [ ];
   };
 }
