@@ -164,7 +164,7 @@ in
       };
     };
     systemd.services.postgresql.serviceConfig = {
-      ProtectSystem = "full";
+      ProtectSystem = lib.mkForce "strict";
       ProtectHome = true;
       PrivateTmp = true;
       NoNewPrivileges = true;
