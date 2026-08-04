@@ -118,6 +118,23 @@ in
         "sops-install-secrets.service"
         "postgresql.service"
       ];
+      serviceConfig = {
+        ProtectSystem = "strict";
+        ReadWritePaths = [ "/var/lib/vaultwarden" ];
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        NoNewPrivileges = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+      };
     };
   };
 }

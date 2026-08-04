@@ -163,5 +163,11 @@ in
         mode = "0400";
       };
     };
+    systemd.services.postgresql.serviceConfig = {
+      ProtectSystem = "full";
+      ProtectHome = true;
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+    };
   };
 }
