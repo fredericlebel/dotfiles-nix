@@ -108,6 +108,11 @@ in
       '';
     };
 
+    systemd.services.suricata = {
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+    };
+
     systemd.tmpfiles.rules = [
       "d /var/log/suricata.nix 0755 suricata suricata - -"
       "d /var/lib/suricata.nix 0750 suricata suricata - -"
