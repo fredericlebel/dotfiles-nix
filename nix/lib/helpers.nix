@@ -66,6 +66,7 @@ let
                 imports = [
                   inputs.sops-nix.homeManagerModules.sops
                   ../../modules/shared/registry.nix
+                  ../../modules/home
                   ../../hosts/${hostName}/home.nix
                 ];
               };
