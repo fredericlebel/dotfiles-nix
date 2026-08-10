@@ -27,26 +27,8 @@ jobs:
         with:
           use-flakehub: false
 
-      - name: Evaluate all NixOS hosts
-        run: |
-          for host in $(nix eval --json .#nixosConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
-            echo "Evaluating NixOS host: $host"
-            nix eval .#nixosConfigurations."$host".config.system.build.toplevel.drvPath
-          done
-
-      - name: Evaluate all Darwin hosts
-        run: |
-          for host in $(nix eval --json .#darwinConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
-            echo "Evaluating Darwin host: $host"
-            nix eval .#darwinConfigurations."$host".system.drvPath
-          done
-
-      - name: Dry-run Build all NixOS hosts
-        run: |
-          for host in $(nix eval --json .#nixosConfigurations --apply "builtins.attrNames" | jq -r '.[]'); do
-            echo "Dry-run building NixOS host: $host"
-            nix build .#nixosConfigurations."$host".config.system.build.toplevel --dry-run
-          done
+      - name: Evaluate all Flake hosts & checks
+        run: nix flake check --all-systems --show-trace
 
   check-devshell:
     needs: linting
