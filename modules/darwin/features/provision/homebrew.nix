@@ -23,6 +23,11 @@ in
       enableRosetta = true;
       inherit user;
       autoMigrate = true;
+      trust = {
+        taps = [
+          "jorgelbg/tap"
+        ];
+      };
     };
 
     homebrew = {
