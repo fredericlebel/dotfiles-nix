@@ -7,18 +7,7 @@ let
   cfg = config.my.bundles.desktop;
 in
 {
-  imports = [
-    ../features/cli/core-utils.nix
-    ../features/cli/desktop-utils.nix
-    ../features/cli/htop.nix
-    ../features/cli/screen.nix
-    ../features/cli/starship.nix
-    ../features/cli/yazi.nix
-    ../../shared/zsh.nix
-    ../features/dev
-    ../features/editors
-    ../features/terminals
-  ];
+  imports = [ ];
 
   options.my.bundles.desktop = {
     enable = lib.mkEnableOption "Bundle d'outils essentiels pour desktop";
