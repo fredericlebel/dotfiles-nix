@@ -73,7 +73,7 @@ in
       ]
       ++ lib.optional (config.my.features.editors.vscode.enable or false) "visual-studio-code"
       ++ lib.optional (config.my.features.editors.vscode.insiders.enable or false
-      ) "visual-studio-code-insiders";
+      ) "visual-studio-code@insiders";
     };
 
     my.registry.dockApps = [
