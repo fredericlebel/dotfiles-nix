@@ -1,18 +1,16 @@
 {
   config,
-  modulesPath,
   user,
   lib,
   ...
 }:
 {
   imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
     ./disko.nix
 
     ../../users/${user}/system.nix
 
-    ../../modules/nixos/bundles/base-server.nix
+    ../../modules/nixos/bundles/vps-base.nix
     ../../modules/nixos/features/infrastructure/caddy.nix
     ../../modules/nixos/features/infrastructure/home-assistant.nix
     ../../modules/nixos/features/infrastructure/observability
@@ -30,46 +28,10 @@
     };
   };
 
-  # Activation manuelle du bundle (importé via imports)
-  my.bundles.base-server.enable = true;
+  # Activation du bundle VPS de base
+  my.bundles.vps-base.enable = true;
 
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-  };
+  networking.hostName = "ix";
 
-  users.users.${user} = {
-    extraGroups = [
-      "wheel"
-      "docker"
-    ];
-    home = "/home/${user}";
-  };
-
-  networking = {
-    hostName = "ix";
-    domain = "opval.com";
-
-    firewall = {
-      enable = true;
-    };
-    nftables.enable = true;
-  };
-
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 2048;
-    }
-  ];
-
-  sops.secrets.tailscale-key = {
-    owner = "root";
-    mode = "0400";
-  };
-
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-
-  system.stateVersion = "26.05";
+  users.users.${user}.extraGroups = [ "docker" ];
 }
