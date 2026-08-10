@@ -7,17 +7,7 @@ let
   cfg = config.my.bundles.server;
 in
 {
-  imports = [
-    ../features/cli/core-utils.nix
-    ../features/cli/htop.nix
-    ../features/cli/screen.nix
-    ../features/cli/starship.nix
-    ../features/cli/yazi.nix
-    ../../shared/zsh.nix
-    ../features/dev
-    ../features/editors
-    ../features/terminals
-  ];
+  imports = [ ];
 
   options.my.bundles.server = {
     enable = lib.mkEnableOption "Bundle d'outils essentiels pour serveur (CLI)";
