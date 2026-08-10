@@ -59,6 +59,7 @@
           programs.nixfmt.package = nixpkgs.legacyPackages.${system}.nixfmt;
           programs.deadnix.enable = true;
           programs.statix.enable = true;
+          programs.prettier.enable = true;
         }
       );
 
