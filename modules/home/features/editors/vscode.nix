@@ -39,6 +39,7 @@ in
 
     programs.vscode = lib.mkIf cfg.enable {
       enable = true;
+      package = lib.mkIf pkgs.stdenv.isDarwin null;
 
       profiles = {
         default = {
