@@ -16,20 +16,28 @@ let
 in
 {
   options.my.features.editors.vscode = {
-    enable = lib.mkEnableOption "vscode avec intégration Zsh, Nix (LSP) et Direnv";
+    enable = lib.mkEnableOption "vscode (version stable) avec intégration Zsh, Nix (LSP) et Direnv";
+    insiders = {
+      enable = lib.mkEnableOption "vscode-insiders (version d'évaluation) avec intégration Zsh, Nix (LSP) et Direnv";
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable || cfg.insiders.enable) {
     home.packages = with pkgs; [
       nixd
       nixfmt
     ];
 
-    my.registry.dockApps = lib.mkIf pkgs.stdenv.isDarwin [
-      "/Users/${config.home.username}/Applications/Home Manager Apps/Visual Studio Code.app"
+    my.registry.dockApps = lib.mkMerge [
+      (lib.mkIf (cfg.enable && pkgs.stdenv.isDarwin) [
+        "/Applications/Visual Studio Code.app"
+      ])
+      (lib.mkIf (cfg.insiders.enable && pkgs.stdenv.isDarwin) [
+        "/Applications/Visual Studio Code - Insiders.app"
+      ])
     ];
 
-    programs.vscode = {
+    programs.vscode = lib.mkIf cfg.enable {
       enable = true;
 
       profiles = {
