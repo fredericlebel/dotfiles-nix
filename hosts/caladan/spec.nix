@@ -17,6 +17,10 @@
     logseq.enable = true;
     antigravity-cli.enable = true;
     terminals.ghostty.enable = true;
+    editors.vscode = {
+      enable = true;
+      insiders.enable = true;
+    };
   };
 
   bundles = {
