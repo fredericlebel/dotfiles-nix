@@ -2,11 +2,12 @@
   config,
   lib,
   pkgs,
+  user,
   ...
 }:
 {
   home = {
-    homeDirectory = lib.mkForce (if pkgs.stdenv.isDarwin then "/Users/flebel" else "/home/flebel");
+    homeDirectory = lib.mkForce (if pkgs.stdenv.isDarwin then "/Users/${user}" else "/home/${user}");
     packages = with pkgs; [
       restic
       bitwarden-cli
