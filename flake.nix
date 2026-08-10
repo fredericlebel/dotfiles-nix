@@ -43,8 +43,8 @@
       inherit (nixpkgs) lib;
       helpers = import ./nix/lib/helpers.nix { inherit inputs user; };
 
-      # Inventaire centralisé des hôtes (Single Source of Truth)
-      hosts = import ./nix/lib/inventory.nix;
+      # Inventaire centralisé du domaine des hôtes (Single Source of Truth / DDD)
+      hosts = import ./hosts;
 
       # Configuration treefmt pour tous les systèmes
       eachSystem = lib.genAttrs [
