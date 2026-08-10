@@ -23,15 +23,16 @@ infrastructure/
 
 Pour agir sur un niveau d'infrastructure spécifique (par défaut `01-core-network`) :
 
-| Commande | Description |
-|---|---|
-| `just tofu-init [layer]` | Initialiser un niveau (ex: `just tofu-init 01-core-network`) |
-| `just tofu-plan [layer]` | Prévisualiser les changements (dry-run) |
-| `just tofu-apply [layer]` | Appliquer les modifications sur le fournisseur |
-| `just tofu-fmt` | Formater l'ensemble du code HCL du projet |
-| `just tofu-validate [layer]` | Valider la syntaxe et la cohérence de la configuration |
+| Commande                     | Description                                                  |
+| ---------------------------- | ------------------------------------------------------------ |
+| `just tofu-init [layer]`     | Initialiser un niveau (ex: `just tofu-init 01-core-network`) |
+| `just tofu-plan [layer]`     | Prévisualiser les changements (dry-run)                      |
+| `just tofu-apply [layer]`    | Appliquer les modifications sur le fournisseur               |
+| `just tofu-fmt`              | Formater l'ensemble du code HCL du projet                    |
+| `just tofu-validate [layer]` | Valider la syntaxe et la cohérence de la configuration       |
 
 ### Authentification Tailscale
+
 Fournir les identifiants via des variables d'environnement avant d'exécuter `tofu-plan` ou `tofu-apply` :
 
 ```bash
@@ -49,6 +50,7 @@ export TAILSCALE_TAILNET="mon-tailnet.ts.net"
 L'état d'OpenTofu est hébergé de façon centralisée et sécurisée dans la base PostgreSQL de l'hôte `ecaz`, accessible via le réseau VPN Tailscale.
 
 Chaque niveau isole sa table d'état dans son propre **schéma PostgreSQL** (`schema_name`) :
+
 - `01-core-network` ➔ `schema_name = "layer_01_core_network"`
 - `02-compute` ➔ `schema_name = "layer_02_compute"`
 - `03-observability` ➔ `schema_name = "layer_03_observability"`
@@ -68,4 +70,3 @@ export PG_CONN_STR="postgres://opentofu:${POSTGRES_PASS}@ecaz.taila562f9.ts.net:
 # Initialiser le backend du niveau
 just tofu-init 01-core-network
 ```
-

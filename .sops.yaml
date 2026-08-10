@@ -13,10 +13,10 @@ creation_rules:
           - *host_ecaz
   - path_regex: secrets/caladan\.yaml$
     key_groups:
-      - age: [ *flebel, *host_caladan ]
+      - age: [*flebel, *host_caladan]
   - path_regex: secrets/ecaz\.yaml$
     key_groups:
-      - age: [ *flebel, *host_ecaz ]
+      - age: [*flebel, *host_ecaz]
   - path_regex: secrets/ix\.yaml$
     key_groups:
-      - age: [ *flebel, *host_ix ]
+      - age: [*flebel, *host_ix]
