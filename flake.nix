@@ -43,12 +43,8 @@
       inherit (nixpkgs) lib;
       helpers = import ./nix/lib/helpers.nix { inherit inputs user; };
 
-      # On lit dynamiquement les hôtes depuis les fichiers spec.nix
-      hosts = {
-        ix = import ./hosts/ix/spec.nix;
-        ecaz = import ./hosts/ecaz/spec.nix;
-        caladan = import ./hosts/caladan/spec.nix;
-      };
+      # Inventaire centralisé des hôtes (Single Source of Truth)
+      hosts = import ./nix/lib/inventory.nix;
 
       # Configuration treefmt pour tous les systèmes
       eachSystem = lib.genAttrs [
