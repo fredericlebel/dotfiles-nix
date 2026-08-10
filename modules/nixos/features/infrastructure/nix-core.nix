@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  user,
   ...
 }:
 let
@@ -17,6 +18,11 @@ in
         experimental-features = [
           "nix-command"
           "flakes"
+        ];
+        trusted-users = [
+          "root"
+          "@wheel"
+          user
         ];
         # Conserver les derivations pour permettre le debug si besoin,
         # mais supprimer les outputs inutilises
