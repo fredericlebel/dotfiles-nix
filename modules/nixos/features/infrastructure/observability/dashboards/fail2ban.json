@@ -1,122 +1,202 @@
 {
-  "annotations": { "list": [ { "builtIn": 1, "datasource": { "type": "grafana", "uid": "-- Grafana --" }, "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] },
-  "editable": true,
-  "panels": [
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Nombre d'adresses IP actuellement rejetées par le pare-feu (nftables).",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] } } },
-      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
-      "id": 1,
-      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KPI: Active Bans",
-      "type": "stat",
-      "targets": [ { "expr": "sum(fail2ban_banned_current{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Nombre de nouveaux bannissements sur la dernière heure. Un pic indique une accélération de l'offensive.",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "orange", "value": 5 }, { "color": "red", "value": 15 } ] } } },
-      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
-      "id": 5,
-      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KRI: Velocity (1h)",
-      "type": "stat",
-      "targets": [ { "expr": "sum(fail2ban_attack_velocity_1h{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Ratio IP Uniques / Total Bans. 100% = Botnet dispersé (bruit de fond). < 20% = Attaque ciblée depuis quelques sources identifiées.",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "blue", "value": null }, { "color": "red", "value": 0.8 } ] }, "unit": "percentunit" } },
-      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
-      "id": 6,
-      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KRI: Botnet Density",
-      "type": "stat",
-      "targets": [ { "expr": "avg(fail2ban_botnet_density_ratio{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Nombre d'attaquants uniques revenus après un premier bannissement. Justifie la sévérité accrue des règles.",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 10 } ] } } },
-      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
-      "id": 4,
-      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KRI: Repeat Offenders",
-      "type": "stat",
-      "targets": [ { "expr": "sum(fail2ban_repeat_offenders_total{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "IP bannies plus de 3 fois dans l'histoire. Représente le noyau dur des attaquants à bloquer définitivement.",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "purple", "value": null } ] } } },
-      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
-      "id": 7,
-      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KRI: Persistent Threats",
-      "type": "stat",
-      "targets": [ { "expr": "sum(fail2ban_persistence_score_total{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Cumul total des bannissements depuis la mise en service du serveur.",
-      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [ { "color": "grey", "value": null } ] } } },
-      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
-      "id": 3,
-      "options": { "colorMode": "value", "reduceOptions": { "calcs": [ "lastNotNull" ] } },
-      "title": "KPI: Total History",
-      "type": "stat",
-      "targets": [ { "expr": "sum(fail2ban_banned_history_total{instance=~\"$instance\"})", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Quantité réelle de tentatives échouées par fenêtre de 5 minutes. Chiffres entiers uniquement.",
-      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "decimals": 0 } },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
-      "id": 8,
-      "options": { "legend": { "displayMode": "list", "placement": "right" } },
-      "title": "KPI: Attack Volume (Actual Event Count)",
-      "type": "timeseries",
-      "targets": [ { "expr": "sum by (instance) (increase(fail2ban_failed_total{instance=~\"$instance\"}[5m]))", "legendFormat": "{{instance}}", "refId": "A" } ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "description": "Nombre de tentatives échouées par minute (moyenne lissée). Permet de visualiser les vagues d'attaques.",
-      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
-      "id": 2,
-      "options": { "legend": { "displayMode": "list", "placement": "right" } },
-      "title": "KRI: Attack Pressure (Averaged Rate/min)",
-      "type": "timeseries",
-      "targets": [ { "expr": "sum by (instance) (rate(fail2ban_failed_total{instance=~\"$instance\"}[5m]) * 60)", "legendFormat": "{{instance}}", "refId": "A" } ]
-    }
-  ],
-  "schemaVersion": 38,
-  "tags": [ "security", "fail2ban" ],
-  "templating": {
-    "list": [
-      {
-        "current": {},
-        "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "definition": "label_values(fail2ban_failed_total, instance)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Host",
-        "multi": true,
-        "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(fail2ban_failed_total, instance)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      }
-    ]
-  },
-  "title": "Security: Fail2ban Elite KPI/KRI",
-  "uid": "f2b-security"
+	"annotations": {
+		"list": [
+			{
+				"builtIn": 1,
+				"datasource": { "type": "grafana", "uid": "-- Grafana --" },
+				"enable": true,
+				"hide": true,
+				"iconColor": "rgba(0, 211, 255, 1)",
+				"name": "Annotations & Alerts",
+				"type": "dashboard"
+			}
+		]
+	},
+	"editable": true,
+	"panels": [
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Nombre d'adresses IP actuellement rejetées par le pare-feu (nftables).",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "red", "value": 1 }
+						]
+					}
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 0, "y": 0 },
+			"id": 1,
+			"options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KPI: Active Bans",
+			"type": "stat",
+			"targets": [{ "expr": "sum(fail2ban_banned_current{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Nombre de nouveaux bannissements sur la dernière heure. Un pic indique une accélération de l'offensive.",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "orange", "value": 5 },
+							{ "color": "red", "value": 15 }
+						]
+					}
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 4, "y": 0 },
+			"id": 5,
+			"options": { "colorMode": "value", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KRI: Velocity (1h)",
+			"type": "stat",
+			"targets": [{ "expr": "sum(fail2ban_attack_velocity_1h{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Ratio IP Uniques / Total Bans. 100% = Botnet dispersé (bruit de fond). < 20% = Attaque ciblée depuis quelques sources identifiées.",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "blue", "value": null },
+							{ "color": "red", "value": 0.8 }
+						]
+					},
+					"unit": "percentunit"
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 8, "y": 0 },
+			"id": 6,
+			"options": { "colorMode": "value", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KRI: Botnet Density",
+			"type": "stat",
+			"targets": [{ "expr": "avg(fail2ban_botnet_density_ratio{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Nombre d'attaquants uniques revenus après un premier bannissement. Justifie la sévérité accrue des règles.",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": {
+						"mode": "absolute",
+						"steps": [
+							{ "color": "green", "value": null },
+							{ "color": "red", "value": 10 }
+						]
+					}
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 12, "y": 0 },
+			"id": 4,
+			"options": { "colorMode": "value", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KRI: Repeat Offenders",
+			"type": "stat",
+			"targets": [{ "expr": "sum(fail2ban_repeat_offenders_total{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "IP bannies plus de 3 fois dans l'histoire. Représente le noyau dur des attaquants à bloquer définitivement.",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] }
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 16, "y": 0 },
+			"id": 7,
+			"options": { "colorMode": "value", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KRI: Persistent Threats",
+			"type": "stat",
+			"targets": [{ "expr": "sum(fail2ban_persistence_score_total{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Cumul total des bannissements depuis la mise en service du serveur.",
+			"fieldConfig": {
+				"defaults": {
+					"color": { "mode": "thresholds" },
+					"thresholds": { "mode": "absolute", "steps": [{ "color": "grey", "value": null }] }
+				}
+			},
+			"gridPos": { "h": 4, "w": 4, "x": 20, "y": 0 },
+			"id": 3,
+			"options": { "colorMode": "value", "reduceOptions": { "calcs": ["lastNotNull"] } },
+			"title": "KPI: Total History",
+			"type": "stat",
+			"targets": [{ "expr": "sum(fail2ban_banned_history_total{instance=~\"$instance\"})", "refId": "A" }]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Quantité réelle de tentatives échouées par fenêtre de 5 minutes. Chiffres entiers uniquement.",
+			"fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "decimals": 0 } },
+			"gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+			"id": 8,
+			"options": { "legend": { "displayMode": "list", "placement": "right" } },
+			"title": "KPI: Attack Volume (Actual Event Count)",
+			"type": "timeseries",
+			"targets": [
+				{
+					"expr": "sum by (instance) (increase(fail2ban_failed_total{instance=~\"$instance\"}[5m]))",
+					"legendFormat": "{{instance}}",
+					"refId": "A"
+				}
+			]
+		},
+		{
+			"datasource": { "type": "prometheus", "uid": "prometheus" },
+			"description": "Nombre de tentatives échouées par minute (moyenne lissée). Permet de visualiser les vagues d'attaques.",
+			"fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } },
+			"gridPos": { "h": 8, "w": 24, "x": 0, "y": 12 },
+			"id": 2,
+			"options": { "legend": { "displayMode": "list", "placement": "right" } },
+			"title": "KRI: Attack Pressure (Averaged Rate/min)",
+			"type": "timeseries",
+			"targets": [
+				{
+					"expr": "sum by (instance) (rate(fail2ban_failed_total{instance=~\"$instance\"}[5m]) * 60)",
+					"legendFormat": "{{instance}}",
+					"refId": "A"
+				}
+			]
+		}
+	],
+	"schemaVersion": 38,
+	"tags": ["security", "fail2ban"],
+	"templating": {
+		"list": [
+			{
+				"current": {},
+				"datasource": { "type": "prometheus", "uid": "prometheus" },
+				"definition": "label_values(fail2ban_failed_total, instance)",
+				"hide": 0,
+				"includeAll": true,
+				"label": "Host",
+				"multi": true,
+				"name": "instance",
+				"options": [],
+				"query": {
+					"query": "label_values(fail2ban_failed_total, instance)",
+					"refId": "StandardVariableQuery"
+				},
+				"refresh": 1,
+				"regex": "",
+				"skipUrlSync": false,
+				"sort": 1,
+				"type": "query"
+			}
+		]
+	},
+	"title": "Security: Fail2ban Elite KPI/KRI",
+	"uid": "f2b-security"
 }
