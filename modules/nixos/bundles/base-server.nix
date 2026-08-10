@@ -74,6 +74,13 @@ in
     };
     security.sudo.wheelNeedsPassword = false;
 
+    documentation = {
+      enable = true;
+      nixos.enable = false;
+      doc.enable = false;
+      info.enable = false;
+    };
+
     time.timeZone = "America/Montreal";
   };
 }
