@@ -70,8 +70,8 @@ Toutes les modifications de code doivent respecter ces principes :
 ### B. Pattern "Factory" et Inversion de Contrôle
 - La génération des systèmes est centralisée dans une usine abstraite.
 - `nix/lib/helpers.nix` expose `mkSystem`, qui gère l'injection de `home-manager`, `sops-nix`, et des `specialArgs`.
-- L'inventaire global `nix/lib/inventory.nix` est l'unique source de vérité pour la liste des hôtes.
-* **Règle** : Pour ajouter un hôte, modifie `inventory.nix` et crée son répertoire dans `hosts/`. Ne modifie pas la logique de génération dans `flake.nix` sans discussion préalable.
+- L'inventaire global `hosts/default.nix` est l'unique source de vérité pour la liste des hôtes (Domain-Driven Design).
+* **Règle** : Pour ajouter un hôte, modifie `hosts/default.nix` et crée son répertoire dans `hosts/`. Ne modifie pas la logique de génération dans `flake.nix` sans discussion préalable.
 
 ### C. Encapsulation via le Namespace `my`
 * **Règle** : Toute nouvelle option (via `lib.mkOption`) ou regroupement logique doit impérativement être préfixé par le namespace `my.` (ex : `my.bundles.laptop`, `my.features.dev.git`).
