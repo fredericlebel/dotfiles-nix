@@ -11,10 +11,6 @@
     ../../users/${user}/system.nix
 
     ../../modules/nixos/bundles/vps-base.nix
-    ../../modules/nixos/features/infrastructure/security/openssh.nix
-    ../../modules/nixos/features/infrastructure/tailscale.nix
-    ../../modules/nixos/features/infrastructure/postgresql.nix
-    ../../modules/nixos/features/infrastructure/observability
   ];
 
   # On fusionne la Spec unifiée avec la config technique locale
