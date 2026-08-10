@@ -12,6 +12,11 @@ in
     enable = lib.mkEnableOption "Homebrew & Casks Support";
   };
 
+  options.my.features.editors.vscode = {
+    enable = lib.mkEnableOption "VS Code (stable) via Homebrew Cask";
+    insiders.enable = lib.mkEnableOption "VS Code Insiders via Homebrew Cask";
+  };
+
   config = lib.mkIf cfg.enable {
     nix-homebrew = {
       enable = true;

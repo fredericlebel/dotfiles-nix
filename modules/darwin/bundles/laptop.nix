@@ -30,6 +30,10 @@ in
       homebrew.enable = lib.mkDefault true;
       podman.enable = lib.mkDefault true;
       antigravity-cli.enable = lib.mkDefault true;
+      editors.vscode = {
+        enable = lib.mkDefault true;
+        insiders.enable = lib.mkDefault true;
+      };
     };
   };
 }
