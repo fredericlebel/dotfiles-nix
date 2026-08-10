@@ -115,9 +115,29 @@
       # Formattage unifié via treefmt
       formatter = eachSystem (system: treefmtEval.${system}.config.build.wrapper);
 
-      # Checks
-      checks = eachSystem (system: {
-        formatting = treefmtEval.${system}.config.build.check self;
-      });
+      # Checks (Auto-évaluation des hôtes et du formattage)
+      checks = eachSystem (
+        system:
+        let
+          nixosForSystem = lib.filterAttrs (
+            _: cfg: cfg.pkgs.stdenv.hostPlatform.system == system
+          ) self.nixosConfigurations;
+          darwinForSystem = lib.filterAttrs (
+            _: cfg: cfg.pkgs.stdenv.hostPlatform.system == system
+          ) self.darwinConfigurations;
+
+          nixosChecks = lib.mapAttrs' (
+            name: cfg: lib.nameValuePair "nixos-${name}" cfg.config.system.build.toplevel
+          ) nixosForSystem;
+          darwinChecks = lib.mapAttrs' (
+            name: cfg: lib.nameValuePair "darwin-${name}" cfg.system
+          ) darwinForSystem;
+        in
+        {
+          formatting = treefmtEval.${system}.config.build.check self;
+        }
+        // nixosChecks
+        // darwinChecks
+      );
     };
 }
