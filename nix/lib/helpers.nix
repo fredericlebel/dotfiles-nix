@@ -27,11 +27,13 @@ let
           [
             inputs.nix-homebrew.darwinModules.nix-homebrew
             inputs.sops-nix.darwinModules.sops
+            ../../modules/darwin
           ]
         else
           [
             inputs.disko.nixosModules.disko
             inputs.sops-nix.nixosModules.sops
+            ../../modules/nixos
           ];
 
       hmModule =
