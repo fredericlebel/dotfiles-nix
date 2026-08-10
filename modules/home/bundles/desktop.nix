@@ -31,7 +31,10 @@ in
       };
       editors = {
         neovim.enable = true;
-        vscode.enable = true;
+        vscode = {
+          enable = true;
+          insiders.enable = true;
+        };
       };
       terminals = {
         ghostty.enable = true;
