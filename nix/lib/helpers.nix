@@ -67,6 +67,7 @@ let
                   inputs.sops-nix.homeManagerModules.sops
                   ../../modules/shared/registry.nix
                   ../../modules/home
+                  ../../users/${user}/home.nix
                   ../../hosts/${hostName}/home.nix
                 ];
               };
