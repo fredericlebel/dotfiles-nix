@@ -121,14 +121,14 @@ deploy-reboot +TARGETS:
 [group('day-2')]
 [group('secrets')]
 edit-secret host:
-    sops secrets/{{host}}.yaml
+    sops os/secrets/{{host}}.yaml
 
 # [Day 2] Rotation des clés (re-chiffrage complet)
 [group('day-2')]
 [group('secrets')]
 rotate-secrets:
     @echo "{{green}}🔄 Day 2 (Secrets): Rotation SOPS...{{reset}}"
-    find secrets/ -name "*.yaml" -exec sops updatekeys -y {} \;
+    find os/secrets/ -name "*.yaml" -exec sops updatekeys -y {} \;
 
 # DAY 2 : OPS & MAINTENANCE
 
@@ -159,11 +159,11 @@ update-input input:
 # Recette privée : Centralisation et injection Just-In-Time des secrets SOPS pour OpenTofu
 [private]
 with-secrets *cmd:
-    @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' secrets/ecaz.yaml)@{{db_host}}:5432/opentofu?sslmode=require" && \
-     export TAILSCALE_OAUTH_CLIENT_ID="$(sops -d --extract '["tailscale-oauth-client-id"]' secrets/tailscale.yaml)" && \
-     export TAILSCALE_OAUTH_CLIENT_SECRET="$(sops -d --extract '["tailscale-oauth-client-secret"]' secrets/tailscale.yaml)" && \
-     export TF_VAR_discord_webhook_url="$(sops -d --extract '["tailscale-discord-webhook-url"]' secrets/tailscale.yaml)" && \
-     export TF_VAR_tailscale_contact_email="$(sops -d --extract '["tailscale-contact-email"]' secrets/tailscale.yaml)" && \
+    @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' os/secrets/ecaz.yaml)@{{db_host}}:5432/opentofu?sslmode=require" && \
+     export TAILSCALE_OAUTH_CLIENT_ID="$(sops -d --extract '["tailscale-oauth-client-id"]' os/secrets/tailscale.yaml)" && \
+     export TAILSCALE_OAUTH_CLIENT_SECRET="$(sops -d --extract '["tailscale-oauth-client-secret"]' os/secrets/tailscale.yaml)" && \
+     export TF_VAR_discord_webhook_url="$(sops -d --extract '["tailscale-discord-webhook-url"]' os/secrets/tailscale.yaml)" && \
+     export TF_VAR_tailscale_contact_email="$(sops -d --extract '["tailscale-contact-email"]' os/secrets/tailscale.yaml)" && \
      {{cmd}}
 
 # [Day 2] OpenTofu: Initialiser un niveau d'infrastructure
@@ -215,7 +215,7 @@ tofu-validate layer='01-core-network':
 [group('restic')]
 restic-hosts auth_host='ecaz':
     @echo "{{green}}🔍 Restic: Hôtes enregistrés dans le bucket S3 (Niveau 1)...{{reset}}"
-    @export $(sops -d --extract '["restic-postgres-env"]' secrets/{{auth_host}}.yaml | xargs) && \
+    @export $(sops -d --extract '["restic-postgres-env"]' os/secrets/{{auth_host}}.yaml | xargs) && \
      nix run nixpkgs#rclone -- lsf --s3-provider Other --s3-access-key-id "$AWS_ACCESS_KEY_ID" --s3-secret-access-key "$AWS_SECRET_ACCESS_KEY" --s3-endpoint "s3.us-west-000.backblazeb2.com" :s3:backups-opval-com/
 
 # [Day 2] Restic: Lister tous les services/dépôts de sauvegardes d'un hôte (Niveau 2)
@@ -223,7 +223,7 @@ restic-hosts auth_host='ecaz':
 [group('restic')]
 restic-services host='ecaz' auth_host='ecaz':
     @echo "{{green}}🔍 Restic: Services sauvegardés pour {{host}} (Niveau 2)...{{reset}}"
-    @export $(sops -d --extract '["restic-postgres-env"]' secrets/{{auth_host}}.yaml | xargs) && \
+    @export $(sops -d --extract '["restic-postgres-env"]' os/secrets/{{auth_host}}.yaml | xargs) && \
      nix run nixpkgs#rclone -- lsf --s3-provider Other --s3-access-key-id "$AWS_ACCESS_KEY_ID" --s3-secret-access-key "$AWS_SECRET_ACCESS_KEY" --s3-endpoint "s3.us-west-000.backblazeb2.com" :s3:backups-opval-com/{{host}}/
 
 # [Day 2] Restic: Lister les snapshots d'un hôte et service (ex: just restic-snapshots ecaz)
@@ -231,8 +231,8 @@ restic-services host='ecaz' auth_host='ecaz':
 [group('restic')]
 restic-snapshots host service='postgres':
     @echo "{{green}}📦 Restic: Snapshots pour {{host}} (service: {{service}})...{{reset}}"
-    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' secrets/{{host}}.yaml | xargs) && \
-     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' secrets/{{host}}.yaml) && \
+    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' os/secrets/{{host}}.yaml | xargs) && \
+     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' os/secrets/{{host}}.yaml) && \
      export RESTIC_REPOSITORY="s3:s3.us-west-000.backblazeb2.com/backups-opval-com/{{host}}/{{ if service == "postgres" { "postgresql" } else { service } }}" && \
      restic snapshots
 
@@ -241,8 +241,8 @@ restic-snapshots host service='postgres':
 [group('restic')]
 restic-check host service='postgres':
     @echo "{{green}}🔍 Restic: Vérification d'intégrité pour {{host}} (service: {{service}})...{{reset}}"
-    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' secrets/{{host}}.yaml | xargs) && \
-     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' secrets/{{host}}.yaml) && \
+    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' os/secrets/{{host}}.yaml | xargs) && \
+     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' os/secrets/{{host}}.yaml) && \
      export RESTIC_REPOSITORY="s3:s3.us-west-000.backblazeb2.com/backups-opval-com/{{host}}/{{ if service == "postgres" { "postgresql" } else { service } }}" && \
      restic check
 
@@ -251,8 +251,8 @@ restic-check host service='postgres':
 [group('restic')]
 restic-ls host service='postgres' snapshot='latest':
     @echo "{{green}}📂 Restic: Contenu du snapshot {{snapshot}} pour {{host}} ({{service}})...{{reset}}"
-    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' secrets/{{host}}.yaml | xargs) && \
-     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' secrets/{{host}}.yaml) && \
+    @export $(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-env"]' os/secrets/{{host}}.yaml | xargs) && \
+     export RESTIC_PASSWORD=$(sops -d --extract '["restic-{{ if service == "postgresql" { "postgres" } else { service } }}-password"]' os/secrets/{{host}}.yaml) && \
      export RESTIC_REPOSITORY="s3:s3.us-west-000.backblazeb2.com/backups-opval-com/{{host}}/{{ if service == "postgres" { "postgresql" } else { service } }}" && \
      restic ls {{snapshot}}
 

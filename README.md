@@ -11,11 +11,14 @@ Ce dépôt contient l'infrastructure déclarative de mes machines, gérée enti�
 ```text
 .
 ├── flake.nix             # Point d'entrée principal (définition des inputs et outputs)
-├── hosts/
-│   ├── ix/               # Configuration spécifique à NixOS (hardware, services)
-│   └── caladan/          # Configuration spécifique à macOS (Homebrew, system defaults)
-├── modules/              # Modules Nix réutilisables à travers les machines
-├── nix/dev/              # DevShells (environnements de développement locaux)
+├── os/                   # La couche Système & Configuration (Nix)
+│   ├── hosts/            # Configuration spécifique aux machines
+│   │   ├── ix/           # Serveur NixOS (hardware, services)
+│   │   └── caladan/      # Hôte macOS (Homebrew, system defaults)
+│   ├── modules/          # Modules Nix réutilisables à travers les machines
+│   ├── nix/              # Librairie et DevShells
+│   └── users/            # Configurations des utilisateurs
+├── infrastructure/       # La couche Infrastructure (OpenTofu)
 └── .github/workflows/    # Pipeline CI/CD (validation, formatage, dry-run)
 ```
 
