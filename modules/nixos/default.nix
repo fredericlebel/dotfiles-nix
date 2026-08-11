@@ -1,14 +1,29 @@
+{ lib, ... }:
+let
+  findModules =
+    dir:
+    let
+      entries = builtins.readDir dir;
+      hasDefault = entries ? "default.nix" && entries."default.nix" == "regular";
+    in
+    if hasDefault && dir != ./features then
+      [ (dir + "/default.nix") ]
+    else
+      lib.concatLists (
+        lib.mapAttrsToList (
+          name: type:
+          let
+            path = dir + "/${name}";
+          in
+          if type == "directory" then
+            findModules path
+          else if type == "regular" && lib.hasSuffix ".nix" name && name != "default.nix" then
+            [ path ]
+          else
+            [ ]
+        ) entries
+      );
+in
 {
-  imports = [
-    ./features/infrastructure/caddy.nix
-    ./features/infrastructure/home-assistant.nix
-    ./features/infrastructure/nix-core.nix
-    ./features/infrastructure/postgresql.nix
-    ./features/infrastructure/tailscale.nix
-    ./features/infrastructure/vaultwarden.nix
-    ./features/infrastructure/observability
-    ./features/infrastructure/security
-    ./features/infrastructure/virtualization/kvm.nix
-    ./features/provision/admin-cli.nix
-  ];
+  imports = findModules ./features;
 }
