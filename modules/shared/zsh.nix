@@ -57,10 +57,13 @@ in
           };
 
           initContent = lib.mkBefore ''
-            # Autocomplétion dynamique pour `just`
-            if command -v just >/dev/null 2>&1; then
-              source <(just --completions zsh 2>/dev/null)
-            fi
+            # Autocomplétion ultra-robuste et propre pour `just`
+            _just() {
+              local -a recipes
+              recipes=(''${(s: :)''$(just --summary 2>/dev/null)})
+              _describe -t recipes 'just recipes' recipes
+            }
+            compdef _just just
 
             ssh-production() {
               # Change terminal background to dark red
