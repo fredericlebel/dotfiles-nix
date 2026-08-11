@@ -9,7 +9,7 @@ Ce skill détaille les étapes nécessaires pour ajouter une nouvelle machine à
 
 ### Étape 1 : Créer le dossier de l'hôte
 
-Créez un dossier sous `hosts/<nom-de-la-machine>/`.
+Créez un dossier sous `os/hosts/<nom-de-la-machine>/`.
 
 ### Étape 2 : Créer les fichiers de configuration de base
 
@@ -26,7 +26,7 @@ Modifiez le fichier `flake.nix` à la racine pour ajouter l'hôte dans la variab
 ```nix
 hosts = {
   # ... autres hôtes ...
-  <nom-de-la-machine> = import ./hosts/<nom-de-la-machine>/spec.nix;
+  <nom-de-la-machine> = import ./os/hosts/<nom-de-la-machine>/spec.nix;
 };
 ```
 

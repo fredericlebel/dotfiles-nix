@@ -7,7 +7,7 @@ Ce skill détaille les procédures pour manipuler et déclarer des secrets de ma
 
 ## Architecture SOPS dans le Dépôt
 
-Les secrets sont chiffrés avec SOPS et stockés dans le répertoire [secrets/](file:///Users/flebel/repositories/nix-config/secrets) sous forme de fichiers `<host>.yaml` ou de fichiers communs (ex: `vaultwarden.yaml`).
+Les secrets sont chiffrés avec SOPS et stockés dans le répertoire [os/secrets/](file:///Users/flebel/repositories/nix-config/os/secrets) sous forme de fichiers `<host>.yaml` ou de fichiers communs (ex: `vaultwarden.yaml`).
 Les clés publiques de chiffrement d'âge (Age) et les règles d'attribution des clés sont définies dans le fichier de configuration [.sops.yaml](file:///Users/flebel/repositories/nix-config/.sops.yaml).
 
 ## Procédures courantes
@@ -17,7 +17,7 @@ Les clés publiques de chiffrement d'âge (Age) et les règles d'attribution des
 Pour modifier les secrets d'un hôte spécifique :
 
 ```bash
-sops secrets/<host>.yaml
+sops os/secrets/<host>.yaml
 ```
 
 _(Alternative via just si applicable : `just edit-secret <host>`)_
