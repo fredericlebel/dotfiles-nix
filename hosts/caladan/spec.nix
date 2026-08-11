@@ -1,4 +1,5 @@
-import ../template.nix // {
+(import ../template.nix)
+// {
 
   system = "aarch64-darwin";
   isDarwin = true;

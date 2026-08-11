@@ -4,10 +4,7 @@
 command = "nixfmt"
 includes = ["*.nix"]
 
-[formatter.markdown]
-command = "prettier"
-options = ["--prose-wrap", "always"]
-includes = ["*.md"]
+
 
 [formatter.deadnix]
 command = "deadnix"
@@ -18,3 +15,4 @@ includes = ["*.nix"]
 command = "statix"
 options = ["fix"]
 includes = ["*.nix"]
+exclude = ["**/.agents/**"]

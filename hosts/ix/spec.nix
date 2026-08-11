@@ -1,7 +1,4 @@
-
-{
-
-import ../template.nix
+(import ../template.nix)
 // {
 
   system = "x86_64-linux";
