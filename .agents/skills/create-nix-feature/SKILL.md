@@ -3,7 +3,7 @@ name: create-nix-feature
 description: Aide à concevoir, structurer et générer une nouvelle fonctionnalité (feature) Nix ou Home-manager en respectant les standards du dépôt.
 ---
 
-Ce skill fournit des instructions et des modèles pour ajouter un nouveau module sous forme de `feature` dans `modules/**/features/`.
+Ce skill fournit des instructions et des modèles pour ajouter un nouveau module sous forme de `feature` dans `os/modules/**/features/`.
 
 ## Architecture de Feature
 
