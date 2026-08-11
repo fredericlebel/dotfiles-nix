@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 {
+=======
+import ../template.nix
+// {
+>>>>>>> Stashed changes
   system = "x86_64-linux";
   isDarwin = false;
 
