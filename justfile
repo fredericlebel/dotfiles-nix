@@ -1,10 +1,12 @@
 set shell := ["bash", "-uc"]
 
 # Variables
-flake_path := "."
-user       := "flebel"
-green      := `tput setaf 2`
-reset      := `tput sgr0`
+flake_path     := "."
+user           := "flebel"
+tailnet_domain := "taila562f9.ts.net"
+db_host        := "ecaz." + tailnet_domain
+green          := `tput setaf 2`
+reset          := `tput sgr0`
 
 [private]
 default:
@@ -157,7 +159,7 @@ update-input input:
 # Recette privée : Centralisation et injection Just-In-Time des secrets SOPS pour OpenTofu
 [private]
 with-secrets *cmd:
-    @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' secrets/ecaz.yaml)@ecaz.taila562f9.ts.net:5432/opentofu?sslmode=require" && \
+    @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' secrets/ecaz.yaml)@{{db_host}}:5432/opentofu?sslmode=require" && \
      export TAILSCALE_OAUTH_CLIENT_ID="$(sops -d --extract '["tailscale-oauth-client-id"]' secrets/tailscale.yaml)" && \
      export TAILSCALE_OAUTH_CLIENT_SECRET="$(sops -d --extract '["tailscale-oauth-client-secret"]' secrets/tailscale.yaml)" && \
      export TF_VAR_discord_webhook_url="$(sops -d --extract '["tailscale-discord-webhook-url"]' secrets/tailscale.yaml)" && \
