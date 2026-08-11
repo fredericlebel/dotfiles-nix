@@ -41,10 +41,10 @@
     let
       user = "flebel";
       inherit (nixpkgs) lib;
-      helpers = import ./nix/lib/helpers.nix { inherit inputs user; };
+      helpers = import ./os/nix/lib/helpers.nix { inherit inputs user; };
 
       # Inventaire centralisé du domaine des hôtes (Single Source of Truth / DDD)
-      hosts = import ./hosts;
+      hosts = import ./os/hosts;
 
       # Configuration treefmt pour tous les systèmes
       eachSystem = lib.genAttrs [

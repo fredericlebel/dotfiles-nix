@@ -26,8 +26,8 @@ Avant toute action modifiant le code du dépôt, respecte rigoureusement ce flux
 
 - Effectue des commits atomiques (une seule modification logique par commit).
 - Utilise des messages clairs au présent en respectant le format `type(scope): message` :
-    - `feat(modules/nom): message` (ex: `feat(modules/zsh): activation de l'autocomplétion`)
-    - `fix(hosts/nom): message` (ex: `fix(hosts/darwin): correction du chemin home-manager`)
+    - `feat(os/modules/nom): message` (ex: `feat(os/modules/zsh): activation de l'autocomplétion`)
+    - `fix(os/hosts/nom): message` (ex: `fix(os/hosts/darwin): correction du chemin home-manager`)
     - `chore(deps): message` (ex: `chore(flake): mise à jour du input nixpkgs`)
     - `docs: message` (ex: `docs(agents): ajout des règles git workflow`)
 
@@ -69,18 +69,18 @@ Toutes les modifications de code doivent respecter ces principes :
 
 ### A. Séparation des Préoccupations (Quoi vs Comment)
 
-- **Les Hôtes (`hosts/`) définissent le "Quoi"** : Ils ne doivent contenir que la configuration spécifique au matériel et l'activation déclarative de fonctionnalités (ex : `my.features.logseq.enable = true;`). Pas de logique complexe.
-- **Les Modules (`modules/`) définissent le "Comment"** : C'est ici que réside la logique complexe, l'installation de paquets et la configuration fine des services.
+- **Les Hôtes (`os/hosts/`) définissent le "Quoi"** : Ils ne doivent contenir que la configuration spécifique au matériel et l'activation déclarative de fonctionnalités (ex : `my.features.logseq.enable = true;`). Pas de logique complexe.
+- **Les Modules (`os/modules/`) définissent le "Comment"** : C'est ici que réside la logique complexe, l'installation de paquets et la configuration fine des services.
 
-* **Règle** : Ne place jamais de logique de configuration complexe directement dans `hosts/`. Crée un module dans `modules/` et expose une option pour l'activer.
+* **Règle** : Ne place jamais de logique de configuration complexe directement dans `os/hosts/`. Crée un module dans `os/modules/` et expose une option pour l'activer.
 
 ### B. Pattern "Factory" et Inversion de Contrôle
 
 - La génération des systèmes est centralisée dans une usine abstraite.
 - `nix/lib/helpers.nix` expose `mkSystem`, qui gère l'injection de `home-manager`, `sops-nix`, et des `specialArgs`.
-- L'inventaire global `hosts/default.nix` est l'unique source de vérité pour la liste des hôtes (Domain-Driven Design).
+- L'inventaire global `os/hosts/default.nix` est l'unique source de vérité pour la liste des hôtes (Domain-Driven Design).
 
-* **Règle** : Pour ajouter un hôte, modifie `hosts/default.nix` et crée son répertoire dans `hosts/`. Ne modifie pas la logique de génération dans `flake.nix` sans discussion préalable.
+* **Règle** : Pour ajouter un hôte, modifie `os/hosts/default.nix` et crée son répertoire dans `os/hosts/`. Ne modifie pas la logique de génération dans `flake.nix` sans discussion préalable.
 
 ### C. Encapsulation via le Namespace `my`
 
