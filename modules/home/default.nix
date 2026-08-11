@@ -27,5 +27,6 @@ in
 {
   imports = [
     ../shared/zsh.nix
-  ] ++ (findModules ./features);
+  ]
+  ++ (findModules ./features);
 }

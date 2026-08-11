@@ -23,6 +23,11 @@
       default = "opval.com";
       description = "Domaine de base des services";
     };
+    defaultStateVersion = lib.mkOption {
+      type = lib.types.str;
+      default = "26.05";
+      description = "Version d'état NixOS/Home-Manager par défaut";
+    };
     # Métadonnées d'hôte
     system = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
