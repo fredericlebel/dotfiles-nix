@@ -22,6 +22,13 @@ in
     services = {
       aerospace = {
         enable = true;
+        package = pkgs.aerospace.overrideAttrs (oldAttrs: rec {
+          version = "0.21.3-Beta";
+          src = pkgs.fetchzip {
+            url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${version}/AeroSpace-v${version}.zip";
+            hash = "sha256-JHXtF3IKUbge7z2cMBi4L9IruiByNPCIKugLe4ymvys=";
+          };
+        });
 
         settings = {
           config-version = 2;
