@@ -3,6 +3,19 @@ let
   defaultMeta = import ./default-meta.nix;
 
   # Prépare les modules et arguments pour un système (NixOS, Darwin ou Colmena)
+  findNixModules = dir:
+    let
+      entries = builtins.readDir dir;
+      lib = inputs.nixpkgs.lib;
+    in lib.concatLists (lib.mapAttrsToList (name: type:
+      let path = dir + "/${name}";
+      in if type == "directory" then
+           findNixModules path
+         else if type == "regular" && lib.hasSuffix ".nix" name && name != "default.nix" then
+           [ path ]
+         else []
+    ) entries);
+
   mkModules =
     {
       hostName,
