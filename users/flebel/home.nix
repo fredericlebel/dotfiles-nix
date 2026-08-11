@@ -3,6 +3,7 @@
   lib,
   pkgs,
   user,
+  myMeta,
   ...
 }:
 {
@@ -13,7 +14,7 @@
       bitwarden-cli
     ];
 
-    stateVersion = "26.05";
+    stateVersion = myMeta.defaultStateVersion;
   };
 
   sops = {
