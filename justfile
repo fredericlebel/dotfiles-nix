@@ -71,7 +71,7 @@ install-server host ip:
 [group('day-1')]
 fmt:
     @echo "{{green}}🎨 Day 1 (Format): Nettoyage du code...{{reset}}"
-    treefmt || nix fmt
+    nix fmt
 
 # [Day 1] Vérifier la configuration avant le premier push
 [group('day-1')]
