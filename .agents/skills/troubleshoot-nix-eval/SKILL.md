@@ -27,7 +27,7 @@ Ce skill fournit des clés de diagnostic pour résoudre rapidement les erreurs d
 ### 3. Option inconnue ("The option ... does not exist")
 
 - **Symptôme** : Une option utilisée dans une configuration n'est pas trouvée.
-- **Cause** : Typo dans le nom de l'option (ex: `my.feature.xxx` au lieu de `my.features.xxx`) ou le module déclarant l'option n'a pas été importé dans `hosts/<host>/configuration.nix`.
+- **Cause** : Typo dans le nom de l'option (ex: `my.feature.xxx` au lieu de `my.features.xxx`) ou le module déclarant l'option n'a pas été importé dans `os/hosts/<host>/configuration.nix`.
 - **Résolution** :
     - Vérifiez l'orthographe exacte sous `options.my.features.<nom>`.
     - Assurez-vous que le module contenant la déclaration de l'option est importé dans la liste `imports` du fichier `configuration.nix` de l'hôte.
