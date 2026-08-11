@@ -60,6 +60,7 @@
           programs.deadnix.enable = true;
           programs.statix.enable = true;
           programs.prettier.enable = true;
+          settings.global.excludes = [ ".agents/**" ];
         }
       );
 
