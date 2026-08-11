@@ -1,5 +1,5 @@
 import ../template.nix // {
->>>>>>> Stashed changes
+
   system = "aarch64-darwin";
   isDarwin = true;
   deployment = null;
