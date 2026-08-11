@@ -49,7 +49,7 @@ let
 
       modules = osModules ++ [
         { nixpkgs.hostPlatform = system; }
-        ../../modules/shared/registry.nix
+        (if (spec.useRegistry or true) then ../../modules/shared/registry.nix else null)
         ../../nix/lib/meta-options.nix
         ../../hosts/${hostName}/configuration.nix
         hmModule
@@ -66,7 +66,7 @@ let
               users.${user} = {
                 imports = [
                   inputs.sops-nix.homeManagerModules.sops
-                  ../../modules/shared/registry.nix
+                  (if (spec.useRegistry or true) then ../../modules/shared/registry.nix else null)
                   ../../modules/home
                   ../../users/${user}/home.nix
                   ../../hosts/${hostName}/home.nix
