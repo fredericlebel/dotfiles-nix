@@ -1,13 +1,6 @@
 {
   system = "x86_64-linux";
   isDarwin = false;
-  deployment = {
-    targetHost = "ix.opval.com";
-    tags = [
-      "vps"
-      "cloud"
-    ];
-  };
 
   # L ancien host-meta.nix
   meta = {

@@ -102,9 +102,13 @@
               hostName = name;
               inherit spec;
             };
+            deployment = {
+              targetHost = spec.deployment.targetHost or "${name}.${config.myMeta.connectivity.rootDomain}";
+              tags = spec.deployment.tags or spec.meta.tags or [ ];
+            };
           in
           {
-            inherit (spec) deployment;
+            inherit deployment;
             imports = config.modules;
             _module.args = {
               inherit (config) myMeta;
