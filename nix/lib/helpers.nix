@@ -13,7 +13,7 @@ let
       lib = inputs.nixpkgs.lib;
       myMeta = (defaultMeta // (spec.meta or { })) // {
         inherit (spec) system isDarwin;
-        tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
+        tags = spec.meta.tags or [ ];
         hostSpec = spec; # On injecte la spec complete pour eviter la recursion
       };
 
@@ -96,7 +96,7 @@ in
     (defaultMeta // (spec.meta or { }))
     // {
       inherit (spec) system isDarwin;
-      tags = (spec.deployment.tags or [ ]) ++ (spec.meta.tags or [ ]);
+      tags = spec.meta.tags or [ ];
     };
 
   # Construit le système final via nixosSystem ou darwinSystem
