@@ -57,6 +57,11 @@ in
           };
 
           initContent = lib.mkBefore ''
+            # Autocomplétion dynamique pour `just`
+            if command -v just >/dev/null 2>&1; then
+              source <(just --completions zsh 2>/dev/null)
+            fi
+
             ssh-production() {
               # Change terminal background to dark red
               printf '\033]11;#3d1515\007'
