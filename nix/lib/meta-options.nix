@@ -25,7 +25,7 @@
     };
     defaultStateVersion = lib.mkOption {
       type = lib.types.str;
-      default = "26.05";
+      default = (import ./default-meta.nix).defaultStateVersion;
       description = "Version d'état NixOS/Home-Manager par défaut";
     };
     # Métadonnées d'hôte
