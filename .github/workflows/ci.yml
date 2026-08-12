@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - name: Check DevShell
-        run: nix flake check ./nix/dev
+        run: nix flake check ./os/nix/dev
 
   tofu-check:
     needs: linting
