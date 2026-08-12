@@ -160,6 +160,7 @@ update-input input:
 [private]
 with-secrets *cmd:
     @export PG_CONN_STR="postgres://opentofu:$(sops -d --extract '["postgres-opentofu-password"]' os/secrets/ecaz.yaml)@{{db_host}}:5432/opentofu?sslmode=require" && \
+     export GITHUB_TOKEN="$(sops -d --extract '["github-token"]' os/secrets/github.yaml)" && \
      export TAILSCALE_OAUTH_CLIENT_ID="$(sops -d --extract '["tailscale-oauth-client-id"]' os/secrets/tailscale.yaml)" && \
      export TAILSCALE_OAUTH_CLIENT_SECRET="$(sops -d --extract '["tailscale-oauth-client-secret"]' os/secrets/tailscale.yaml)" && \
      export TF_VAR_discord_webhook_url="$(sops -d --extract '["tailscale-discord-webhook-url"]' os/secrets/tailscale.yaml)" && \
