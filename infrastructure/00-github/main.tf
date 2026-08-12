@@ -9,6 +9,7 @@ resource "github_repository" "dotfiles_nix" {
   has_discussions = false
 
   delete_branch_on_merge = true
+  allow_auto_merge       = true
   allow_squash_merge     = true
   allow_merge_commit     = false
   allow_rebase_merge     = true
