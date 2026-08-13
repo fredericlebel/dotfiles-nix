@@ -31,7 +31,7 @@ resource "github_branch_protection" "main" {
 
   required_status_checks {
     strict   = true
-    contexts = ["evaluation"] # Le nom du job dans ci.yml est 'evaluation'
+    contexts = ["ci-success"]
   }
 
   required_pull_request_reviews {

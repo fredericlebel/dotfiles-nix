@@ -9,6 +9,26 @@ permissions:
   contents: "read"
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      nix: ${{ steps.filter.outputs.nix }}
+      tofu: ${{ steps.filter.outputs.tofu }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            nix:
+              - 'flake.nix'
+              - 'flake.lock'
+              - 'os/**'
+              - '.github/workflows/ci.yml'
+            tofu:
+              - 'infrastructure/**'
+              - '.github/workflows/ci.yml'
+
   linting:
     runs-on: ubuntu-latest
     steps:
@@ -18,18 +38,19 @@ jobs:
         run: nix fmt -- --ci
 
   evaluation:
-    needs: linting
+    needs: [linting, changes]
+    if: ${{ needs.changes.outputs.nix == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/flakehub-cache-action@main
-
       - name: Evaluate all Flake hosts & checks
         run: nix flake check --show-trace
 
   check-devshell:
-    needs: linting
+    needs: [linting, changes]
+    if: ${{ needs.changes.outputs.nix == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +59,8 @@ jobs:
         run: nix flake check ./os/nix/dev
 
   tofu-check:
-    needs: linting
+    needs: [linting, changes]
+    if: ${{ needs.changes.outputs.tofu == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,3 +74,16 @@ jobs:
           cd infrastructure/01-core-network
           tofu init -backend=false
           tofu validate
+
+  ci-success:
+    needs: [linting, evaluation, check-devshell, tofu-check]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "CI failed"
+            exit 1
+          fi
+          echo "CI passed"
