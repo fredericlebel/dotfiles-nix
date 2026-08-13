@@ -8,11 +8,13 @@ resource "github_repository" "dotfiles_nix" {
   has_wiki        = false
   has_discussions = false
 
-  delete_branch_on_merge = true
-  allow_auto_merge       = true
-  allow_squash_merge     = true
-  allow_merge_commit     = false
-  allow_rebase_merge     = true
+  delete_branch_on_merge      = true
+  allow_auto_merge            = true
+  allow_squash_merge          = true
+  allow_merge_commit          = false
+  allow_rebase_merge          = true
+  squash_merge_commit_title   = "PR_TITLE"
+  squash_merge_commit_message = "PR_BODY"
 }
 
 resource "github_repository_vulnerability_alerts" "dotfiles_nix_alerts" {
@@ -22,7 +24,9 @@ resource "github_repository_vulnerability_alerts" "dotfiles_nix_alerts" {
 resource "github_branch_protection" "main" {
   repository_id  = github_repository.dotfiles_nix.node_id
   pattern        = "main"
-  enforce_admins = true
+  enforce_admins                  = true
+  require_conversation_resolution = true
+  required_linear_history         = true
 
   required_status_checks {
     strict   = true
