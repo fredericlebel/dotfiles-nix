@@ -6,11 +6,25 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      # Optionnel: regrouper les inputs fréquents pour éviter trop de PR
+      # Regrouper les inputs fréquents pour éviter trop de PR
       nix-core:
         patterns:
           - "nixpkgs"
           - "home-manager"
           - "darwin"
           - "sops-nix"
+    open-pull-requests-limit: 10
+
+  # Mises à jour des modules Terraform / OpenTofu
+  - package-ecosystem: "terraform"
+    directory: "/infrastructure"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Mises à jour des GitHub Actions (sécurité des hashs SHA-1)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
     open-pull-requests-limit: 10
