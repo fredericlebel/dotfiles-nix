@@ -2,37 +2,56 @@
   description = "Infrastructure orchestrée de Frédéric Lebel";
 
   inputs = {
+    # ====================================================
+    # 1. Nœud central (Nixpkgs)
+    # ====================================================
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
-    colmena = {
-      url = "github:zhaofengli/colmena";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
+    # ====================================================
+    # 2. Gestion des systèmes et du matériel
+    # ====================================================
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     disko = {
       url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # ====================================================
+    # 3. Gestion du Home (Environnement Utilisateur)
+    # ====================================================
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    mac-app-util.url = "github:hraban/mac-app-util";
+
+    # ====================================================
+    # 4. Déploiement et Sécurité
+    # ====================================================
+    colmena = {
+      url = "github:zhaofengli/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+
+    # ====================================================
+    # 5. Outils de développement & Utilitaires
+    # ====================================================
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    mac-app-util.url = "github:hraban/mac-app-util";
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     antigravity-nix.url = "github:jacopone/antigravity-nix";
   };
 
