@@ -42,3 +42,21 @@ resource "github_branch_protection" "main" {
 resource "github_user_gpg_key" "my_gpg_key" {
   armored_public_key = file("${path.module}/keys/flebel_public.gpg")
 }
+
+resource "github_repository" "profile" {
+  name        = "fredericlebel"
+  description = "My public GitHub profile"
+  visibility  = "public"
+  auto_init   = true
+}
+
+resource "github_repository_file" "profile_readme" {
+  repository          = github_repository.profile.name
+  branch              = "main"
+  file                = "README.md"
+  content             = file("${path.module}/files/profile_readme.md")
+  commit_message      = "feat: update github profile readme"
+  commit_author       = "Frédéric Lebel"
+  commit_email        = "flebel@opval.com"
+  overwrite_on_create = true
+}
