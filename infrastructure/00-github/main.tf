@@ -38,3 +38,7 @@ resource "github_branch_protection" "main" {
     required_approving_review_count = 0 # Force de passer par une PR mais sans bloquer sur l'approbation d'un tiers
   }
 }
+
+resource "github_user_gpg_key" "my_gpg_key" {
+  armored_public_key = file("${path.module}/keys/flebel_public.gpg")
+}
