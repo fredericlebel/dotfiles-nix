@@ -25,6 +25,7 @@ resource "github_branch_protection" "main" {
   repository_id                   = github_repository.dotfiles_nix.node_id
   pattern                         = "main"
   enforce_admins                  = true
+  require_signed_commits          = true
   require_conversation_resolution = true
   required_linear_history         = true
 
