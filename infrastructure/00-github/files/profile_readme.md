@@ -1,7 +1,7 @@
 <p>👋 Salut, je suis Frédéric, et bienvenue sur mon petit coin de GitHub.</p>
 <p>✍️ Je suis passionné par l'infrastructure, l'automatisation et l'art de rendre les systèmes informatiques prévisibles.</p>
 <p>❄️ Mon arme de prédilection est <strong>Nix</strong>. Je crois fermement en la configuration déclarative : si ce n'est pas reproductible, ce n'est qu'un château de cartes.</p>
-<p>🍁 Je suis basé au Canada, où je code généralement accompagné d'un très bon café.</p>
+<p>🍁 Je suis basé à Québec (Québec, Canada), où je code généralement accompagné d'un très bon café.</p>
 <p>♻️ J'aime le minimalisme numérique. Mon Mac et mes serveurs sont générés de A à Z à partir de mon <a href="https://github.com/fredericlebel/dotfiles-nix">dépôt de dotfiles</a>, orchestré par l'invisible OpenTofu.</p>
 <p>🏃‍♂️ Le mouvement, c'est la vie. Quand je ne refactorise pas mon infrastructure, je suis probablement en train de courir (sur route ou en trail), de rouler en VTT (MTB) ou de partir en backpacking.</p>
 <p>🧘‍♂️ J'équilibre tout ça avec la pratique du yoga et de l'Aïkido.</p>
