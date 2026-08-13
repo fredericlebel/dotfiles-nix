@@ -1,7 +1,5 @@
 version: 2
 updates:
-
-
   # Mises à jour des modules Terraform / OpenTofu
   - package-ecosystem: "terraform"
     directory: "/infrastructure"
