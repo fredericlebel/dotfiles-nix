@@ -4,12 +4,10 @@ import ../template.nix
   system = "x86_64-linux";
   isDarwin = false;
 
-  meta = {
-    tags = [
-      "vps"
-      "cloud"
-    ];
-  };
+  tags = [
+    "vps"
+    "cloud"
+  ];
 
   # Features d intention
   features = {

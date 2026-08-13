@@ -5,12 +5,10 @@
   isDarwin = true;
   deployment = null;
 
-  meta = {
-    tags = [
-      "laptop"
-      "macos"
-    ];
-  };
+  tags = [
+    "laptop"
+    "macos"
+  ];
 
   # Features d intention
   features = {
