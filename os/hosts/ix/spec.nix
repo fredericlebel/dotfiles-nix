@@ -7,11 +7,12 @@
   # L ancien host-meta.nix
   meta = {
     subdomain = "vault";
-    tags = [
-      "vps"
-      "cloud"
-    ];
   };
+  tags = [
+    "vps"
+    "cloud"
+    "web"
+  ];
 
   # L activation des features (le "Quoi")
   features = {
