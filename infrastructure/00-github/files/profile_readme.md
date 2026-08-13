@@ -9,6 +9,6 @@
 
 ## Ce qui m'anime en ce moment
 
-* 🏗️ J'automatise le déploiement de mes environnements macOS et serveurs NixOS.
-* 🌐 J'expérimente avec **Tailscale** pour interconnecter mes machines de façon élégante.
-* 🔐 Je consolide la sécurité de ma vie numérique avec **SOPS** et des signatures cryptographiques omniprésentes.
+- 🏗️ J'automatise le déploiement de mes environnements macOS et serveurs NixOS.
+- 🌐 J'expérimente avec **Tailscale** pour interconnecter mes machines de façon élégante.
+- 🔐 Je consolide la sécurité de ma vie numérique avec **SOPS** et des signatures cryptographiques omniprésentes.
