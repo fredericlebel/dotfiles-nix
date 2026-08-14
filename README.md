@@ -44,19 +44,23 @@ Alternativement, utilisez le command runner `just` si disponible : `just install
 Le dépôt utilise [`just`](https://just.systems/) comme interface unique d'orchestration. Tapez simplement `just` pour lister toutes les commandes disponibles.
 
 **Formatage et Validation**
+
 - `just fmt` : Formater tout le code Nix et Terraform du projet.
 - `just check` : Valider la configuration du Flake localement.
 
 **Déploiement Système (Nix)**
+
 - `just switch-mac` : Reconstruire et appliquer la configuration macOS locale.
 - `just deploy <hôte>` : Déployer la configuration sur un serveur distant via Colmena.
 - `just deploy-all` : Déployer sur l'ensemble de l'inventaire.
 
 **Infrastructure as Code (OpenTofu)**
+
 - `just tofu-plan <layer>` : Prévisualiser les changements d'infrastructure (ex: `00-github`).
 - `just tofu-apply <layer>` : Appliquer l'infrastructure (les secrets SOPS sont injectés automatiquement).
 
 **Sécurité et Secrets**
+
 - `just edit-secret <hôte>` : Éditer de façon sécurisée le fichier `secrets.yaml` d'un hôte.
 - `just rotate-secrets` : Faire une rotation et re-chiffrer tous les secrets.
 
