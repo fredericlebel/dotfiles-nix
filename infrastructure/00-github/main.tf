@@ -39,9 +39,7 @@ resource "github_branch_protection" "main" {
   }
 }
 
-resource "github_user_gpg_key" "my_gpg_key" {
-  armored_public_key = file("${path.module}/keys/flebel_public.gpg")
-}
+
 
 resource "github_repository" "profile" {
   name        = "fredericlebel"
