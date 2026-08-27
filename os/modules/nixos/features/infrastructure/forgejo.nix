@@ -25,11 +25,20 @@ in
       default = null;
       description = "Chemin vers un fichier d'environnement (ex: géré par SOPS) pour les secrets (comme FORGEJO__database__PASSWD).";
     };
+
+    dbPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = "Chemin vers le fichier contenant le mot de passe de la base de données PostgreSQL (pour l'initialisation).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     my.features.infrastructure.caddy.enable = true;
     my.features.infrastructure.postgresql.databases = [ "forgejo" ];
+    my.features.infrastructure.postgresql.userPasswordFiles = lib.mkIf (cfg.dbPasswordFile != null) {
+      forgejo = cfg.dbPasswordFile;
+    };
 
     services.caddy.virtualHosts."${internalDomain}" = {
       extraConfig = myLib.caddy.mkTailscaleHost {

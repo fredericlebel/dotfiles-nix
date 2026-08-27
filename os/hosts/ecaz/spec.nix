@@ -22,7 +22,6 @@ import ../template.nix
         enable = true;
         databases = [
           "opentofu"
-          "forgejo"
         ];
         resticEnable = true;
       };
