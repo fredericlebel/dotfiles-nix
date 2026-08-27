@@ -119,6 +119,10 @@ in
         lib.mapAttrsToList (user: passwordFile: ''
           if [ -f "${passwordFile}" ]; then
             PASS=$(cat "${passwordFile}")
+            # Ensure the role exists in case postgresql was only reloaded and ensureUsers didn't run
+            if ! ${cfg.package}/bin/psql -tA -c "SELECT 1 FROM pg_roles WHERE rolname='${user}';" | grep -q 1; then
+              ${cfg.package}/bin/psql -tA -c "CREATE ROLE ${user} LOGIN;"
+            fi
             ${cfg.package}/bin/psql -tA -c "ALTER USER ${user} WITH PASSWORD '$PASS';"
           fi
         '') cfg.userPasswordFiles
