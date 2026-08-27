@@ -54,7 +54,7 @@ in
     virtualisation.oci-containers = {
       backend = "podman";
       containers.forgejo = {
-        image = "codeberg.org/forgejo/forgejo:9";
+        image = "codeberg.org/forgejo/forgejo:15";
         extraOptions = [ "--network=host" ];
         environment = {
           USER_UID = "1000";
@@ -67,7 +67,6 @@ in
         environmentFiles = lib.mkIf (cfg.envFile != null) [ cfg.envFile ];
         volumes = [
           "/var/lib/forgejo:/data"
-          "/etc/timezone:/etc/timezone:ro"
           "/etc/localtime:/etc/localtime:ro"
         ];
       };
