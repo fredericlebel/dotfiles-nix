@@ -20,8 +20,14 @@ import ../template.nix
       };
       postgresql = {
         enable = true;
-        databases = [ "opentofu" ];
+        databases = [
+          "opentofu"
+          "forgejo"
+        ];
         resticEnable = true;
+      };
+      forgejo = {
+        enable = true;
       };
       tailscale = {
         enable = true;

@@ -18,7 +18,9 @@
     infrastructure.tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
     infrastructure.postgresql.userPasswordFiles = {
       opentofu = config.sops.secrets.postgres-opentofu-password.path;
+      forgejo = config.sops.secrets.postgres-forgejo-password.path;
     };
+    infrastructure.forgejo.envFile = config.sops.secrets.forgejo-env.path;
   };
 
   # Activation du bundle VPS de base
@@ -28,6 +30,14 @@
 
   sops.secrets.postgres-opentofu-password = {
     owner = "postgres";
+    mode = "0400";
+  };
+  sops.secrets.postgres-forgejo-password = {
+    owner = "postgres";
+    mode = "0400";
+  };
+  sops.secrets.forgejo-env = {
+    owner = "root";
     mode = "0400";
   };
 }
