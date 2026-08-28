@@ -20,6 +20,12 @@ in
       description = "Le sous-domaine utilisé pour l'identité réseau (Tailscale).";
     };
 
+    sshPort = lib.mkOption {
+      type = lib.types.port;
+      default = 2222;
+      description = "Port SSH utilisé par le serveur intégré de Forgejo.";
+    };
+
     envFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
@@ -51,6 +57,8 @@ in
       "d /var/lib/forgejo 0755 1000 1000 -"
     ];
 
+    networking.firewall.allowedTCPPorts = [ cfg.sshPort ];
+
     virtualisation.oci-containers = {
       backend = "podman";
       containers.forgejo = {
@@ -63,6 +71,8 @@ in
           FORGEJO__database__HOST = "127.0.0.1:5432";
           FORGEJO__database__NAME = "forgejo";
           FORGEJO__database__USER = "forgejo";
+          FORGEJO__server__SSH_PORT = toString cfg.sshPort;
+          FORGEJO__server__SSH_LISTEN_PORT = toString cfg.sshPort;
         };
         environmentFiles = lib.mkIf (cfg.envFile != null) [ cfg.envFile ];
         volumes = [
