@@ -73,6 +73,7 @@ in
           FORGEJO__database__USER = "forgejo";
           FORGEJO__server__SSH_PORT = toString cfg.sshPort;
           FORGEJO__server__SSH_LISTEN_PORT = toString cfg.sshPort;
+          FORGEJO__server__SSH_DOMAIN = "${config.networking.hostName}.${myMeta.connectivity.tailnet}";
         };
         environmentFiles = lib.mkIf (cfg.envFile != null) [ cfg.envFile ];
         volumes = [
