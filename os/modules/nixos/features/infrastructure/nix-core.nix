@@ -24,10 +24,9 @@ in
           "@wheel"
           user
         ];
-        # Conserver les derivations pour permettre le debug si besoin,
-        # mais supprimer les outputs inutilises
-        keep-outputs = true;
-        keep-derivations = true;
+        # Désactivé pour économiser l'espace disque (recommandé sur VPS)
+        keep-outputs = false;
+        keep-derivations = false;
       };
 
       # Optimisation hebdomadaire du store (hard-links)
