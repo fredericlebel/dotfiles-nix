@@ -53,6 +53,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     antigravity-nix.url = "github:jacopone/antigravity-nix";
+
+    # Agent Skills (sources déclaratives et immuables)
+    anthropic-agent-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
   outputs =

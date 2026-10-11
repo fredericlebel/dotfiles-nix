@@ -257,5 +257,34 @@ restic-ls host service='postgres' snapshot='latest':
      export RESTIC_REPOSITORY="s3:s3.us-west-000.backblazeb2.com/backups-opval-com/{{host}}/{{ if service == "postgres" { "postgresql" } else { service } }}" && \
      restic ls {{snapshot}}
 
+# DAY 2 : AGENT SKILLS (AGY & Écosystème IA)
+
+# [Day 2] Lister les Agent Skills AGY installés et actifs
+[group('day-2')]
+[group('agent-skills')]
+agent-skills-list:
+    @echo "{{green}}🧠 Agent Skills AGY actifs dans ~/.gemini/config/skills :{{reset}}"
+    @if [ -d "$HOME/.gemini/config/skills" ]; then \
+        ls -l "$HOME/.gemini/config/skills"; \
+    else \
+        echo "Aucun skill installé pour le moment."; \
+    fi
+
+# [Day 2] Mettre à jour l'input Flake des skills d'Anthropic
+[group('day-2')]
+[group('agent-skills')]
+agent-skills-update-anthropic:
+    @echo "{{green}}🔄 Mise à jour de l'input Flake anthropic-agent-skills...{{reset}}"
+    nix flake lock --update-input anthropic-agent-skills
+    @echo "{{green}}Application de la nouvelle version sur macOS...{{reset}}"
+    just switch-mac
+
+# [Day 2] Rechercher des skills dans le catalogue communautaire skills.sh
+[group('day-2')]
+[group('agent-skills')]
+agent-skills-find query="":
+    npx skills find {{query}}
+
+
 
 

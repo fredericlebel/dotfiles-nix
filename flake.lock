@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "anthropic-agent-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791571549,
+        "narHash": "sha256-+UIqBnzyeIOvJSKYaDaE3GYPEpLw7qQqyUw5S971AfU=",
+        "owner": "anthropics",
+        "repo": "skills",
+        "rev": "dbd4588f9e1033efb41dad4bef2f7947c8993d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anthropics",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "antigravity-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -445,6 +461,7 @@
     },
     "root": {
       "inputs": {
+        "anthropic-agent-skills": "anthropic-agent-skills",
         "antigravity-nix": "antigravity-nix",
         "colmena": "colmena",
         "darwin": "darwin",

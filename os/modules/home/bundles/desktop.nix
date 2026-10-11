@@ -39,6 +39,15 @@ in
       terminals = {
         ghostty.enable = true;
       };
+      ai = {
+        agent-skills = {
+          enable = true;
+          sources.anthropic = {
+            enable = true;
+            targets = [ ]; # Importe l'ensemble des skills disponibles
+          };
+        };
+      };
     };
   };
 }
