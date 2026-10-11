@@ -57,7 +57,7 @@ in
         #hash = "sha256-Jc+bdPZus6UYszKcwaUkkoaHUek5KVjsp24wYys3AJo=";
         #hash = "sha256-OENfZRkzz1cZfXCidKRA+nSzqGODITDoKShBof5PVq4=";
         #hash = "sha256-xaEgfPyOU/QwMhcSuDTJNoER0yd2ePaF3eBnfn9Jl6I=";
-        hash = "sha256-vNFzqeaKkTZUw1xBzSoyMAg54twnTLrVISDDMyfOkG8=";
+        hash = "sha256-ezLeByqXuhyKhHf4mgne4MSYtyJNgxDWBfb9I9SeMmg=";
       };
 
       environmentFile = cfg.tailscaleAuthFile;
