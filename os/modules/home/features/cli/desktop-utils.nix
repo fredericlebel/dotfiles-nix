@@ -33,6 +33,7 @@ in
       gh
       just
       python3
+      uv
       yq-go
       wrkflw
     ];
