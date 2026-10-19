@@ -30,7 +30,10 @@ in
   config = mkIf (cfg.enable && isLinux) {
     environment.systemPackages = [ pkgs.tailscale ];
 
-    services.tailscale.enable = true;
+    services.tailscale = {
+      enable = true;
+      extraSetFlags = config.services.tailscale.extraUpFlags;
+    };
 
     networking = {
       firewall = {
@@ -66,7 +69,7 @@ in
           exit 0
         fi
 
-        ${pkgs.tailscale}/bin/tailscale up -authkey $(cat ${cfg.authKeyFile}) --ssh
+        ${pkgs.tailscale}/bin/tailscale up -authkey $(cat ${cfg.authKeyFile}) --ssh ${escapeShellArgs config.services.tailscale.extraUpFlags}
       '';
     };
   };
