@@ -12,7 +12,7 @@ resource "github_repository" "dotfiles_nix" {
   allow_auto_merge            = true
   allow_squash_merge          = true
   allow_merge_commit          = false
-  allow_rebase_merge          = true
+  allow_rebase_merge          = false
   squash_merge_commit_title   = "PR_TITLE"
   squash_merge_commit_message = "PR_BODY"
 }
