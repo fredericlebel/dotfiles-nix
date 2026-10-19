@@ -113,6 +113,11 @@ in
               # Numérotation relative, idéal pour les sauts de lignes au clavier (style Vim)
               "editor.lineNumbers" = "relative";
 
+              # Ignore les alertes pour les caractères légitimes de la langue française
+              "editor.unicodeHighlight.allowedLocales" = {
+                "fr" = true;
+              };
+
               # Surligne toute la ligne où se trouve le curseur pour un repérage rapide
               "editor.renderLineHighlight" = "all";
 
