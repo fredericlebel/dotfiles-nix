@@ -26,6 +26,11 @@ in
 
     my.features.infrastructure.caddy.enable = true;
 
+    services.tailscale = {
+      enable = true;
+      extraUpFlags = [ "--accept-routes" ];
+    };
+
     services.caddy.virtualHosts."${internalDomain}" = {
       extraConfig = myLib.caddy.mkTailscaleHost {
         inherit (cfg) subdomain;
