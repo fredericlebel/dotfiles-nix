@@ -20,6 +20,12 @@ in
       default = myMeta.subdomain;
       description = "Le sous-domaine utilisé pour l'identité réseau (Tailscale).";
     };
+
+    version = lib.mkOption {
+      type = lib.types.str;
+      default = "2026.10.2";
+      description = "Version / tag de l'image de conteneur Home Assistant.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -46,7 +52,7 @@ in
     virtualisation.oci-containers = {
       backend = "podman";
       containers.home-assistant = {
-        image = "ghcr.io/home-assistant/home-assistant:stable";
+        image = "ghcr.io/home-assistant/home-assistant:${cfg.version}";
         ports = [ "127.0.0.1:8123:8123" ];
         volumes = [
           "/var/lib/home-assistant:/config"
