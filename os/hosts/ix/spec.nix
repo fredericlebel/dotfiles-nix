@@ -21,6 +21,10 @@
       home-assistant = {
         enable = true;
         subdomain = "hass";
+        eufy = {
+          enable = true;
+          country = "CA";
+        };
       };
       observability = {
         enable = true;

@@ -18,7 +18,13 @@
     infrastructure = {
       caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
       tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
+      home-assistant.eufy.envFile = config.sops.secrets.eufy-bridge-env.path;
     };
+  };
+
+  sops.secrets.eufy-bridge-env = {
+    owner = "root";
+    mode = "0400";
   };
 
   # Activation du bundle VPS de base
