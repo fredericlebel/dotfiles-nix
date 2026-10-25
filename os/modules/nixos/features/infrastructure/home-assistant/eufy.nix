@@ -70,9 +70,6 @@ in
 
       eufy-bridge = {
         image = "ghcr.io/mega-yfue/ha-eufy-sdk-bridge:${cfg.bridgeVersion}";
-        ports = [
-          "127.0.0.1:${toString cfg.port}:${toString cfg.port}"
-        ];
         environment = {
           TZ = "America/Toronto";
           EUFY_COUNTRY = cfg.country;
