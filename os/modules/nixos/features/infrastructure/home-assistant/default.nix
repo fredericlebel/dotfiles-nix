@@ -12,6 +12,10 @@ let
   internalDomain = "${cfg.subdomain}.${myMeta.connectivity.tailnet}";
 in
 {
+  imports = [
+    ./eufy.nix
+  ];
+
   options.my.features.infrastructure.home-assistant = {
     enable = lib.mkEnableOption "Enable Home Assistant (Containerized with Caddy/Tailscale)";
 
@@ -48,6 +52,8 @@ in
       "d /var/lib/home-assistant 0755 root root -"
       "d /var/log/caddy.nix 0755 caddy caddy -"
     ];
+
+    virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
 
     virtualisation.oci-containers = {
       backend = "podman";
