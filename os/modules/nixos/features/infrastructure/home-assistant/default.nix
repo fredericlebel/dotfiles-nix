@@ -27,7 +27,7 @@ in
 
     version = lib.mkOption {
       type = lib.types.str;
-      default = "2026.10.2";
+      default = "2026.10.4";
       description = "Version / tag de l'image de conteneur Home Assistant.";
     };
   };
