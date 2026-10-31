@@ -17,7 +17,7 @@ let
         get_certificate tailscale
       }
 
-      reverse_proxy localhost:${toString port} {
+      reverse_proxy 127.0.0.1:${toString port} {
         header_up Host {host}
         header_up X-Real-IP {remote_host}
       }
