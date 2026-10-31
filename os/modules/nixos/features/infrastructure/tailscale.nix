@@ -32,7 +32,7 @@ in
 
     services.tailscale = {
       enable = true;
-      extraSetFlags = config.services.tailscale.extraUpFlags;
+      extraSetFlags = lib.unique config.services.tailscale.extraUpFlags;
     };
 
     networking = {

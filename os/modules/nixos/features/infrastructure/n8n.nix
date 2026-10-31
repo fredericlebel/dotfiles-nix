@@ -49,10 +49,7 @@ in
     # 1. Reverse Proxy Caddy / Tailscale
     my.features.infrastructure.caddy.enable = true;
 
-    services.tailscale = {
-      enable = true;
-      extraUpFlags = [ "--accept-routes" ];
-    };
+    services.tailscale.enable = true;
 
     services.caddy.virtualHosts."${internalDomain}" = {
       extraConfig = myLib.caddy.mkTailscaleHost {
