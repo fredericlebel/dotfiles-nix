@@ -140,7 +140,6 @@ in
           DB_POSTGRESDB_USER = "n8n";
           DB_POSTGRESDB_HOST = "127.0.0.1";
           DB_POSTGRESDB_PORT = "5432";
-          DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED = "false";
         }
         // cfg.environment;
         environmentFiles = lib.optional (cfg.envFile != null) cfg.envFile;
