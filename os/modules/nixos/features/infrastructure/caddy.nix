@@ -74,7 +74,8 @@ in
     systemd.services.caddy.serviceConfig.SupplementaryGroups = [ "tsusers" ];
 
     systemd.services.caddy = {
-      reloadTriggers = [ ];
+      reloadTriggers = lib.mkForce [ ];
+      restartTriggers = [ config.services.caddy.configFile ];
       serviceConfig = {
         ProtectSystem = "strict";
         ReadWritePaths = [
