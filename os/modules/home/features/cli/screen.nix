@@ -17,6 +17,7 @@ in
 
       screenrc = ''
         startup_message off
+        truecolor on
         deflogin on
         windowlist title "Select Window"
         vbell off
