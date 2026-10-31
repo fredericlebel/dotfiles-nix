@@ -18,6 +18,10 @@
   features = {
     zsh.enable = true;
     infrastructure = {
+      n8n = {
+        enable = true;
+        subdomain = "n8n";
+      };
       home-assistant = {
         enable = true;
         subdomain = "hass";
