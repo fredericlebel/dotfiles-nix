@@ -76,8 +76,6 @@ in
         enabledSources = [
           "et/open"
           "oisf/trafficid"
-          "sslbl/ja3-fingerprints"
-          "ptresearch/attackdetection"
         ];
       };
 
