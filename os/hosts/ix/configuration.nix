@@ -19,7 +19,14 @@
       caddy.tailscaleAuthFile = config.sops.secrets.tailscale-key.path;
       tailscale.authKeyFile = config.sops.secrets.tailscale-key.path;
       home-assistant.eufy.envFile = config.sops.secrets.eufy-bridge-env.path;
+      n8n.envFile = config.sops.secrets.n8n-env.path;
     };
+  };
+
+  sops.secrets.n8n-env = {
+    owner = "root";
+    group = "postgres";
+    mode = "0440";
   };
 
   sops.secrets.eufy-bridge-env = {
