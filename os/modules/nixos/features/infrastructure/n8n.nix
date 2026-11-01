@@ -132,6 +132,7 @@ in
           N8N_LISTEN_ADDRESS = "127.0.0.1";
           N8N_PROTOCOL = "https";
           WEBHOOK_URL = "https://${internalDomain}/";
+          N8N_WEBHOOK_URL = "https://${internalDomain}/";
           N8N_METRICS = "true";
 
           # Configuration PostgreSQL

@@ -25,7 +25,8 @@
 
   sops.secrets.n8n-env = {
     owner = "root";
-    mode = "0400";
+    group = "postgres";
+    mode = "0440";
   };
 
   sops.secrets.eufy-bridge-env = {
