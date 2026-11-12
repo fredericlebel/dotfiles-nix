@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       nix: ${{ steps.filter.outputs.nix }}
+      devshell: ${{ steps.filter.outputs.devshell }}
       tofu: ${{ steps.filter.outputs.tofu }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -25,20 +26,30 @@ jobs:
               - 'flake.lock'
               - 'os/**'
               - '.github/workflows/ci.yml'
+            devshell:
+              - 'os/nix/dev/**'
+              - 'flake.nix'
+              - 'flake.lock'
+              - '.github/workflows/ci.yml'
             tofu:
               - 'infrastructure/**'
               - '.github/workflows/ci.yml'
 
   linting:
+    needs: [changes]
+    if: ${{ needs.changes.outputs.nix == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+      - uses: DeterminateSystems/magic-nix-cache-action@55718cd9ebf1737a061487d5ada21abf31e99a98 # main
+        with:
+          use-flakehub: false
       - name: Check formatting
         run: nix fmt -- --ci
 
   evaluation:
-    needs: [linting, changes]
+    needs: [changes]
     if: ${{ needs.changes.outputs.nix == 'true' }}
     runs-on: ubuntu-latest
     steps:
@@ -51,17 +62,20 @@ jobs:
         run: nix flake check --show-trace
 
   check-devshell:
-    needs: [linting, changes]
-    if: ${{ needs.changes.outputs.nix == 'true' }}
+    needs: [changes]
+    if: ${{ needs.changes.outputs.devshell == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+      - uses: DeterminateSystems/magic-nix-cache-action@55718cd9ebf1737a061487d5ada21abf31e99a98 # main
+        with:
+          use-flakehub: false
       - name: Check DevShell
         run: nix flake check ./os/nix/dev
 
   tofu-check:
-    needs: [linting, changes]
+    needs: [changes]
     if: ${{ needs.changes.outputs.tofu == 'true' }}
     runs-on: ubuntu-latest
     steps:
