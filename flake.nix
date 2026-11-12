@@ -149,7 +149,7 @@
       # Formattage unifié via treefmt
       formatter = eachSystem (system: treefmtEval.${system}.config.build.wrapper);
 
-      # Checks (Auto-évaluation des hôtes, de Colmena et du formattage)
+      # Checks (Auto-évaluation des hôtes et du formattage)
       checks = eachSystem (
         system:
         let
@@ -159,7 +159,6 @@
           darwinForSystem = lib.filterAttrs (
             _: cfg: cfg.pkgs.stdenv.hostPlatform.system == system
           ) self.darwinConfigurations;
-          colmenaForSystem = lib.filterAttrs (_: drv: drv.system == system) self.colmenaHive.toplevel;
 
           nixosChecks = lib.mapAttrs' (
             name: cfg: lib.nameValuePair "nixos-${name}" cfg.config.system.build.toplevel
@@ -167,14 +166,12 @@
           darwinChecks = lib.mapAttrs' (
             name: cfg: lib.nameValuePair "darwin-${name}" cfg.system
           ) darwinForSystem;
-          colmenaChecks = lib.mapAttrs' (name: drv: lib.nameValuePair "colmena-${name}" drv) colmenaForSystem;
         in
         {
           formatting = treefmtEval.${system}.config.build.check self;
         }
         // nixosChecks
         // darwinChecks
-        // colmenaChecks
       );
 
       colmena = self.colmenaHive;

@@ -58,8 +58,15 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@55718cd9ebf1737a061487d5ada21abf31e99a98 # main
         with:
           use-flakehub: false
-      - name: Evaluate all Flake hosts & checks
-        run: nix flake check --show-trace
+      - name: Evaluate NixOS hosts
+        run: |
+          nix eval --json .#nixosConfigurations --apply 'builtins.mapAttrs (_: c: c.config.system.build.toplevel.drvPath)'
+      - name: Evaluate Darwin hosts
+        run: |
+          nix eval --json .#darwinConfigurations --apply 'builtins.mapAttrs (_: c: c.system.drvPath)'
+      - name: Evaluate Colmena deployments
+        run: |
+          nix eval --json .#colmenaHive.toplevel --apply 'builtins.mapAttrs (_: d: d.drvPath)'
 
   check-devshell:
     needs: [changes]
