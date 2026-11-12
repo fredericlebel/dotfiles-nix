@@ -73,10 +73,32 @@ fmt:
     @echo "{{green}}🎨 Day 1 (Format): Nettoyage du code...{{reset}}"
     nix fmt
 
-# [Day 1] Vérifier la configuration avant le premier push
+# [Day 1] Vérifier la configuration avant le premier push (évaluation rapide)
 [group('day-1')]
 check:
-    @echo "{{green}}🔍 Day 1 (Check): Vérification du Flake...{{reset}}"
+    @echo "{{green}}🔍 Day 1 (Check): Évaluation des configurations (NixOS, Darwin, Colmena)...{{reset}}"
+    @nix eval --json .#nixosConfigurations --apply 'builtins.mapAttrs (_: c: c.config.system.build.toplevel.drvPath)' > /dev/null
+    @nix eval --json .#darwinConfigurations --apply 'builtins.mapAttrs (_: c: c.system.drvPath)' > /dev/null
+    @nix eval --json .#colmenaHive.toplevel --apply 'builtins.mapAttrs (_: d: d.drvPath)' > /dev/null
+    @echo "{{green}}✅ Toutes les configurations sont valides !{{reset}}"
+
+# [Day 1] Vérifier un hôte spécifique
+[group('day-1')]
+check-host host:
+    @echo "{{green}}🔍 Day 1 (Check): Évaluation de {{host}}...{{reset}}"
+    @if nix eval .#nixosConfigurations.{{host}}.config.system.build.toplevel.drvPath > /dev/null 2>&1; then \
+        echo "{{green}}✅ NixOS ({{host}}) est valide !{{reset}}"; \
+    elif nix eval .#darwinConfigurations.{{host}}.system.drvPath > /dev/null 2>&1; then \
+        echo "{{green}}✅ Darwin ({{host}}) est valide !{{reset}}"; \
+    else \
+        echo "❌ Hôte {{host}} introuvable ou erreur d'évaluation"; \
+        exit 1; \
+    fi
+
+# [Day 1] Vérification approfondie du Flake (avec build complet des checks)
+[group('day-1')]
+check-all:
+    @echo "{{green}}🔍 Day 1 (Check): Vérification complète du Flake...{{reset}}"
     nix flake check --show-trace
 
 # DAY 2 : DEPLOY & COLMENA (Le "Run" quotidien)
