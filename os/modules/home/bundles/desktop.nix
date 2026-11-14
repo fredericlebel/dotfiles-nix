@@ -25,6 +25,7 @@ in
         yazi.enable = true;
       };
       dev = {
+        ghq.enable = true;
         git.enable = true;
         gpg.enable = true;
         k9s.enable = true;
